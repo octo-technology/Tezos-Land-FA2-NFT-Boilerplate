@@ -21,12 +21,7 @@ type token_storage = {
 
 type ledger = (token_id, address) big_map
 
-type marketplace_storage = {
-  admin: address;
-  height: nat;
-  width: nat;
-  to_sell: token_id list;
-}
+
 
 type coordinates = ( nat * nat )
 
@@ -44,12 +39,19 @@ type land = {
 
 type lands = (nat, land) big_map
 
+type marketplace_storage = {
+  admin: address;
+  height: nat;
+  width: nat;
+  to_sell: token_id list;
+  lands: lands;
+}
+
 type nft_token_storage = {
   ledger : ledger;
   operators : operator_storage;
   metadata : token_storage;
   market : marketplace_storage;
-  lands: lands;
 }
 
 #endif
