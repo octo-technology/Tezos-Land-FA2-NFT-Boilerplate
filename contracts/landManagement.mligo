@@ -40,7 +40,6 @@ let changeLandName (landId, name, storage : nat * name * storage) : (operation l
 
 let main ( params, storage : params * storage) : (operation list) * storage =
     match params with
-    | Action_1 p -> function_action1(p, storage)
     | CreateLand p -> createLand(p, storage)
     | ChangeLandName p -> changeLandName(p.0, p.1, storage)
 
