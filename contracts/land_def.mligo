@@ -35,6 +35,7 @@ type land = {
     onSale: bool;
     price: nat;
     id: nat
+    // owner : address
 }
 
 type lands = (nat, land) big_map
@@ -43,7 +44,7 @@ type marketplace_storage = {
   admin: address;
   height: nat;
   width: nat;
-  to_sell: token_id list;
+  to_sell: token_id set;
   lands: lands;
 }
 
