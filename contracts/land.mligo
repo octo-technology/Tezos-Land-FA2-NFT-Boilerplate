@@ -52,7 +52,6 @@ let transfer (txs, owner_validator, ops_storage, ledger
           match owner with
           | None -> (failwith fa2_token_undefined : ledger)
           | Some o -> 
-          // fix ?
             if o <> tx.from_
             then (failwith fa2_insufficient_balance : ledger)
             else 
@@ -132,7 +131,6 @@ type mint_param = {
 type sell_param = {
   id : token_id;
   price : price;
-  //delay : timestamp;
 }
 
 type buy_param = {
@@ -147,9 +145,10 @@ type validate_param = {
   id : token_id;
 }
 
-// DOES NOT WORK !!!!! 
-// mark the land as "not to_sell"
-// transfer ownership to sender
+type cancelbuyer_param = {
+  id : token_id;
+}
+
 let buy(p, s : buy_param * nft_token_storage) : (operation  list) * nft_token_storage =
     let priceLand : price = match Big_map.find_opt p.id s.market.to_sell with
     | None -> (failwith("Land is not on sale"): price)
@@ -221,15 +220,70 @@ let validateDeal (p, s : validate_param * nft_token_storage) : (operation  list)
     in
     let withdrawTransaction : operation = Tezos.transaction unit priceLand receiver in
     let new_to_sell = Map.remove p.id s.market.to_sell in
-
     let txs = [{from_=Tezos.sender; txs=[{to_=buyer; token_id=p.id; amount=1n}]}] in
     let validator = default_operator_validator in
     let new_ledger = transfer (txs, validator, s.operators, s.ledger) in
     [ withdrawTransaction ], { s with ledger = new_ledger; market={ s.market with fundsByOwner=new_fundsByOwner; buyers=new_buyers; to_sell=new_to_sell } }
 
 
+let cancelBuyer (p, s : cancelbuyer_param * nft_token_storage) : (operation  list) * nft_token_storage =
+  match Big_map.find_opt p.id s.market.buyers with 
+  | None -> (failwith ("No buyer for this token") : (operation  list) * nft_token_storage)
+  | Some buyer -> if buyer = Tezos.sender then
+      let priceLand : price = match Big_map.find_opt p.id s.market.to_sell with
+      | None -> (failwith("Land is not on sale"): price)
+      | Some pl -> pl
+      in
+      let new_buyers = Big_map.remove p.id s.market.buyers in
+      let new_fundsByOwner : (address, tez) big_map = match Big_map.find_opt buyer s.market.fundsByOwner with
+      | None -> (failwith("Should not be possible:buyer has no fund") : (address, tez) big_map)
+      | Some v -> if v >= priceLand then 
+          Big_map.update buyer (Some(v - priceLand)) s.market.fundsByOwner
+        else
+          (failwith("Should not be possible: buyer has not enough balance to refund for this sell") : (address, tez) big_map)
+      in 
+      let receiver : unit contract = match (Tezos.get_contract_opt buyer: unit contract option) with
+      | Some (contract) -> contract
+      | None -> (failwith ("Not a contract") : unit contract)
+      in
+      let refundTransaction : operation = Tezos.transaction unit priceLand receiver in
+      // transfer back
+      [ refundTransaction ], { s with market={ s.market with fundsByOwner=new_fundsByOwner; buyers=new_buyers } }
+    else
+      (failwith ("Only buyer of this token can cancel the deal") : (operation  list) * nft_token_storage)
+
+
 let cancelSell (p, s : cancelsell_param * nft_token_storage) : (operation  list) * nft_token_storage =
-([] : operation list), s
+  match Big_map.find_opt p.id s.ledger with 
+  | None ->  (failwith(fa2_token_undefined) : (operation  list) * nft_token_storage)
+  | Some ow -> if Tezos.sender = ow then
+      match Big_map.find_opt p.id s.market.buyers with 
+      | None -> 
+        let new_to_sell = Map.remove p.id s.market.to_sell in
+        ([]: operation list), { s with market={ s.market with to_sell=new_to_sell } }
+      | Some buyer -> 
+        let priceLand : price = match Big_map.find_opt p.id s.market.to_sell with
+        | None -> (failwith("Land is not on sale"): price)
+        | Some pl -> pl
+        in
+        let new_fundsByOwner : (address, tez) big_map = match Big_map.find_opt buyer s.market.fundsByOwner with
+        | None -> (failwith("Should not be possible:buyer has no fund") : (address, tez) big_map)
+        | Some v -> if v >= priceLand then 
+          Big_map.update buyer (Some(v - priceLand)) s.market.fundsByOwner
+        else
+          (failwith("Should not be possible: buyer has not enough balance to refund for this sell") : (address, tez) big_map)
+        in
+        let new_to_sell = Map.remove p.id s.market.to_sell in
+        let new_buyers = Big_map.remove p.id s.market.buyers in
+        let receiver : unit contract = match (Tezos.get_contract_opt buyer: unit contract option) with
+        | Some (contract) -> contract
+        | None -> (failwith ("Not a contract") : unit contract)
+        in
+        let refundTransaction : operation = Tezos.transaction unit priceLand receiver in
+        [ refundTransaction ], { s with market={ s.market with fundsByOwner=new_fundsByOwner; buyers=new_buyers; to_sell=new_to_sell } }
+    else 
+      (failwith("") : (operation  list) * nft_token_storage)
+
 
 // Create a land, and a token (they both have the same id), associate token to given owner, (and optionnaly setup an operator for this newly minted token)
 let mint (param, store : mint_param * nft_token_storage) : (operation  list) * nft_token_storage =
@@ -238,9 +292,14 @@ let mint (param, store : mint_param * nft_token_storage) : (operation  list) * n
     else
     // ensure token-id is not owned
     let really_mint (p,s : mint_param * nft_token_storage) : (operation  list) * nft_token_storage = 
-       // TODO: payment ??? 
+       // TODO: default price .. payment to
+       if (Tezos.amount = 100mutez) then 
         // mint in ledger
-        let new_ledger = Big_map.update p.token_id (Some(p.owner)) s.ledger in
+        let new_ledger = Big_map.add p.token_id p.owner s.ledger in
+        // let new_ledger = match Big_map.find_opt p.token_id s.ledger with 
+        // | None ->  Big_map.add p.token_id p.owner s.ledger 
+        // | Some ownr -> (failwith("token already exist") : ledger)
+        // in
         let new_land = ({ name=""; description=(None:string option); position=convert_index_to_position(p.token_id, s.market); isOwned=true; onSale=false; price=200mutez; id=p.token_id }:land) in
         let new_lands = Big_map.add p.token_id new_land s.market.lands in
         let opaddrOpt = param.operator in
@@ -251,6 +310,8 @@ let mint (param, store : mint_param * nft_token_storage) : (operation  list) * n
             let update : update_operator = Add_operator_p({ owner = p.owner; operator = op; token_id = p.token_id; }) in
             let new_operators = update_operators (update, s.operators) in 
             ([] : operation list),  { s with ledger = new_ledger; operators = new_operators; market = { s.market with lands=new_lands } }
+      else
+        (failwith("Default mint price is 100mutez") : (operation  list) * nft_token_storage)
     in
     let ownrOpt : address option = Big_map.find_opt param.token_id store.ledger in
     match ownrOpt with
@@ -268,6 +329,7 @@ let mint (param, store : mint_param * nft_token_storage) : (operation  list) * n
   | SellLand of sell_param
   | BuyLand of buy_param
   | ValidateDeal of validate_param
+  | CancelBuyer of cancelbuyer_param
   | CancelSell of cancelsell_param
 
   let nft_token_main (param, storage : nft_entry_points * nft_token_storage)
@@ -289,6 +351,7 @@ let mint (param, store : mint_param * nft_token_storage) : (operation  list) * n
     | SellLand p -> sell(p, storage)
     | BuyLand p -> buy(p, storage)
     | ValidateDeal p -> validateDeal(p, storage)
+    | CancelBuyer p -> cancelBuyer(p, storage)
     | CancelSell p -> cancelSell(p, storage)
 
 
@@ -344,12 +407,19 @@ let mint (param, store : mint_param * nft_token_storage) : (operation  list) * n
 // ligo dry-run --amount=0.0001 --sender="tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v" land.mligo nft_token_main 'BuyLand({id=1n})' '{ market = { fundsByOwner=(Big_map.empty : (address, tez) big_map); buyers=(Big_map.empty : (token_id, address) big_map); lands = Big_map.literal [(1n, { name = "terrain_1"; description = Some("description_1"); position = (0n, 0n); isOwned = true; onSale = false; price = 200mutez; id = 1n })]; admin = ("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address); height=10n; width=10n; to_sell=Big_map.literal ([(1n, 100mutez)]) }; ledger = Big_map.literal([(1n,("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv":address))]); operators = Big_map.literal([ ((("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv": address), (("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address), 1n)), unit) ]); metadata = { token_defs = Set.add {from_=1n; to_=100n} (Set.empty : token_def set); last_used_id = 1n; metadata = Big_map.literal([ ({from_=1n;to_=100n},{token_id=1n; symbol="TLD"; name="TezosLand"; decimals=0n; extras=(Map.empty :(string, string) map)}) ]) }}'
 // (echoue sur le montant) // ligo dry-run --amount=0.0002 --sender="tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v" land.mligo nft_token_main 'BuyLand({id=1n})' '{ market = { fundsByOwner=(Big_map.empty : (address, tez) big_map); buyers=(Big_map.empty : (token_id, address) big_map); lands = Big_map.literal [(1n, { name = "terrain_1"; description = Some("description_1"); position = (0n, 0n); isOwned = true; onSale = false; price = 200mutez; id = 1n })]; admin = ("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address); height=10n; width=10n; to_sell=Big_map.literal ([(1n, 100mutez)]) }; ledger = Big_map.literal([(1n,("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv":address))]); operators = Big_map.literal([ ((("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv": address), (("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address), 1n)), unit) ]); metadata = { token_defs = Set.add {from_=1n; to_=100n} (Set.empty : token_def set); last_used_id = 1n; metadata = Big_map.literal([ ({from_=1n;to_=100n},{token_id=1n; symbol="TLD"; name="TezosLand"; decimals=0n; extras=(Map.empty :(string, string) map)}) ]) }}'
 
-// VALIDATE DEAL
+// VALIDATE DEAL (SELLER)
 // ligo compile-storage land.mligo nft_token_main '{ market = { fundsByOwner=Big_map.literal([(("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address),100mutez)]); buyers=Big_map.literal([(1n,("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address))]); lands = Big_map.literal [(1n, { name = "terrain_1"; description = Some("description_1"); position = (0n, 0n); isOwned = true; onSale = false; price = 200mutez; id = 1n })]; admin = ("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address); height=10n; width=10n; to_sell=(Big_map.empty : (token_id, price) big_map) }; ledger = Big_map.literal([(1n,("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv":address))]); operators = Big_map.literal([ ((("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv": address), (("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address), 1n)), unit) ]); metadata = { token_defs = Set.add {from_=1n; to_=100n} (Set.empty : token_def set); last_used_id = 1n; metadata = Big_map.literal([ ({from_=1n;to_=100n},{token_id=1n; symbol="TLD"; name="TezosLand"; decimals=0n; extras=(Map.empty :(string, string) map)}) ]) }}'
 // ligo compile-parameter --sender=tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv land.mligo nft_token_main 'ValidateDeal({id=1n})'
 // ligo dry-run --sender=tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv land.mligo nft_token_main 'ValidateDeal({id=1n})' '{ market = { fundsByOwner=Big_map.literal([(("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address),100mutez)]); buyers=Big_map.literal([(1n,("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address))]); lands = Big_map.literal [(1n, { name = "terrain_1"; description = Some("description_1"); position = (0n, 0n); isOwned = true; onSale = false; price = 200mutez; id = 1n })]; admin = ("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address); height=10n; width=10n; to_sell=Big_map.literal ([(1n, 100mutez)]) }; ledger = Big_map.literal([(1n,("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv":address))]); operators = Big_map.literal([ ((("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv": address), (("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address), 1n)), unit) ]); metadata = { token_defs = Set.add {from_=1n; to_=100n} (Set.empty : token_def set); last_used_id = 1n; metadata = Big_map.literal([ ({from_=1n;to_=100n},{token_id=1n; symbol="TLD"; name="TezosLand"; decimals=0n; extras=(Map.empty :(string, string) map)}) ]) }}'
 
 
+// CANCEL BUYER
+// ligo compile-storage land.mligo nft_token_main '{ market = { fundsByOwner=Big_map.literal([(("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address),100mutez)]); buyers=Big_map.literal([(1n,("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address))]); lands = Big_map.literal [(1n, { name = "terrain_1"; description = Some("description_1"); position = (0n, 0n); isOwned = true; onSale = false; price = 200mutez; id = 1n })]; admin = ("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address); height=10n; width=10n; to_sell=(Big_map.empty : (token_id, price) big_map) }; ledger = Big_map.literal([(1n,("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv":address))]); operators = Big_map.literal([ ((("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv": address), (("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address), 1n)), unit) ]); metadata = { token_defs = Set.add {from_=1n; to_=100n} (Set.empty : token_def set); last_used_id = 1n; metadata = Big_map.literal([ ({from_=1n;to_=100n},{token_id=1n; symbol="TLD"; name="TezosLand"; decimals=0n; extras=(Map.empty :(string, string) map)}) ]) }}'
+// ligo compile-parameter --sender=tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv land.mligo nft_token_main 'CancelBuyer({id=1n})'
+// ligo dry-run --sender=tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v land.mligo nft_token_main 'CancelBuyer({id=1n})' '{ market = { fundsByOwner=Big_map.literal([(("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address),100mutez)]); buyers=Big_map.literal([(1n,("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address))]); lands = Big_map.literal [(1n, { name = "terrain_1"; description = Some("description_1"); position = (0n, 0n); isOwned = true; onSale = false; price = 200mutez; id = 1n })]; admin = ("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address); height=10n; width=10n; to_sell=Big_map.literal ([(1n, 100mutez)]) }; ledger = Big_map.literal([(1n,("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv":address))]); operators = Big_map.literal([ ((("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv": address), (("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address), 1n)), unit) ]); metadata = { token_defs = Set.add {from_=1n; to_=100n} (Set.empty : token_def set); last_used_id = 1n; metadata = Big_map.literal([ ({from_=1n;to_=100n},{token_id=1n; symbol="TLD"; name="TezosLand"; decimals=0n; extras=(Map.empty :(string, string) map)}) ]) }}'
 
-// CANCEL SELL
-// ligo compile-storage land.mligo nft_token_main '{ market = { fundsByOwner=(Big_map.empty : (address, tez) big_map); buyers=(Big_map.empty : (token_id, address) big_map); lands = Big_map.literal [(1n, { name = "terrain_1"; description = Some("description_1"); position = (0n, 0n); isOwned = true; onSale = false; price = 200mutez; id = 1n })]; admin = ("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address); height=10n; width=10n; to_sell=Big_map.literal ([(1n, 100mutez)]) }; ledger = Big_map.literal([(1n,("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv":address))]); operators = Big_map.literal([ ((("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv": address), (("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address), 1n)), unit) ]); metadata = { token_defs = Set.add {from_=1n; to_=100n} (Set.empty : token_def set); last_used_id = 1n; metadata = Big_map.literal([ ({from_=1n;to_=100n},{token_id=1n; symbol="TLD"; name="TezosLand"; decimals=0n; extras=(Map.empty :(string, string) map)}) ]) }}'
+
+// CANCEL SELLER
+// ligo compile-storage land.mligo nft_token_main '{ market = { fundsByOwner=Big_map.literal([(("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address),100mutez)]); buyers=Big_map.literal([(1n,("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address))]); lands = Big_map.literal [(1n, { name = "terrain_1"; description = Some("description_1"); position = (0n, 0n); isOwned = true; onSale = false; price = 200mutez; id = 1n })]; admin = ("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address); height=10n; width=10n; to_sell=(Big_map.empty : (token_id, price) big_map) }; ledger = Big_map.literal([(1n,("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv":address))]); operators = Big_map.literal([ ((("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv": address), (("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address), 1n)), unit) ]); metadata = { token_defs = Set.add {from_=1n; to_=100n} (Set.empty : token_def set); last_used_id = 1n; metadata = Big_map.literal([ ({from_=1n;to_=100n},{token_id=1n; symbol="TLD"; name="TezosLand"; decimals=0n; extras=(Map.empty :(string, string) map)}) ]) }}'
+// ligo compile-parameter --sender=tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv land.mligo nft_token_main 'CancelSell({id=1n})'
+// ligo dry-run --sender=tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv land.mligo nft_token_main 'CancelSell({id=1n})' '{ market = { fundsByOwner=Big_map.literal([(("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address),100mutez)]); buyers=Big_map.literal([(1n,("tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v":address))]); lands = Big_map.literal [(1n, { name = "terrain_1"; description = Some("description_1"); position = (0n, 0n); isOwned = true; onSale = false; price = 200mutez; id = 1n })]; admin = ("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address); height=10n; width=10n; to_sell=Big_map.literal ([(1n, 100mutez)]) }; ledger = Big_map.literal([(1n,("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv":address))]); operators = Big_map.literal([ ((("tz1b7tUupMgCNw2cCLpKTkSD1NZzB5TkP2sv": address), (("tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z":address), 1n)), unit) ]); metadata = { token_defs = Set.add {from_=1n; to_=100n} (Set.empty : token_def set); last_used_id = 1n; metadata = Big_map.literal([ ({from_=1n;to_=100n},{token_id=1n; symbol="TLD"; name="TezosLand"; decimals=0n; extras=(Map.empty :(string, string) map)}) ]) }}'
