@@ -26,6 +26,7 @@ type ledger = (token_id, address) big_map
 type coordinates = ( nat * nat )
 
 type name = string
+type price = tez
 
 type land = {
     name: string;
@@ -33,7 +34,7 @@ type land = {
     position: coordinates;
     isOwned: bool;
     onSale: bool;
-    price: nat;
+    price: price;
     id: nat
     // owner : address
 }
@@ -44,7 +45,7 @@ type marketplace_storage = {
   admin: address;
   height: nat;
   width: nat;
-  to_sell: token_id set;
+  to_sell: (token_id, price) big_map;
   lands: lands;
 }
 
