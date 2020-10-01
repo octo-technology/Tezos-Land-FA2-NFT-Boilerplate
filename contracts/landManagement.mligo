@@ -8,6 +8,7 @@ let is_owner (id, addr, l: token_id * address * ledger) : bool =
   | None -> (failwith(fa2_token_undefined) : bool)
   | Some o -> o = addr
 
+// not used
 let createLand ( land, storage : land * nft_token_storage) : (operation list) * nft_token_storage =
     if not is_admin(Tezos.sender, storage.market) 
     then (failwith("need admin privilege") : (operation  list) * nft_token_storage)
