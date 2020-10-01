@@ -47,6 +47,8 @@ type marketplace_storage = {
   width: nat;
   to_sell: (token_id, price) big_map;
   lands: lands;
+  fundsByOwner : (address, tez) big_map;
+  buyers : (token_id, address) big_map;
 }
 
 type nft_token_storage = {
