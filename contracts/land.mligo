@@ -150,6 +150,13 @@ type cancelbuyer_param = {
 }
 
 let buy(p, s : buy_param * nft_token_storage) : (operation  list) * nft_token_storage =
+    let landOwner : address = match Big_map.find_opt p.id s.ledger with
+    | None -> (failwith("Land has no owner"): address)
+    | Some owner -> if (Tezos.sender = owner) then
+    (failwith("The buyer is already the owner of the land"): address)
+    else
+    owner
+    in
     let priceLand : price = match Big_map.find_opt p.id s.market.to_sell with
     | None -> (failwith("Land is not on sale"): price)
     | Some pl -> pl
