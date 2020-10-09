@@ -151,21 +151,20 @@ type cancelbuyer_param = {
 
 let buy(p, s : buy_param * nft_token_storage) : (operation  list) * nft_token_storage =
     let landOwner : address = match Big_map.find_opt p.id s.ledger with
-    | None -> (failwith("Land has no owner"): address)
+    | None -> (failwith("This land has no owner"): address)
     | Some owner -> if (Tezos.sender = owner) then
-    (failwith("The buyer is already the owner of the land"): address)
+    (failwith("The buyer is already the owner of this land"): address)
     else
     owner
     in
     let priceLand : price = match Big_map.find_opt p.id s.market.to_sell with
-    | None -> (failwith("Land is not on sale"): price)
+    | None -> (failwith("This land is not on sale"): price)
     | Some pl -> pl
     in
     let existingBuyer : unit = match Big_map.find_opt p.id s.market.buyers with
     | None -> unit
-    | Some pl -> failwith("this land has already a buyer")
+    | Some pl -> failwith("This land has already a buyer")
     in
-    // verify amount is equal land price in tz
     if not (priceLand = Tezos.amount) then
        (failwith("The amount sent is not equal to the price of the land") : (operation  list) * nft_token_storage)
     else
@@ -173,13 +172,9 @@ let buy(p, s : buy_param * nft_token_storage) : (operation  list) * nft_token_st
       | None -> Big_map.add Tezos.sender Tezos.amount s.market.fundsByOwner
       | Some v -> Big_map.update Tezos.sender (Some(v + Tezos.amount)) s.market.fundsByOwner
       in 
-      //let new_to_sell = Map.remove p.id s.market.to_sell in
       let new_buyers : (token_id, address) big_map = match Big_map.find_opt p.id s.market.buyers with
       | None -> Big_map.add p.id Tezos.sender s.market.buyers
-      | Some add -> if add = Tezos.sender then 
-        (failwith("You are the buyer , wait for validation") : (token_id, address) big_map)
-      else 
-        (failwith("already have a buyer, sorry too late") : (token_id, address) big_map)
+      | Some add -> (failwith("This land has already a buyer") : (token_id, address) big_map)
       in
       ([] : operation list), { s with market={ s.market with fundsByOwner=new_fundsByOwner; buyers=new_buyers } }
 

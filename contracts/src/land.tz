@@ -308,12 +308,14 @@
                          DUG 2 ;
                          GET ;
                          IF_NONE
-                           { PUSH string "Land has no owner" ; FAILWITH }
+                           { PUSH string "This land has no owner" ; FAILWITH }
                            { DUP ;
                              SENDER ;
                              COMPARE ;
                              EQ ;
-                             IF { DROP ; PUSH string "The buyer is already the owner of the land" ; FAILWITH }
+                             IF { DROP ;
+                                  PUSH string "The buyer is already the owner of this land" ;
+                                  FAILWITH }
                                 {} } ;
                          DROP ;
                          SWAP ;
@@ -328,7 +330,7 @@
                          DUP ;
                          DUG 2 ;
                          GET ;
-                         IF_NONE { PUSH string "Land is not on sale" ; FAILWITH } {} ;
+                         IF_NONE { PUSH string "This land is not on sale" ; FAILWITH } {} ;
                          DIG 2 ;
                          DUP ;
                          DUG 3 ;
@@ -343,7 +345,7 @@
                          GET ;
                          IF_NONE
                            { UNIT }
-                           { DROP ; PUSH string "this land has already a buyer" ; FAILWITH } ;
+                           { DROP ; PUSH string "This land has already a buyer" ; FAILWITH } ;
                          DROP ;
                          AMOUNT ;
                          SWAP ;
@@ -417,14 +419,7 @@
                                   SOME ;
                                   SWAP ;
                                   UPDATE }
-                                { DIG 2 ;
-                                  DROP ;
-                                  SENDER ;
-                                  SWAP ;
-                                  COMPARE ;
-                                  EQ ;
-                                  IF { PUSH string "You are the buyer , wait for validation" ; FAILWITH }
-                                     { PUSH string "already have a buyer, sorry too late" ; FAILWITH } } ;
+                                { DIG 2 ; DROP 2 ; PUSH string "This land has already a buyer" ; FAILWITH } ;
                               DIG 2 ;
                               DUP ;
                               CAR ;
