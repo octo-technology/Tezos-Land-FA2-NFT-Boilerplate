@@ -1549,7 +1549,7 @@
                      SWAP ;
                      EXEC ;
                      NOT ;
-                     IF { DROP 2 ; PUSH string "only owner can sell land" ; FAILWITH }
+                     IF { DROP 2 ; PUSH string "Only the owner can sell its land" ; FAILWITH }
                         { SWAP ;
                           DUP ;
                           CAR ;

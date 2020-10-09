@@ -182,7 +182,7 @@ let buy(p, s : buy_param * nft_token_storage) : (operation  list) * nft_token_st
 // mark the land as "to_sell" and add an operator for this token
 let sell (p, s : sell_param * nft_token_storage) : (operation  list) * nft_token_storage =
   if not is_owner(p.id, Tezos.sender, s.ledger)
-    then (failwith("only owner can sell land") : (operation  list) * nft_token_storage)
+    then (failwith("Only the owner can sell its land") : (operation  list) * nft_token_storage)
     else
         // add admin as operator for this token
         //let new_operators = exec_update_operator([Add_operator_p({owner=Tezos.sender; operator=s.market.admin; token_id=p.id})], Tezos.sender, s.operators) in 
