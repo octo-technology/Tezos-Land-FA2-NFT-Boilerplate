@@ -11,9 +11,10 @@ jean = "tz1hQzKQpprB5JhNxZZRowEDRBoieHRAL84b"
 boby = "tz1hTic2GpaNumpTtYwqyPSBd9KcWifRMuEN"
 bartholome = "tz1hv9CrgtaxiCayc567KUvCyWDQRF9sVNuf"
 lucas = "tz1iWMsg4UNSSQNKYsiH5s2maUZ9xBwymXxR"
+contract_address = "KT1BEqzn5Wx8uJrZNvuS9DVHmLvG9td3fDLi"
 
 
-def get_storage(self, funds_by_owner=None, buyers=None, lands=None, admin=administrator, height=10, width=10,
+def get_storage(self, lands=None, admin=administrator, height=10, width=10,
                 to_sell=None, ledger=None, operators=None):
     if operators is None:
         operators = {}
@@ -23,13 +24,7 @@ def get_storage(self, funds_by_owner=None, buyers=None, lands=None, admin=admini
         to_sell = {}
     if lands is None:
         lands = {}
-    if buyers is None:
-        buyers = {}
-    if funds_by_owner is None:
-        funds_by_owner = {}
-    return {"market": {"fundsByOwner": funds_by_owner,
-                       "buyers": buyers,
-                       "lands": lands,
+    return {"market": {"lands": lands,
                        "admin": admin,
                        "height": height, "width": width,
                        "to_sell": to_sell},

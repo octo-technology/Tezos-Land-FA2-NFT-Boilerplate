@@ -47,8 +47,6 @@ type marketplace_storage = {
   width: nat;
   to_sell: (token_id, price) big_map;
   lands: lands;
-  fundsByOwner : (address, tez) big_map;
-  buyers : (token_id, address) big_map;
 }
 
 type nft_token_storage = {
@@ -57,5 +55,8 @@ type nft_token_storage = {
   metadata : token_storage;
   market : marketplace_storage;
 }
-
+type change_land_name_param = {
+    token_id: token_id;
+    new_land_name: string;
+}
 #endif
