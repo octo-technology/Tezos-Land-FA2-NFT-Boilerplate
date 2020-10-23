@@ -59,3 +59,23 @@ tezos-client gen keys bob
 ```
 tezos-client show address bootstrap1 -S
 ```
+
+## With Truffle
+
+### Compile contract 
+In project folder, run:
+```
+$ truffle compile
+```
+
+### Deploy contract 
+In project folder, run:
+```
+$ truffle migrate
+```
+
+# Run tests
+In project folder, run: 
+```
+$ python -m unittest
+```
