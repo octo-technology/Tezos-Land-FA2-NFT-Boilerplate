@@ -3,7 +3,7 @@ from unittest import TestCase, main
 from pytezos import MichelsonRuntimeError
 from pytezos import ContractInterface
 from decimal import Decimal
-from tests_utils import *
+from test.tests_utils import *
 
 
 class TestBuyLand(TestCase):

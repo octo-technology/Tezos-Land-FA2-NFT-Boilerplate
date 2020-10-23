@@ -2,7 +2,7 @@ from os.path import dirname, join
 from unittest import TestCase, main
 from pytezos import MichelsonRuntimeError
 from pytezos import ContractInterface
-from tests_utils import *
+from test.tests_utils import *
 
 
 class TestTransfer(TestCase):

@@ -6,7 +6,7 @@ module.exports = {
   networks: {
     development: {
       host: "http://localhost",
-      port: 8732,
+      port: 18731,
       network_id: "*",
       secretKey: alice.sk,
       type: "tezos"

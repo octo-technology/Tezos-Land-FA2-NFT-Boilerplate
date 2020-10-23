@@ -223,7 +223,7 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
   | BuyLand of buy_param
 
 
-  let nft_token_main (param, storage : nft_entry_points * nft_token_storage)
+  let main (param, storage : nft_entry_points * nft_token_storage)
       : (operation  list) * nft_token_storage =
     match param with
     | Fa2 fa2 -> fa2_main (fa2, storage)
