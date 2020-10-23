@@ -11,7 +11,7 @@ class TestTransfer(TestCase):
     @classmethod
     def setUpClass(cls):
         project_dir = dirname(dirname(__file__))
-        cls.nftContract = ContractInterface.create_from(join(project_dir, 'src/land.tz'))
+        cls.nftContract = ContractInterface.create_from(join(project_dir, 'build/land.tz'))
         cls.nftContract.address = contract_address
 
     get_storage = get_storage

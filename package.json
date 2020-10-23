@@ -1,0 +1,27 @@
+{
+  "name": "tezos-bare-box",
+  "version": "2.0.0",
+  "description": "Tezos Bare Box =================",
+  "dependencies": {},
+  "devDependencies": {
+    "ganache-cli": "^6.10.0-tezos.1"
+  },
+  "scripts": {
+    "start-sandbox": "ganache-cli --flavor tezos --seed alice"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/truffle-box/tezos-bare-box.git"
+  },
+  "keywords": [
+    "tezos",
+    "blockchain",
+    "truffle"
+  ],
+  "author": "Cruz Molina <cruz@trufflesuite.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/truffle-box/tezos-bare-box/issues"
+  },
+  "homepage": "https://github.com/truffle-box/tezos-bare-box#readme"
+}

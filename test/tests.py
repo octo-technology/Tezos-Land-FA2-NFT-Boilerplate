@@ -28,7 +28,7 @@ class landContractTest(TestCase):
     @classmethod
     def setUpClass(cls):
         project_dir = dirname(dirname(__file__))
-        cls.nftContract = ContractInterface.create_from(join(project_dir, 'src/land.tz'))
+        cls.nftContract = ContractInterface.create_from(join(project_dir, 'build/land.tz'))
         cls.nftContract.address = "KT1BEqzn5Wx8uJrZNvuS9DVHmLvG9td3fDLi"
 
     def test_add_operator(self):
