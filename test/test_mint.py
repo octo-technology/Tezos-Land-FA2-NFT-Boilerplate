@@ -1,4 +1,3 @@
-from os.path import dirname, join
 from unittest import TestCase, main
 from pytezos import MichelsonRuntimeError
 from pytezos import ContractInterface
@@ -10,8 +9,7 @@ class TestTransfer(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        project_dir = dirname(dirname(__file__))
-        cls.nftContract = ContractInterface.create_from(join(project_dir, 'build/land.tz'))
+        cls.nftContract = ContractInterface.create_from(path_to_michelson_contract)
         cls.nftContract.address = contract_address
 
     get_storage = get_storage
