@@ -1,5 +1,5 @@
 # TEZOSLAND
 
-TezosLand is the world's first non-fungible tokens game on the Tezos Mainnet!
+The Tezos FA2 NFT Marketplace Boilerplate
 
-Check it out on [TezosLand.com](https://TezosLand.com) 
+Demo on [TezosLand.io](https://TezosLand.io) 
