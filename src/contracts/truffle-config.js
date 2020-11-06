@@ -1,4 +1,5 @@
 const { alice } = require('./scripts/sandbox/accounts');
+const { mnemonic, secret, password, email } = require("./faucet.json");
 
 module.exports = {
   // see <http://truffleframework.com/docs/advanced/configuration>
@@ -15,6 +16,10 @@ module.exports = {
       host: "https://carthagenet.smartpy.io",
       port: 443,
       network_id: "*",
+      secret,
+      mnemonic,
+      password,
+      email,
       type: "tezos"
     },
     mainnet: {
