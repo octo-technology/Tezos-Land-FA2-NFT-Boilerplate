@@ -19,7 +19,7 @@ metadata_bigmap.set(
 
 const admin = "tz1ddb9NMYHZi5UzPdzTZMYQQZoMub195zgv"
 const empty_lands = new MichelsonMap()
-const empty_to_sell = new MichelsonMap()
+const empty_on_sale = new MichelsonMap()
 const empty_ledger = new MichelsonMap()
 const empty_operators = new MichelsonMap()
 const lands_grid_height = 10
@@ -33,7 +33,7 @@ const initial_storage = {
         "admin": admin,
         "height": lands_grid_height,
         "width": lands_grid_width,
-        "to_sell": empty_to_sell
+        "on_sale": empty_on_sale
     },
     "ledger": empty_ledger,
     "operators":empty_operators,

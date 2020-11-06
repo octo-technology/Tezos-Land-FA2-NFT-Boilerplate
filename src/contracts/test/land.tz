@@ -31,7 +31,7 @@
                                   (pair (pair (pair (option %description string) (nat %id))
                                               (pair (bool %isOwned) (string %name)))
                                         (pair (pair (bool %onSale) (pair %position nat nat)) (mutez %price))))
-                               (big_map %to_sell nat mutez)))
+                               (big_map %on_sale nat mutez)))
                    (nat %width)))
           (pair (pair %metadata
                    (pair (nat %last_used_id)

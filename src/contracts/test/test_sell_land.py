@@ -26,7 +26,7 @@ class TestSellLand(TestCase):
             source=alice
         )
         # THEN
-        self.assertEqual({token_id_sold_by_alice: alice_land_price}, result.big_map_diff["market/to_sell"])
+        self.assertEqual({token_id_sold_by_alice: alice_land_price}, result.big_map_diff["market/on_sale"])
         self.assertEqual(False, (alice, bob, 1) in result.big_map_diff['operators'].keys())
         self.assertEqual(True, (alice, self.nftContract.address, 1) in result.big_map_diff['operators'].keys())
 
@@ -53,7 +53,7 @@ class TestSellLand(TestCase):
             token_id_sold_by_alice = 1
             alice_land_price = Decimal(0.0003).quantize(Decimal("0.0003"))
             storage_with_alice_selling_her_land = self.get_storage(ledger={token_id_sold_by_alice: alice},
-                                                                   to_sell={token_id_sold_by_alice: alice_land_price},
+                                                                   on_sale={token_id_sold_by_alice: alice_land_price},
                                                                    operators={(alice, self.nftContract.address, 1): None})
 
             # WHEN

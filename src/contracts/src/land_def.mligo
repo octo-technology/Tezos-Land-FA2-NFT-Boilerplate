@@ -45,7 +45,7 @@ type marketplace_storage = {
   admin: address;
   height: nat;
   width: nat;
-  to_sell: (token_id, price) big_map;
+  on_sale: (token_id, price) big_map;
   lands: lands;
 }
 
