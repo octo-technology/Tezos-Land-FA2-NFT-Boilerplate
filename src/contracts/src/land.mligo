@@ -139,6 +139,9 @@ type buy_param = {
   id : token_id;
 }
 
+type withdraw_param = {
+  id : token_id;
+}
 
 let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  list) * nft_token_storage =
     let land_price : price = match Big_map.find_opt buy_parameters.id storage.market.on_sale with
@@ -180,10 +183,26 @@ let sell (sell_params, storage : sell_param * nft_token_storage) : (operation  l
   if not is_owner(sell_params.id, Tezos.sender, storage.ledger)
     then (failwith("Only the owner of a land can sell it") : (operation  list) * nft_token_storage)
     else
-        let operators_with_token_operator = exec_update_operator([Add_operator_p({owner=Tezos.sender; operator=Tezos.self_address; token_id=sell_params.id})], Tezos.sender, storage.operators) in
+        let operators_with_token_operator = exec_update_operator([Remove_operator_p({owner=Tezos.sender; operator=Tezos.self_address; token_id=sell_params.id})], Tezos.sender, storage.operators) in
         let on_sale_with_new_land_on_sale = Map.add sell_params.id sell_params.price storage.market.on_sale in
         ([] : operation list), { storage with market = { storage.market with on_sale = on_sale_with_new_land_on_sale }; operators = operators_with_token_operator }
 
+
+(**
+Withdraw the land on sale from the "on_sale" list and removes this contract as an operator for this token
+@return storage with modified operators and on_sale lists
+*)
+let withdraw_from_sale (withdraw_param, storage : withdraw_param * nft_token_storage) : (operation  list) * nft_token_storage =
+    let land_price : price = match Big_map.find_opt withdraw_param.id storage.market.on_sale with
+        | None -> (failwith("This land is not on sale"): price)
+        | Some price -> price
+      in
+    if not is_owner(withdraw_param.id, Tezos.sender, storage.ledger)
+    then (failwith("Only the owner of a land can withdraw it from sale") : (operation  list) * nft_token_storage)
+    else
+        let operators_without_token_operator = exec_update_operator([Remove_operator_p({owner=Tezos.sender; operator=Tezos.self_address; token_id=withdraw_param.id})], Tezos.sender, storage.operators) in
+        let on_sale_without_removed_land = Map.remove withdraw_param.id storage.market.on_sale in
+        ([] : operation list),  { storage with market = { storage.market with on_sale = on_sale_without_removed_land }; operators = operators_without_token_operator }
 
 // Create a land, and a token (they both have the same id), associate token to given owner, (and optionnaly setup an operator for this newly minted token)
 let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list) * nft_token_storage =
@@ -221,6 +240,7 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
   | ChangeLandDescription of (nat * name)
   | SellLand of sell_param
   | BuyLand of buy_param
+  | WithdrawFromSale of withdraw_param
 
 
   let main (param, storage : nft_entry_points * nft_token_storage)
@@ -240,6 +260,7 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
     | ChangeLandDescription p -> changeLandDescription(p.0, p.1, storage)
     | SellLand p -> sell(p, storage)
     | BuyLand p -> buy(p, storage)
+    | WithdrawFromSale p -> withdraw_from_sale(p, storage)
 
 
 #endif
