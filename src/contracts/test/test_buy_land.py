@@ -21,6 +21,7 @@ class TestBuyLand(TestCase):
         token_id = 1
         on_sale = {token_id: price}
         storage_with_alice_selling_a_land = self.get_storage(ledger={token_id: alice},
+                                                             owners={alice:[token_id]},
                                                              on_sale=on_sale,
                                                              operators={(alice, self.nftContract.address, 1): None})
         # WHEN
@@ -33,6 +34,7 @@ class TestBuyLand(TestCase):
 
         self.assertEqual({1: None}, result.big_map_diff["market/on_sale"])
         self.assertEqual(bob, result.big_map_diff['ledger'][1])
+        self.assertEqual({alice: None, bob: [token_id]}, result.big_map_diff['market/owners'])
         self.assertEqual({'source': self.nftContract.address, 'nonce': 0, 'kind': 'transaction', 'amount': str(price), 'destination': alice}, result.operations[0])
         self.assertEqual(False, (bob, self.nftContract.address, 1) in result.big_map_diff['operators'].keys())
         self.assertEqual(True, (alice, self.nftContract.address, 1) in result.big_map_diff['operators'].keys())

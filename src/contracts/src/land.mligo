@@ -13,6 +13,26 @@ types of NFTs. Each NFT type is represented by the range of token IDs - `token_d
 #include "land_management.mligo"
 
 
+let add_token_to_owner (token_id, new_owner, owners: token_id * address * owners) : owners =
+        let owned_tokens_by_owner : token_id set = match Big_map.find_opt new_owner owners with
+        | Some(ownr) -> ownr
+        | None -> (Set.empty: token_id set) in
+        let owned_tokens_by_owner_with_new_token : token_id set =  Set.add token_id owned_tokens_by_owner in
+        let new_owners: owners = Big_map.update new_owner (Some owned_tokens_by_owner_with_new_token) owners in
+        new_owners
+
+let remove_token_from_owner (token_id, new_owner, owners: token_id * address * owners) : owners =
+        let owned_tokens_by_owner : token_id set = match Big_map.find_opt new_owner owners with
+        | Some(ownr) -> ownr
+        | None -> (Set.empty: token_id set) in
+        let number_of_owned_lands : nat = Set.size owned_tokens_by_owner in
+        if (number_of_owned_lands > 0n) then
+            let owned_tokens_by_owner_with_new_token : token_id set =  Set.remove token_id owned_tokens_by_owner in
+            let new_owners: owners = Big_map.update new_owner (Some owned_tokens_by_owner_with_new_token) owners in
+            new_owners
+        else
+            owners
+
 (** 
 Retrieve the balances for the specified tokens and owners
 @return callback operation
@@ -162,6 +182,8 @@ let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  l
       let token_transfer_transaction = [{from_=land_owner_before_sale; txs=[{to_=Tezos.sender; token_id=buy_parameters.id; amount=1n}]}] in
       let transfer_validator = default_operator_validator in
       let ledger_with_token_transferred = transfer (token_transfer_transaction, transfer_validator, storage.operators, storage.ledger, Some(Tezos.self_address)) in
+      let owners_with_updated_seller = remove_token_from_owner (buy_parameters.id, land_owner_before_sale, storage.market.owners) in
+      let owners_with_updated_buyer_and_seller = add_token_to_owner (buy_parameters.id, Tezos.sender, owners_with_updated_seller) in
       let on_sale_without_token_bought = Map.remove buy_parameters.id storage.market.on_sale in
       let operators_without_token_bought_operator = exec_update_operator([Remove_operator_p({owner=land_owner_before_sale; operator=Tezos.self_address; token_id=buy_parameters.id})], land_owner_before_sale, storage.operators) in
 
@@ -170,7 +192,7 @@ let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  l
       | None -> (failwith ("Not a contract") : unit contract)
       in
       let withdrawTransaction : operation = Tezos.transaction unit land_price seller in
-      [withdrawTransaction], { storage with market={ storage.market with on_sale=on_sale_without_token_bought }; ledger=ledger_with_token_transferred; operators=operators_without_token_bought_operator }
+      [withdrawTransaction], { storage with market={ storage.market with on_sale=on_sale_without_token_bought; owners=owners_with_updated_buyer_and_seller }; ledger=ledger_with_token_transferred; operators=operators_without_token_bought_operator }
 (**
 Put the land on sale in the "on_sale" list and add this contract as an operator for this token
 @return storage with modified operators and on_sale lists
@@ -204,7 +226,9 @@ let withdraw_from_sale (withdraw_param, storage : withdraw_param * nft_token_sto
         let on_sale_without_removed_land = Map.remove withdraw_param.id storage.market.on_sale in
         ([] : operation list),  { storage with market = { storage.market with on_sale = on_sale_without_removed_land }; operators = operators_without_token_operator }
 
+
 // Create a land, and a token (they both have the same id), associate token to given owner, (and optionnaly setup an operator for this newly minted token)
+
 let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list) * nft_token_storage =
     // if not is_admin(Tezos.sender, store.market)
     // then (failwith("need admin privilege") : (operation  list) * nft_token_storage)
@@ -213,15 +237,16 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
     let create_token_with_operator (p,s : mint_param * nft_token_storage) : (operation  list) * nft_token_storage =
        // TODO: default price .. payment to
        if (Tezos.amount = 200mutez) then
+        let new_owners: owners = add_token_to_owner (p.token_id, p.owner, s.market.owners) in
         let ledgder_with_minted_token = Big_map.add p.token_id p.owner s.ledger in
         let new_land = ({ name=""; description=(None:string option); position=convert_index_to_position(p.token_id, s.market); isOwned=true; onSale=false; price=200mutez; id=p.token_id }:land) in
         let lands_with_new_land = Big_map.add p.token_id new_land s.market.lands in
         match mint_param.operator with
-        | None -> ([] : operation list),  { s with ledger = ledgder_with_minted_token; market = { s.market with lands=lands_with_new_land; } }
+        | None -> ([] : operation list),  { s with ledger = ledgder_with_minted_token; market = { s.market with lands=lands_with_new_land; owners=new_owners; } }
         | Some(operator_address) ->
             let update : update_operator = Add_operator_p({ owner = p.owner; operator = operator_address; token_id = p.token_id; }) in
             let operators_with_minted_token_operator = update_operators (update, s.operators) in
-            ([] : operation list),  { s with ledger = ledgder_with_minted_token; operators = operators_with_minted_token_operator; market = { s.market with lands=lands_with_new_land; } }
+            ([] : operation list),  { s with ledger = ledgder_with_minted_token; operators = operators_with_minted_token_operator; market = { s.market with lands=lands_with_new_land; owners=new_owners; } }
       else
         (failwith("Default mint price is 200mutez") : (operation  list) * nft_token_storage)
     in

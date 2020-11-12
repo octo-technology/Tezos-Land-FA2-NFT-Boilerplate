@@ -36,6 +36,7 @@ class landContractTest(TestCase):
                                                    ).result(
             storage={"market": {
                                 "lands": {},
+                                "owners": {},
                                 "admin": "tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z",
                                 "height": 10, "width": 10,
                                 "on_sale": {1: 100}},
@@ -61,6 +62,7 @@ class landContractTest(TestCase):
                                                    ).result(
             storage={"market": {
                                 "lands": {},
+                                "owners": {},
                                 "admin": "tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z",
                                 "height": 10, "width": 10,
                                 "on_sale": {1: 100}},
@@ -88,6 +90,7 @@ class landContractTest(TestCase):
                 [{"add_operator": {"owner": alice, "operator": bob, "token_id": 1}}]).result(
                 storage={"market": {
                                     "lands": {},
+                                    "owners": {},
                                     "admin": "tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z",
                                     "height": 10, "width": 10,
                                     "on_sale": {1: 100}},
