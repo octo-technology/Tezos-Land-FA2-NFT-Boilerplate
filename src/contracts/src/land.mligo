@@ -9,7 +9,7 @@ types of NFTs. Each NFT type is represented by the range of token IDs - `token_d
 #include "tzip-12/fa2_errors.mligo"
 #include "tzip-12/lib/fa2_operator_lib.mligo"
 
-#include "land_def.mligo"
+#include "storage_definition.mligo"
 #include "land_management.mligo"
 
 
@@ -51,11 +51,45 @@ let get_balance (p, ledger : balance_of_param * ledger) : operation =
   let responses = List.map to_balance p.requests in
   Operation.transaction responses 0mutez p.callback
 
+
+(** Finds a definition of the token type (token_id range) associated with the provided token id *)
+let find_token_def (tid, token_defs : token_id * (token_def set)) : token_def =
+  let tdef = Set.fold (fun (res, d : (token_def option) * token_def) ->
+    match res with
+    | Some r -> res
+    | None ->
+      if tid >= d.from_ && tid < d.to_
+      then  Some d
+      else (None : token_def option)
+  ) token_defs (None : token_def option)
+  in
+  match tdef with
+  | None -> (failwith fa2_token_undefined : token_def)
+  | Some d -> d
+
+let get_metadata (tokens, meta : (token_id list) * token_storage )
+    : token_metadata list =
+  List.map (fun (tid: token_id) ->
+    let tdef = find_token_def (tid, meta.token_defs) in
+    let meta = Big_map.find_opt tdef meta.metadata in
+    match meta with
+    | Some m -> { m with token_id = tid; }
+    | None -> (failwith "NO_DATA" : token_metadata)
+  ) tokens
+
+
+let exec_update_operator (updates, updater, ops_storage : update_operator list * address * operator_storage) : operator_storage =
+    let process_update = (fun (ops, update : operator_storage * update_operator) ->
+      let u = validate_update_operators_by_owner (update, updater) in
+      update_operators (update, ops)
+    ) in
+    List.fold process_update updates ops_storage
+
 (**
 Update leger balances according to the specified transfers. Fails if any of the
 permissions or constraints are violated.
 @param txs transfers to be applied to the ledger
-@param owner_validator function that validates of the tokens from the particular owner can be transferred. 
+@param owner_validator function that validates of the tokens from the particular owner can be transferred.
  *)
 let transfer (txs, owner_validator, ops_storage, ledger, emitter
     : (transfer list) * operator_validator * operator_storage * ledger * address option) : ledger =
@@ -85,84 +119,14 @@ let transfer (txs, owner_validator, ops_storage, ledger, emitter
   in
   List.fold make_transfer txs ledger
 
-let exec_update_operator (updates, updater, ops_storage : update_operator list * address * operator_storage) : operator_storage =
-    let process_update = (fun (ops, update : operator_storage * update_operator) ->
-      let u = validate_update_operators_by_owner (update, updater) in
-      update_operators (update, ops)
-    ) in
-    List.fold process_update updates ops_storage
-
-(** Finds a definition of the token type (token_id range) associated with the provided token id *)
-let find_token_def (tid, token_defs : token_id * (token_def set)) : token_def =
-  let tdef = Set.fold (fun (res, d : (token_def option) * token_def) ->
-    match res with
-    | Some r -> res
-    | None ->
-      if tid >= d.from_ && tid < d.to_
-      then  Some d
-      else (None : token_def option)
-  ) token_defs (None : token_def option)
-  in
-  match tdef with
-  | None -> (failwith fa2_token_undefined : token_def)
-  | Some d -> d
-
-let get_metadata (tokens, meta : (token_id list) * token_storage )
-    : token_metadata list =
-  List.map (fun (tid: token_id) ->
-    let tdef = find_token_def (tid, meta.token_defs) in
-    let meta = Big_map.find_opt tdef meta.metadata in
-    match meta with
-    | Some m -> { m with token_id = tid; }
-    | None -> (failwith "NO_DATA" : token_metadata)
-  ) tokens
-
-let fa2_main (param, storage : fa2_entry_points * nft_token_storage)
-    : (operation  list) * nft_token_storage =
-  match param with
-  | Transfer txs_michelson ->
-    let txs = transfers_from_michelson txs_michelson in
-    let validator = default_operator_validator in
-    let new_ledger = transfer (txs, validator, storage.operators, storage.ledger, Some(Tezos.sender)) in
-    let new_storage = { storage with ledger = new_ledger; }
-    in ([] : operation list), new_storage
-
-  | Balance_of pm ->
-    let p = balance_of_param_from_michelson pm in
-    let op = get_balance (p, storage.ledger) in
-    [op], storage
-
-  | Update_operators updates_michelson ->
-    let updates = operator_updates_from_michelson updates_michelson in
-    let updater = Tezos.sender in
-    let new_ops = exec_update_operator(updates, updater, storage.operators) in
-    ([] : operation list), { storage with operators = new_ops; }
-
-
-  | Token_metadata_registry callback ->
-    (* the contract stores its own token metadata and exposes `token_metadata` entry point *)
-    let callback_op = Operation.transaction Tezos.self_address 0mutez callback in
-    [callback_op], storage
-
-type mint_param = {
-    token_id: token_id;
-    owner: address;
-    operator: address option;
-}
-
-type sell_param = {
-  id : token_id;
-  price : price;
-}
 
 type buy_param = {
   id : token_id;
 }
-
-type withdraw_param = {
-  id : token_id;
-}
-
+(**
+Buy a land from the on_sale list, and transfer it to the buyer
+@return storage with modified operators and on_sale lists
+*)
 let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  list) * nft_token_storage =
     let land_price : price = match Big_map.find_opt buy_parameters.id storage.market.on_sale with
     | None -> (failwith("This land is not on sale"): price)
@@ -193,6 +157,12 @@ let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  l
       in
       let withdrawTransaction : operation = Tezos.transaction unit land_price seller in
       [withdrawTransaction], { storage with market={ storage.market with on_sale=on_sale_without_token_bought; owners=owners_with_updated_buyer_and_seller }; ledger=ledger_with_token_transferred; operators=operators_without_token_bought_operator }
+
+
+type sell_param = {
+  id : token_id;
+  price : price;
+}
 (**
 Put the land on sale in the "on_sale" list and add this contract as an operator for this token
 @return storage with modified operators and on_sale lists
@@ -210,6 +180,9 @@ let sell (sell_params, storage : sell_param * nft_token_storage) : (operation  l
         ([] : operation list), { storage with market = { storage.market with on_sale = on_sale_with_new_land_on_sale }; operators = operators_with_token_operator }
 
 
+type withdraw_param = {
+  id : token_id;
+}
 (**
 Withdraw the land on sale from the "on_sale" list and removes this contract as an operator for this token
 @return storage with modified operators and on_sale lists
@@ -227,8 +200,15 @@ let withdraw_from_sale (withdraw_param, storage : withdraw_param * nft_token_sto
         ([] : operation list),  { storage with market = { storage.market with on_sale = on_sale_without_removed_land }; operators = operators_without_token_operator }
 
 
-// Create a land, and a token (they both have the same id), associate token to given owner, (and optionnaly setup an operator for this newly minted token)
-
+type mint_param = {
+    token_id: token_id;
+    owner: address;
+    operator: address option;
+}
+(**
+Create a land, and a token (they both have the same id), associate token to given owner, (and possibly setup an operator for this newly minted token)
+@return storage with new token, and operators
+*)
 let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list) * nft_token_storage =
     // if not is_admin(Tezos.sender, store.market)
     // then (failwith("need admin privilege") : (operation  list) * nft_token_storage)
@@ -257,6 +237,34 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
     | None -> create_token_with_operator (mint_param, store)
 
 
+let fa2_main (param, storage : fa2_entry_points * nft_token_storage)
+    : (operation  list) * nft_token_storage =
+  match param with
+  | Transfer txs_michelson ->
+    let txs = transfers_from_michelson txs_michelson in
+    let validator = default_operator_validator in
+    let new_ledger = transfer (txs, validator, storage.operators, storage.ledger, Some(Tezos.sender)) in
+    let new_storage = { storage with ledger = new_ledger; }
+    in ([] : operation list), new_storage
+
+  | Balance_of pm ->
+    let p = balance_of_param_from_michelson pm in
+    let op = get_balance (p, storage.ledger) in
+    [op], storage
+
+  | Update_operators updates_michelson ->
+    let updates = operator_updates_from_michelson updates_michelson in
+    let updater = Tezos.sender in
+    let new_ops = exec_update_operator(updates, updater, storage.operators) in
+    ([] : operation list), { storage with operators = new_ops; }
+
+
+  | Token_metadata_registry callback ->
+    (* the contract stores its own token metadata and exposes `token_metadata` entry point *)
+    let callback_op = Operation.transaction Tezos.self_address 0mutez callback in
+    [callback_op], storage
+
+
   type nft_entry_points =
   | Fa2 of fa2_entry_points
   | Metadata of fa2_token_metadata
@@ -266,7 +274,6 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
   | SellLand of sell_param
   | BuyLand of buy_param
   | WithdrawFromSale of withdraw_param
-
 
   let main (param, storage : nft_entry_points * nft_token_storage)
       : (operation  list) * nft_token_storage =

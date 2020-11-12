@@ -184,10 +184,68 @@
              SOME ;
              DIG 2 ;
              UPDATE } ;
-         DIG 6 ;
+         DIG 3 ;
          DUP ;
-         DUG 7 ;
-         DIG 6 ;
+         DUG 4 ;
+         LAMBDA
+           (pair (lambda
+                    (pair (or (pair (pair address address) nat) (pair (pair address address) nat))
+                          (big_map (pair address (pair address nat)) unit))
+                    (big_map (pair address (pair address nat)) unit))
+                 (pair (pair (list (or (pair (pair address address) nat) (pair (pair address address) nat)))
+                             address)
+                       (big_map (pair address (pair address nat)) unit)))
+           (big_map (pair address (pair address nat)) unit)
+           { DUP ;
+             CDR ;
+             SWAP ;
+             CAR ;
+             SWAP ;
+             DUP ;
+             CDR ;
+             SWAP ;
+             DUP ;
+             DUG 2 ;
+             CAR ;
+             CAR ;
+             ITER { SWAP ;
+                    PAIR ;
+                    DUP ;
+                    CDR ;
+                    DIG 2 ;
+                    DUP ;
+                    DUG 3 ;
+                    CAR ;
+                    CDR ;
+                    SWAP ;
+                    DUP ;
+                    DUG 2 ;
+                    IF_LEFT {} {} ;
+                    CAR ;
+                    CDR ;
+                    COMPARE ;
+                    EQ ;
+                    IF { UNIT } { PUSH string "FA2_NOT_OWNER" ; FAILWITH } ;
+                    DROP ;
+                    SWAP ;
+                    CAR ;
+                    SWAP ;
+                    PAIR ;
+                    DIG 2 ;
+                    DUP ;
+                    DUG 3 ;
+                    SWAP ;
+                    EXEC } ;
+             SWAP ;
+             DROP ;
+             SWAP ;
+             DROP } ;
+         SWAP ;
+         APPLY ;
+         DIG 7 ;
+         DUP ;
+         DUG 8 ;
+         DIG 7 ;
          PAIR ;
          LAMBDA
            (pair (pair string string)
@@ -305,64 +363,6 @@
              DROP } ;
          SWAP ;
          APPLY ;
-         DIG 4 ;
-         DUP ;
-         DUG 5 ;
-         LAMBDA
-           (pair (lambda
-                    (pair (or (pair (pair address address) nat) (pair (pair address address) nat))
-                          (big_map (pair address (pair address nat)) unit))
-                    (big_map (pair address (pair address nat)) unit))
-                 (pair (pair (list (or (pair (pair address address) nat) (pair (pair address address) nat)))
-                             address)
-                       (big_map (pair address (pair address nat)) unit)))
-           (big_map (pair address (pair address nat)) unit)
-           { DUP ;
-             CDR ;
-             SWAP ;
-             CAR ;
-             SWAP ;
-             DUP ;
-             CDR ;
-             SWAP ;
-             DUP ;
-             DUG 2 ;
-             CAR ;
-             CAR ;
-             ITER { SWAP ;
-                    PAIR ;
-                    DUP ;
-                    CDR ;
-                    DIG 2 ;
-                    DUP ;
-                    DUG 3 ;
-                    CAR ;
-                    CDR ;
-                    SWAP ;
-                    DUP ;
-                    DUG 2 ;
-                    IF_LEFT {} {} ;
-                    CAR ;
-                    CDR ;
-                    COMPARE ;
-                    EQ ;
-                    IF { UNIT } { PUSH string "FA2_NOT_OWNER" ; FAILWITH } ;
-                    DROP ;
-                    SWAP ;
-                    CAR ;
-                    SWAP ;
-                    PAIR ;
-                    DIG 2 ;
-                    DUP ;
-                    DUG 3 ;
-                    SWAP ;
-                    EXEC } ;
-             SWAP ;
-             DROP ;
-             SWAP ;
-             DROP } ;
-         SWAP ;
-         APPLY ;
          DIG 8 ;
          DUP ;
          DUG 9 ;
@@ -456,7 +456,7 @@
                           PAIR ;
                           PAIR ;
                           PAIR ;
-                          DIG 6 ;
+                          DIG 5 ;
                           SWAP ;
                           EXEC ;
                           DIG 4 ;
@@ -876,7 +876,7 @@
                        { DIG 6 ;
                          DROP ;
                          IF_LEFT
-                           { DIG 2 ;
+                           { DIG 3 ;
                              DROP ;
                              DIG 4 ;
                              DROP ;
@@ -923,7 +923,7 @@
                              PAIR ;
                              NIL operation ;
                              PAIR }
-                           { DIG 3 ;
+                           { DIG 2 ;
                              DROP ;
                              DIG 3 ;
                              DROP ;
@@ -965,7 +965,7 @@
                              PAIR ;
                              NIL operation ;
                              PAIR } } } } }
-           { DIG 3 ;
+           { DIG 2 ;
              DROP ;
              DIG 5 ;
              DROP ;

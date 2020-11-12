@@ -1,5 +1,9 @@
-#include "land_def.mligo"
+#include "storage_definition.mligo"
 
+type change_land_name_param = {
+    token_id: token_id;
+    new_land_name: string;
+}
 let is_admin(u,s: address * marketplace_storage) : bool =
   u = s.admin
 
