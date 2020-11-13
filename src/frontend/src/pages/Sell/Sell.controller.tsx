@@ -4,6 +4,7 @@ import { useAccountPkh, useOnBlock, useReady, useTezos, useWallet } from 'dapp/d
 import { LEDGER, PLAYERS, TEZOSLAND_ADDRESS, TOKENS } from 'dapp/defaults'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
+import {MichelsonMap} from '@taquito/taquito'
 
 import { SellStyled } from './Sell.style'
 import { SellView } from './Sell.view'
@@ -45,62 +46,22 @@ export const Sell = () => {
     ;(async () => {
       if (tezos) {
         const ctr = await (tezos as any).wallet.at(TEZOSLAND_ADDRESS)
-        setContract(ctr)
+        setContract(ctr)        
       }
     })()
   }, [tezos])
 
   useEffect(() => {
     ;(async () => {
-      const myTokens: Token[] = []
-      if (accountPkh) {
-        axios({
-          method: 'get',
-          url: `https://cors-anywhere.herokuapp.com/https://api.tzstats.com/explorer/bigmap/${LEDGER}/values`,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }).then(function (response) {
-          const ledger: any[] = response.data?.filter((ledger: any) => ledger.key === accountPkh)?.[0]?.value?.['0@set']
-          if (ledger) {
-            ledger.forEach(
-              (legderEl, i) => (myTokens[i] = { token_id: legderEl, player_id: undefined, name: undefined }),
-            )
-            axios({
-              method: 'get',
-              url: `https://cors-anywhere.herokuapp.com/https://api.tzstats.com/explorer/bigmap/${TOKENS}/values`,
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }).then(function (response) {
-              const tokens = response.data
-              myTokens.forEach((myToken) => {
-                const player_id = tokens.filter((token: any) => token.value.token_id === myToken.token_id)?.[0]?.value
-                  ?.player_id
-                if (player_id) myToken.player_id = player_id
-              })
-              axios({
-                method: 'get',
-                url: `https://cors-anywhere.herokuapp.com/https://api.tzstats.com/explorer/bigmap/${PLAYERS}/values`,
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              }).then(function (response) {
-                const players = response.data
-                myTokens.forEach((myToken) => {
-                  const name = players.filter((player: any) => player.value.player_id === myToken.player_id)?.[0]?.value
-                    ?.name
-                  if (name) myToken.name = name
-                })
-                setMyTokens(myTokens)
-                setLoading(false)
-              })
-            })
-          }
-        })
+      if (contract && accountPkh) {
+        const storage = await (contract as any).storage()
+        const tokensOwnedFromStorage = await storage.market.owners.get(accountPkh)
+        const tokensOwnedByUser = tokensOwnedFromStorage.map((token: { c: any[] }) => ({token_id: token.c[0], name: token.c[0]}))
+        setMyTokens(tokensOwnedByUser)
+        
       }
     })()
-  }, [accountPkh])
+  }, [contract, accountPkh])
 
   // useOnBlock(tezos, loadStorage)
 
@@ -108,7 +69,7 @@ export const Sell = () => {
   const sellToken = React.useCallback(
     ({ token_id, price }: SellToken) => {
       console.log(token_id, price)
-      ;(contract as any).methods.sellToken(price * 1000000, token_id).send()
+      ;(contract as any).methods.sellLand(price * 1000000, token_id).send()
     },
     [contract],
   )
