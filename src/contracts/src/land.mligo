@@ -18,7 +18,7 @@ type nft_entry_points =
     | Metadata of fa2_token_metadata
     | Mint of mint_param
     | ChangeLandName of change_land_name_param
-    | ChangeLandDescription of (nat * name)
+    | ChangeLandDescription of change_land_description_param
     | SellLand of sell_param
     | BuyLand of buy_param
     | WithdrawFromSale of withdraw_param
@@ -38,7 +38,7 @@ let main (param, storage : nft_entry_points * nft_token_storage)
     | Metadata m -> get_metadata_entrypoint(m, storage)
     | Mint p -> mint(p,storage)
     | ChangeLandName p -> change_land_name(p, storage)
-    | ChangeLandDescription p -> changeLandDescription(p.0, p.1, storage)
+    | ChangeLandDescription p -> changeLandDescription(p, storage)
     | SellLand p -> sell(p, storage)
     | BuyLand p -> buy(p, storage)
     | WithdrawFromSale p -> withdraw_from_sale(p, storage)

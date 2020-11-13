@@ -1,6 +1,6 @@
 { parameter
     (or (or (or (pair %buyLand (mutez %price) (nat %token_id))
-                (pair %changeLandDescription nat string))
+                (pair %changeLandDescription (string %new_land_description) (nat %token_id)))
             (or (pair %changeLandName (string %new_land_name) (nat %token_id))
                 (or %fa2
                    (or (pair %balance_of
@@ -595,14 +595,6 @@
                      DROP ;
                      DIG 3 ;
                      DROP ;
-                     PAIR ;
-                     DUP ;
-                     CDR ;
-                     SWAP ;
-                     DUP ;
-                     DUG 2 ;
-                     CAR ;
-                     CAR ;
                      SWAP ;
                      DUP ;
                      DUG 2 ;
@@ -612,13 +604,14 @@
                      DIG 2 ;
                      DUP ;
                      DUG 3 ;
+                     CDR ;
                      PAIR ;
                      PAIR ;
-                     DIG 4 ;
+                     DIG 3 ;
                      SWAP ;
                      EXEC ;
                      NOT ;
-                     IF { DROP 3 ;
+                     IF { DROP 2 ;
                           PUSH string "Only the owner of a land can change its description" ;
                           FAILWITH }
                         { SWAP ;
@@ -632,9 +625,10 @@
                           SWAP ;
                           DUP ;
                           DUG 2 ;
+                          CDR ;
                           GET ;
                           IF_NONE
-                            { DROP 3 ; PUSH string "Failure." ; FAILWITH }
+                            { DROP 2 ; PUSH string "This land does not exist" ; FAILWITH }
                             { DIG 2 ;
                               DUP ;
                               CAR ;
@@ -643,9 +637,10 @@
                               CDR ;
                               CAR ;
                               DIG 2 ;
-                              DIG 4 ;
+                              DIG 3 ;
+                              DUP ;
+                              DUG 4 ;
                               CAR ;
-                              CDR ;
                               SOME ;
                               DIP { DUP ; CDR ; SWAP ; CAR ; DUP ; CDR ; SWAP ; CAR ; CDR } ;
                               PAIR ;
@@ -653,6 +648,7 @@
                               PAIR ;
                               SOME ;
                               DIG 3 ;
+                              CDR ;
                               UPDATE ;
                               DIP { DUP ;
                                     CDR ;
