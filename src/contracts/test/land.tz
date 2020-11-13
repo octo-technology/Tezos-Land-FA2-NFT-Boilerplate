@@ -1211,20 +1211,36 @@
                      DUP ;
                      DUG 2 ;
                      CAR ;
+                     CDR ;
+                     SENDER ;
+                     PAIR ;
+                     DUP ;
+                     CDR ;
+                     CAR ;
+                     CAR ;
                      CAR ;
                      SWAP ;
-                     DUP ;
-                     DUG 2 ;
-                     CDR ;
-                     GET ;
-                     IF_NONE
-                       { DUP ;
-                         DUG 2 ;
-                         PUSH mutez 200 ;
-                         AMOUNT ;
-                         COMPARE ;
-                         EQ ;
-                         IF { SWAP ;
+                     CAR ;
+                     COMPARE ;
+                     EQ ;
+                     NOT ;
+                     IF { DROP 3 ;
+                          PUSH string "A new token can only be minted by the administrator" ;
+                          FAILWITH }
+                        { SWAP ;
+                          DUP ;
+                          DUG 2 ;
+                          CAR ;
+                          CAR ;
+                          SWAP ;
+                          DUP ;
+                          DUG 2 ;
+                          CDR ;
+                          GET ;
+                          IF_NONE
+                            { DUP ;
+                              DUG 2 ;
+                              SWAP ;
                               DUP ;
                               DUG 2 ;
                               CAR ;
@@ -1451,15 +1467,14 @@
                                   PAIR ;
                                   NIL operation ;
                                   PAIR } }
-                            { DROP 4 ; PUSH string "Default mint price is 200mutez" ; FAILWITH } }
-                       { SWAP ;
-                         DROP ;
-                         SWAP ;
-                         DROP ;
-                         SWAP ;
-                         DROP 2 ;
-                         PUSH string "This non-fungible token already exists" ;
-                         FAILWITH } } }
+                            { SWAP ;
+                              DROP ;
+                              SWAP ;
+                              DROP ;
+                              SWAP ;
+                              DROP 2 ;
+                              PUSH string "This non-fungible token already exists" ;
+                              FAILWITH } } } }
                { DIG 5 ;
                  DROP ;
                  IF_LEFT

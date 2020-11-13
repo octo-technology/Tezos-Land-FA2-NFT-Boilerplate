@@ -9,7 +9,7 @@ type land = {
     position: coordinates;
     isOwned: bool;
     onSale: bool;
-    price: price;
+    price: price option;
     id: nat
 }
 
