@@ -10,7 +10,7 @@ let change_land_name (change_land_name_param, storage : change_land_name_param *
     else
         let landToBeChangedOption : land option = Big_map.find_opt change_land_name_param.token_id storage.market.lands in
         match landToBeChangedOption with
-            | None -> (failwith "Failure." : (operation list) * nft_token_storage)
+            | None -> (failwith "This land does not exist" : (operation list) * nft_token_storage)
             | Some landToBeChanged ->
                 let landChanged : land = { landToBeChanged with name = change_land_name_param.new_land_name } in
                 let landsWithGivenLandNameChanged : lands = Big_map.update change_land_name_param.token_id (Some(landChanged)) storage.market.lands  in

@@ -726,7 +726,7 @@
                           CDR ;
                           GET ;
                           IF_NONE
-                            { DROP 2 ; PUSH string "Failure." ; FAILWITH }
+                            { DROP 2 ; PUSH string "This land does not exist" ; FAILWITH }
                             { DIG 2 ;
                               DUP ;
                               CAR ;
