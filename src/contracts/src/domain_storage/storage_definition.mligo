@@ -3,12 +3,13 @@
 
 #include "land_definition.mligo"
 #include "token_definition.mligo"
+#include "marketplace_definition.mligo"
 
 type marketplace_storage = {
   admin: address;
   height: nat;
   width: nat;
-  on_sale: (token_id, price) big_map;
+  sales: sale set;
   lands: lands;
   owners: owners;
 }

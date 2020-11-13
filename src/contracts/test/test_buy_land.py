@@ -19,20 +19,21 @@ class TestBuyLand(TestCase):
         amount_sent = Decimal(0.000100).quantize(Decimal("0.0001"))
         price : int = 100
         token_id = 1
-        on_sale = {token_id: price}
+        sale = {"token_id": token_id, "price": price}
+        sales = [sale]
         storage_with_alice_selling_a_land = self.get_storage(ledger={token_id: alice},
                                                              owners={alice:[token_id]},
-                                                             on_sale=on_sale,
+                                                             sales=sales,
                                                              operators={(alice, self.nftContract.address, 1): None})
         # WHEN
-        result = self.nftContract.buyLand(token_id).with_amount(amount_sent).result(
+        result = self.nftContract.buyLand(sale).with_amount(amount_sent).result(
             storage=storage_with_alice_selling_a_land,
             source=bob
         )
 
         # THEN
 
-        self.assertEqual({1: None}, result.big_map_diff["market/on_sale"])
+        self.assertEqual([], result.storage["market"]["sales"])
         self.assertEqual(bob, result.big_map_diff['ledger'][1])
         self.assertEqual({alice: None, bob: [token_id]}, result.big_map_diff['market/owners'])
         self.assertEqual({'source': self.nftContract.address, 'nonce': 0, 'kind': 'transaction', 'amount': str(price), 'destination': alice}, result.operations[0])
@@ -45,9 +46,11 @@ class TestBuyLand(TestCase):
             amount_sent = Decimal(0.000100).quantize(Decimal("0.0001"))
             price = 200
             token_id = 1
-            storage_with_alice_owning_a_land = self.get_storage(ledger={token_id: alice}, on_sale={token_id: price})
+            sale = {"token_id": token_id, "price": price}
+            storage_with_alice_owning_a_land = self.get_storage(ledger={token_id: alice},
+                                                                sales=[sale])
             # WHEN
-            result = self.nftContract.buyLand(1).with_amount(amount_sent).result(
+            self.nftContract.buyLand(sale).with_amount(amount_sent).result(
                 storage=storage_with_alice_owning_a_land,
                 source=bob
             )
@@ -62,11 +65,12 @@ class TestBuyLand(TestCase):
             amount_sent = Decimal(0.000100).quantize(Decimal("0.0001"))
             price = 100
             token_id = 1
+            sale = {"token_id": token_id, "price": price}
             storage_with_alice_owning_a_land = self.get_storage(ledger={token_id: alice},
-                                                                on_sale={token_id: price},
+                                                                sales=[sale],
                                                                 operators={(alice, self.nftContract.address, 1): None})
             # WHEN
-            self.nftContract.buyLand(token_id).with_amount(amount_sent).result(
+            self.nftContract.buyLand(sale).with_amount(amount_sent).result(
                 storage=storage_with_alice_owning_a_land,
                 source=alice
             )
@@ -81,9 +85,10 @@ class TestBuyLand(TestCase):
             amount_sent = Decimal(0.000100).quantize(Decimal("0.0001"))
             price = 100
             token_id = 1
-            storage_with_a_land_not_owned_by_alice = self.get_storage(ledger={}, on_sale={token_id: price})
+            sale = {"token_id": token_id, "price": price}
+            storage_with_a_land_not_owned_by_alice = self.get_storage(ledger={}, sales=[sale])
             # WHEN
-            self.nftContract.buyLand(token_id).with_amount(amount_sent).result(
+            self.nftContract.buyLand(sale).with_amount(amount_sent).result(
                 storage=storage_with_a_land_not_owned_by_alice,
                 source=alice
             )
@@ -97,10 +102,12 @@ class TestBuyLand(TestCase):
             # GIVEN
             amount_sent = Decimal(0.000100).quantize(Decimal("0.0001"))
             token_id = 1
-            storage_with_alice_owning_a_land = self.get_storage(ledger={token_id: alice}, on_sale={})
+            price = 100
+            sale = {"token_id": token_id, "price": price}
+            storage_with_alice_owning_a_land = self.get_storage(ledger={token_id: alice}, sales=[])
 
             # WHEN
-            self.nftContract.buyLand(token_id).with_amount(amount_sent).result(
+            self.nftContract.buyLand(sale).with_amount(amount_sent).result(
                 storage=storage_with_alice_owning_a_land,
                 source=bob
             )
@@ -115,12 +122,13 @@ class TestBuyLand(TestCase):
             amount_sent = Decimal(0.000100).quantize(Decimal("0.0001"))
             token_id = 1
             price = 100
+            sale = {"token_id": token_id, "price": price}
             storage_with_alice_owning_a_land = self.get_storage(ledger={token_id: alice},
-                                                                on_sale={token_id: price},
+                                                                sales=[sale],
                                                                 operators={})
 
             # WHEN
-            result = self.nftContract.buyLand(token_id).with_amount(amount_sent).result(
+            result = self.nftContract.buyLand(sale).with_amount(amount_sent).result(
                 storage=storage_with_alice_owning_a_land,
                 source=bob
             )

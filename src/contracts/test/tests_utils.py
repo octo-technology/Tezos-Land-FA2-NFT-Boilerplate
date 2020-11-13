@@ -18,21 +18,21 @@ path_to_michelson_contract = join(dirname(dirname(__file__)), 'test/land.tz')
 
 
 def get_storage(self, lands=None, admin=administrator, height=10, width=10,
-                on_sale=None, owners=None, ledger=None, operators=None):
+                sales=None, owners=None, ledger=None, operators=None):
     if owners is None:
         owners = {}
     if operators is None:
         operators = {}
     if ledger is None:
         ledger = {}
-    if on_sale is None:
-        on_sale = {}
+    if sales is None:
+        sales = ()
     if lands is None:
         lands = {}
     return {"market": {"lands": lands,
                        "admin": admin,
                        "height": height, "width": width,
-                       "on_sale": on_sale,
+                       "sales": sales,
                        "owners": owners},
             "ledger": ledger,
             "operators": operators,

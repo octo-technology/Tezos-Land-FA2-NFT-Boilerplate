@@ -12,7 +12,3 @@ type land = {
     price: price option;
     id: nat
 }
-
-type lands = (nat, land) big_map
-
-type owners = (address, token_id set) big_map

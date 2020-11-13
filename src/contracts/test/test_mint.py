@@ -56,7 +56,7 @@ class TestTransfer(TestCase):
         )
 
         # THEN
-        expected_minted_land = {'description': None, 'id': 1, 'isOwned': True, 'name': '', 'onSale': False, 'position': [0, 0], 'price': Decimal('0.0002')}
+        expected_minted_land = {'description': None, 'id': 1, 'isOwned': True, 'name': '', 'onSale': False, 'position': [0, 0], 'price': None}
         lands_with_minted_land = {minted_token_id: expected_minted_land}
         self.assertEqual({minted_token_id: alice}, result.big_map_diff['ledger'])
         self.assertEqual({alice: [minted_token_id]}, result.big_map_diff['market/owners'])
@@ -75,7 +75,7 @@ class TestTransfer(TestCase):
         )
 
         # THEN
-        expected_minted_land = {'description': None, 'id': 1, 'isOwned': True, 'name': '', 'onSale': False, 'position': [0, 0], 'price': Decimal('0.0002')}
+        expected_minted_land = {'description': None, 'id': 1, 'isOwned': True, 'name': '', 'onSale': False, 'position': [0, 0], 'price': None}
         lands_with_minted_land = {minted_token_id: expected_minted_land}
         minted_land_operator = {('tz1L738ifd66ah69PrmKAZzckvvHnbcSeqjf', 'tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v', 1): None}
         self.assertEqual({minted_token_id: alice}, result.big_map_diff['ledger'])

@@ -19,16 +19,16 @@ class TestSellLand(TestCase):
         token_id_sold_by_alice = 1
         alice_land_price = Decimal(0.0003).quantize(Decimal("0.0003"))
         storage_with_alice_selling_a_land = self.get_storage(ledger={token_id_sold_by_alice: alice},
-                                                             on_sale={token_id_sold_by_alice: alice_land_price},
+                                                             sales=[{"token_id": token_id_sold_by_alice, "price": alice_land_price}],
                                                              operators={(alice, self.nftContract.address, 1): None})
 
         # WHEN
-        result = self.nftContract.withdrawFromSale(token_id_sold_by_alice).result(
+        result = self.nftContract.withdrawFromSale({"token_id": token_id_sold_by_alice, "price": alice_land_price}).result(
             storage=storage_with_alice_selling_a_land,
             source=alice
         )
         # THEN
-        self.assertEqual({token_id_sold_by_alice: None}, result.big_map_diff["market/on_sale"])
+        self.assertEqual([], result.storage["market"]["sales"])
         self.assertEqual({token_id_sold_by_alice: alice}, result.big_map_diff["ledger"])
         self.assertEqual(True, (alice, self.nftContract.address, 1) in result.big_map_diff['operators'].keys())
 
@@ -36,10 +36,11 @@ class TestSellLand(TestCase):
         with self.assertRaises(MichelsonRuntimeError) as not_on_sale_error:
             # GIVEN
             token_id_sold_by_alice = 1
+            alice_land_price = Decimal(0.0003).quantize(Decimal("0.0003"))
             storage_with_alice_owning_a_land = self.get_storage(ledger={token_id_sold_by_alice: alice})
 
             # WHEN
-            self.nftContract.withdrawFromSale(token_id_sold_by_alice).result(
+            self.nftContract.withdrawFromSale({"token_id": token_id_sold_by_alice, "price": alice_land_price}).result(
                 storage=storage_with_alice_owning_a_land,
                 source=alice
             )
@@ -54,11 +55,11 @@ class TestSellLand(TestCase):
             token_id_sold_by_alice = 1
             alice_land_price = Decimal(0.0003).quantize(Decimal("0.0003"))
             storage_with_alice_selling_her_land = self.get_storage(ledger={token_id_sold_by_alice: alice},
-                                                                   on_sale={token_id_sold_by_alice: alice_land_price},
+                                                                   sales=[{"token_id": token_id_sold_by_alice, "price": alice_land_price}],
                                                                    operators={(alice, self.nftContract.address, 1): None})
 
             # WHEN
-            self.nftContract.withdrawFromSale(token_id_sold_by_alice).result(
+            self.nftContract.withdrawFromSale({"token_id": token_id_sold_by_alice, "price": alice_land_price}).result(
                 storage=storage_with_alice_selling_her_land,
                 source=bob
             )
