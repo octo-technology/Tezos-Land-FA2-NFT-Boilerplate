@@ -46,3 +46,14 @@ def get_storage(self, lands=None, admin=administrator, height=10, width=10,
                                                  }
                                       }}
             }
+
+
+def get_test_storage(self, check_consistency_ledger=None, check_consistency_owners=None, check_consistency_result=False):
+    if check_consistency_owners is None:
+        check_consistency_owners = {}
+    if check_consistency_ledger is None:
+        check_consistency_ledger = {}
+    return {"check_consistency_ledger": check_consistency_ledger,
+            "check_consistency_owners": check_consistency_owners,
+            "check_consistency_result": check_consistency_result,
+            }

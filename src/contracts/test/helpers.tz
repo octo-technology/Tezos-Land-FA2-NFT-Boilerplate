@@ -1,0 +1,132 @@
+{ parameter
+    (or (or (pair %consistencyLedgerOwners (address %owner) (nat %token_id))
+            (pair %ownerOwnsTokenIdInOwners (address %owner) (nat %token_id)))
+        (pair %tokenIdOwnedByOwnerInLedger (address %owner) (nat %token_id))) ;
+  storage
+    (pair (pair (big_map %check_consistency_ledger nat address)
+                (big_map %check_consistency_owners address (set nat)))
+          (bool %check_consistency_result)) ;
+  code { LAMBDA
+           (pair (pair address nat) (big_map nat address))
+           bool
+           { DUP ;
+             CAR ;
+             SWAP ;
+             CDR ;
+             SWAP ;
+             DUP ;
+             DUG 2 ;
+             CDR ;
+             GET ;
+             IF_NONE
+               { DROP ; PUSH bool False }
+               { SWAP ;
+                 CAR ;
+                 SWAP ;
+                 COMPARE ;
+                 EQ ;
+                 IF { PUSH bool True } { PUSH bool False } } } ;
+         LAMBDA
+           (pair (pair address nat) (big_map address (set nat)))
+           bool
+           { DUP ;
+             CAR ;
+             SWAP ;
+             CDR ;
+             SWAP ;
+             DUP ;
+             DUG 2 ;
+             CAR ;
+             GET ;
+             IF_NONE { DROP ; PUSH bool False } { SWAP ; CDR ; MEM } } ;
+         DIG 2 ;
+         DUP ;
+         DUG 3 ;
+         CDR ;
+         DIG 3 ;
+         CAR ;
+         IF_LEFT
+           { IF_LEFT
+               { PAIR ;
+                 DUP ;
+                 CDR ;
+                 DUP ;
+                 CAR ;
+                 CDR ;
+                 SWAP ;
+                 DUP ;
+                 DUG 2 ;
+                 CAR ;
+                 CAR ;
+                 DIG 3 ;
+                 CAR ;
+                 PAIR ;
+                 PAIR ;
+                 DUP ;
+                 CAR ;
+                 CAR ;
+                 SWAP ;
+                 DUP ;
+                 DUG 2 ;
+                 CAR ;
+                 CDR ;
+                 SWAP ;
+                 DUP ;
+                 DUG 2 ;
+                 PAIR ;
+                 DIG 5 ;
+                 SWAP ;
+                 EXEC ;
+                 DIG 2 ;
+                 CDR ;
+                 DIG 2 ;
+                 PAIR ;
+                 DIG 3 ;
+                 SWAP ;
+                 EXEC ;
+                 AND ;
+                 IF { PUSH bool True } { PUSH bool False } ;
+                 SWAP ;
+                 CAR ;
+                 PAIR ;
+                 NIL operation ;
+                 PAIR }
+               { DIG 3 ;
+                 DROP ;
+                 PAIR ;
+                 DUP ;
+                 CDR ;
+                 DUP ;
+                 CAR ;
+                 CDR ;
+                 DIG 2 ;
+                 CAR ;
+                 PAIR ;
+                 DIG 2 ;
+                 SWAP ;
+                 EXEC ;
+                 SWAP ;
+                 CAR ;
+                 PAIR ;
+                 NIL operation ;
+                 PAIR } }
+           { DIG 2 ;
+             DROP ;
+             PAIR ;
+             DUP ;
+             CDR ;
+             DUP ;
+             CAR ;
+             CAR ;
+             DIG 2 ;
+             CAR ;
+             PAIR ;
+             DIG 2 ;
+             SWAP ;
+             EXEC ;
+             SWAP ;
+             CAR ;
+             PAIR ;
+             NIL operation ;
+             PAIR } } }
+

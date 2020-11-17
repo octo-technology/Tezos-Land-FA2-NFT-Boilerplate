@@ -1,3 +1,5 @@
+#include "../tzip-12/fa2_interface.mligo"
+
 (* range of nft tokens *)
 type token_def = {
   from_ : nat;

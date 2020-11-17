@@ -39,3 +39,29 @@ let convert_index_to_position(i, s: nat * marketplace_storage) : (nat * nat) =
   (fixed mod s.width, fixed / s.width)
   else
   (failwith("wrong Dimension") : (nat * nat))
+
+type ownership = {
+    owner: address;
+    token_id: token_id;
+}
+
+let check_token_id_is_owned_by_given_owner (ownership, ledger: ownership * ledger) : bool =
+    match Big_map.find_opt ownership.token_id ledger with
+        | Some(owner) -> if (owner = ownership.owner) then
+                            true
+                         else
+                            false
+        | None -> false
+
+let check_owner_owns_a_given_token_id (ownership, owners: ownership * owners) : bool =
+    match Big_map.find_opt ownership.owner owners with
+        | Some (tokens) -> Set.mem ownership.token_id tokens
+        | None -> false
+
+let check_ownership_is_consistent_in_ledger_and_owners (ownership, ledger, owners : ownership * ledger * owners ) : bool =
+    let token_id_is_owned_by_owner_in_ledger: bool = check_token_id_is_owned_by_given_owner (ownership, ledger) in
+    let owner_owns_a_given_token_id_in_owners: bool = check_owner_owns_a_given_token_id (ownership, owners) in
+    if (token_id_is_owned_by_owner_in_ledger && owner_owns_a_given_token_id_in_owners) then
+        true
+    else
+        false

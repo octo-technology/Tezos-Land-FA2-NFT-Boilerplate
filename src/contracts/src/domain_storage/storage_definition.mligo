@@ -4,6 +4,7 @@
 #include "land_definition.mligo"
 #include "token_definition.mligo"
 #include "marketplace_definition.mligo"
+#include "../tzip-12/lib/fa2_operator_lib.mligo"
 
 type marketplace_storage = {
   admin: address;
