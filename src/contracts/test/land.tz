@@ -212,64 +212,51 @@
                  IF_LEFT
                    { DIG 2 ;
                      DROP ;
-                     SWAP ;
+                     SENDER ;
+                     DIG 2 ;
                      DUP ;
-                     DUG 2 ;
+                     DUG 3 ;
                      CAR ;
                      CDR ;
                      CDR ;
                      CAR ;
-                     SWAP ;
+                     DIG 2 ;
                      DUP ;
-                     DUG 2 ;
+                     DUG 3 ;
                      MEM ;
                      IF { AMOUNT ;
-                          SWAP ;
+                          DIG 2 ;
                           DUP ;
-                          DUG 2 ;
+                          DUG 3 ;
                           CAR ;
                           COMPARE ;
                           EQ ;
                           NOT ;
-                          IF { DROP 7 ;
+                          IF { DROP 8 ;
                                PUSH string "The amount sent is not equal to the price of the land" ;
                                FAILWITH }
-                             { SWAP ;
+                             { DIG 2 ;
                                DUP ;
-                               DUG 2 ;
+                               DUG 3 ;
                                CAR ;
                                CAR ;
-                               SWAP ;
+                               DIG 2 ;
                                DUP ;
-                               DUG 2 ;
+                               DUG 3 ;
                                CDR ;
                                GET ;
                                IF_NONE
                                  { PUSH string "This land is not owned by anyone" ; FAILWITH }
                                  { DUP ;
-                                   SENDER ;
+                                   DIG 2 ;
+                                   DUP ;
+                                   DUG 3 ;
                                    COMPARE ;
                                    EQ ;
                                    IF { DROP ;
                                         PUSH string "The buyer is already the owner of this land" ;
                                         FAILWITH }
                                       {} } ;
-                               NIL (pair address (list (pair (pair nat address) nat))) ;
-                               NIL (pair (pair nat address) nat) ;
-                               DIG 3 ;
-                               DUP ;
-                               DUG 4 ;
-                               CDR ;
-                               SENDER ;
-                               PUSH nat 1 ;
-                               PAIR ;
-                               PAIR ;
-                               CONS ;
-                               DIG 2 ;
-                               DUP ;
-                               DUG 3 ;
-                               PAIR ;
-                               CONS ;
                                SELF ;
                                ADDRESS ;
                                SOME ;
@@ -278,14 +265,66 @@
                                DUG 5 ;
                                CAR ;
                                CAR ;
+                               PAIR ;
+                               DIG 4 ;
+                               DUP ;
+                               DUG 5 ;
+                               CDR ;
+                               CDR ;
+                               DIG 3 ;
+                               DUP ;
+                               DUG 4 ;
+                               PAIR ;
+                               DIG 2 ;
+                               DUP ;
+                               DUG 3 ;
                                DIG 5 ;
                                DUP ;
                                DUG 6 ;
                                CDR ;
+                               PAIR ;
+                               PAIR ;
+                               PAIR ;
+                               DUP ;
+                               CDR ;
+                               CDR ;
+                               SWAP ;
+                               DUP ;
+                               DUG 2 ;
+                               CDR ;
+                               CAR ;
+                               DIG 2 ;
+                               DUP ;
+                               DUG 3 ;
+                               CAR ;
+                               CDR ;
                                CDR ;
                                PAIR ;
+                               DIG 7 ;
+                               NIL (pair address (list (pair (pair nat address) nat))) ;
+                               NIL (pair (pair nat address) nat) ;
+                               DIG 5 ;
+                               DUP ;
+                               DUG 6 ;
+                               CAR ;
+                               CAR ;
+                               CAR ;
                                DIG 6 ;
-                               DIG 3 ;
+                               DUP ;
+                               DUG 7 ;
+                               CAR ;
+                               CDR ;
+                               CAR ;
+                               PUSH nat 1 ;
+                               PAIR ;
+                               PAIR ;
+                               CONS ;
+                               DIG 5 ;
+                               CAR ;
+                               CAR ;
+                               CDR ;
+                               PAIR ;
+                               CONS ;
                                PAIR ;
                                PAIR ;
                                PAIR ;
@@ -319,7 +358,7 @@
                                                   CAR ;
                                                   COMPARE ;
                                                   NEQ ;
-                                                  IF { DROP 2 ; DIG 7 ; DUP ; DUG 8 ; FAILWITH }
+                                                  IF { DROP 2 ; DIG 8 ; DUP ; DUG 9 ; FAILWITH }
                                                      { SWAP ;
                                                        DUP ;
                                                        DUG 2 ;
@@ -329,7 +368,7 @@
                                                        CDR ;
                                                        GET ;
                                                        IF_NONE
-                                                         { DROP 2 ; DIG 8 ; DUP ; DUG 9 ; FAILWITH }
+                                                         { DROP 2 ; DIG 9 ; DUP ; DUG 10 ; FAILWITH }
                                                          { DIG 3 ;
                                                            DUP ;
                                                            DUG 4 ;
@@ -339,7 +378,7 @@
                                                            DUG 2 ;
                                                            COMPARE ;
                                                            NEQ ;
-                                                           IF { DROP 3 ; DIG 7 ; DUP ; DUG 8 ; FAILWITH }
+                                                           IF { DROP 3 ; DIG 8 ; DUP ; DUG 9 ; FAILWITH }
                                                               { DIG 4 ;
                                                                 DUP ;
                                                                 DUG 5 ;
@@ -381,25 +420,47 @@
                                       DROP } ;
                                SWAP ;
                                DROP ;
-                               DIG 6 ;
+                               DIG 7 ;
                                DROP ;
-                               DIG 6 ;
+                               DIG 7 ;
                                DROP ;
-                               DIG 3 ;
+                               DIG 4 ;
                                DUP ;
-                               DUG 4 ;
+                               DUG 5 ;
                                CAR ;
                                CDR ;
                                CAR ;
+                               CDR ;
+                               CDR ;
+                               DIG 3 ;
+                               DUP ;
+                               DUG 4 ;
+                               PAIR ;
+                               DIG 2 ;
+                               DUP ;
+                               DUG 3 ;
+                               DIG 5 ;
+                               DUP ;
+                               DUG 6 ;
+                               CDR ;
+                               PAIR ;
+                               PAIR ;
+                               DUP ;
+                               CAR ;
+                               CAR ;
+                               SWAP ;
+                               DUP ;
+                               DUG 2 ;
                                CDR ;
                                CDR ;
                                DIG 2 ;
                                DUP ;
                                DUG 3 ;
-                               DIG 4 ;
-                               DUP ;
-                               DUG 5 ;
+                               CAR ;
                                CDR ;
+                               DIG 2 ;
+                               DUP ;
+                               DUG 3 ;
                                PAIR ;
                                PAIR ;
                                DUP ;
@@ -436,11 +497,10 @@
                                     DIG 2 ;
                                     UPDATE }
                                   { DROP 2 ; SWAP ; DROP } ;
-                               SENDER ;
-                               DIG 4 ;
-                               DUP ;
-                               DUG 5 ;
+                               DIG 2 ;
                                CDR ;
+                               CAR ;
+                               DIG 2 ;
                                PAIR ;
                                PAIR ;
                                DUP ;
@@ -470,11 +530,11 @@
                                DIG 2 ;
                                DUP ;
                                DUG 3 ;
-                               DIG 5 ;
+                               DIG 6 ;
                                DUP ;
-                               DUG 6 ;
+                               DUG 7 ;
                                CDR ;
-                               SENDER ;
+                               DIG 6 ;
                                PAIR ;
                                PAIR ;
                                PAIR ;
@@ -630,7 +690,7 @@
                                     CONS ;
                                     PAIR }
                                   { DROP 7 ; PUSH string "Error: cannot transfer token" ; FAILWITH } } }
-                        { DROP 7 ; PUSH string "This land is not on sale" ; FAILWITH } }
+                        { DROP 8 ; PUSH string "This land is not on sale" ; FAILWITH } }
                    { DIG 3 ;
                      DROP ;
                      DIG 3 ;

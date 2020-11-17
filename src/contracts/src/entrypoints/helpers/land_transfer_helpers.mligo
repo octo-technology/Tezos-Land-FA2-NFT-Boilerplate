@@ -40,6 +40,20 @@ let convert_index_to_position(i, s: nat * marketplace_storage) : (nat * nat) =
   else
   (failwith("wrong Dimension") : (nat * nat))
 
+
+let transfer_token_in_ledger (token_id, token_owner, buyer, operators, ledger, emitter : token_id * address * address * operator_storage * ledger * address option ) : ledger =
+    let token_transfer_transaction = [{from_=token_owner; txs=[{to_=buyer; token_id=token_id; amount=1n}]}] in
+    let transfer_validator: operator_validator = default_operator_validator in
+    let ledger_with_token_transferred: ledger = transfer (token_transfer_transaction, transfer_validator, operators, ledger, emitter) in
+    ledger_with_token_transferred
+
+let transfer_token_in_owners (token_id, seller, buyer, owners : token_id * address * address * owners) : owners =
+    let owners_with_updated_seller: owners = remove_token_from_owner (token_id, seller, owners) in
+    let owners_with_updated_buyer_and_seller: owners = add_token_to_owner (token_id, buyer, owners_with_updated_seller) in
+    owners_with_updated_buyer_and_seller
+
+
+
 type ownership = {
     owner: address;
     token_id: token_id;
