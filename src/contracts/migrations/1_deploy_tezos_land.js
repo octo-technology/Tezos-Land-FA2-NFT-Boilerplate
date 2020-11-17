@@ -17,7 +17,7 @@ metadata_bigmap.set(
     }
 );
 
-const admin = "tz1ddb9NMYHZi5UzPdzTZMYQQZoMub195zgv"
+const admin = "tz1V4yYUaga5AHuoeK7jM6tvDBD7wm9ZpiLn"
 const empty_lands = new MichelsonMap()
 const empty_sales = []
 const empty_ledger = new MichelsonMap()
