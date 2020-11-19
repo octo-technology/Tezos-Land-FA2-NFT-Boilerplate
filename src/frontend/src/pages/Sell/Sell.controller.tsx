@@ -56,8 +56,11 @@ export const Sell = () => {
       if (contract && accountPkh) {
         const storage = await (contract as any).storage()
         const tokensOwnedFromStorage = await storage.market.owners.get(accountPkh)
-        const tokensOwnedByUser = tokensOwnedFromStorage.map((token: { c: any[] }) => ({token_id: token.c[0], name: token.c[0]}))
-        setMyTokens(tokensOwnedByUser)
+        if (tokensOwnedFromStorage){
+          const tokensOwnedByUser = tokensOwnedFromStorage.map((token: { c: any[] }) => ({token_id: token.c[0], name: token.c[0]}))
+          setMyTokens(tokensOwnedByUser)
+          setLoading(false)
+        } 
         
       }
     })()

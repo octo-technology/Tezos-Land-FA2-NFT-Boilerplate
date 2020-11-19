@@ -44,6 +44,7 @@ export const Buy = () => {
             price: sale.price.c[0]
           } as TokenOnSale))
         setTokensOnSale(tokensOnSaleWithPrice)
+        setLoading(false)
         
       }
     })()
