@@ -1,7 +1,3 @@
-#include "../../domain_storage/storage_definition.mligo"
-#include "../helpers/fa2_transfer_helpers.mligo"
-#include "../helpers/land_transfer_helpers.mligo"
-
 type sell_param = sale
 (**
 Put the land on sale in the "on_sale" list and add this contract as an operator for this token

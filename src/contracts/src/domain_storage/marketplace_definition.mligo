@@ -1,5 +1,3 @@
-#include "land_definition.mligo"
-
 type sale = {
     token_id: token_id;
     price: price;

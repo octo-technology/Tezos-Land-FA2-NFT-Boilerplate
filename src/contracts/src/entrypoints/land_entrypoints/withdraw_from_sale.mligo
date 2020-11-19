@@ -1,6 +1,3 @@
-#include "../../domain_storage/storage_definition.mligo"
-#include "../helpers/fa2_transfer_helpers.mligo"
-
 type withdraw_param = sale
 
 (**

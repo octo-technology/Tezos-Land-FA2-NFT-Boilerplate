@@ -1,3 +1,5 @@
+#include "helpers/fa2_transfer_helpers.mligo"
+#include "helpers/land_transfer_helpers.mligo"
 #include "land_entrypoints/buy.mligo"
 #include "land_entrypoints/sell.mligo"
 #include "land_entrypoints/withdraw_from_sale.mligo"

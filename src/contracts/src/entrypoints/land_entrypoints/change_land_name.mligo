@@ -1,5 +1,3 @@
-#include "../../domain_storage/storage_definition.mligo"
-
 type change_land_name_param = {
     token_id: token_id;
     new_land_name: string;

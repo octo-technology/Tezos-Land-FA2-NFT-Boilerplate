@@ -1,7 +1,3 @@
-#include "../../domain_storage/storage_definition.mligo"
-#include "../helpers/fa2_transfer_helpers.mligo"
-#include "../helpers/land_transfer_helpers.mligo"
-
 type buy_param = sale
 
 (**

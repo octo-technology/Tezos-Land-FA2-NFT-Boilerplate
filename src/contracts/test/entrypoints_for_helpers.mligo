@@ -5,7 +5,9 @@ types of NFTs. Each NFT type is represented by the range of token IDs - `token_d
 #if !FA2_TLD_TOKEN
 #define FA2_TLD_TOKEN
 
+#include "../src/tzip-12/fa2_interface.mligo"
 #include "../src/domain_storage/storage_definition.mligo"
+#include "../src/entrypoints/helpers/fa2_transfer_helpers.mligo"
 #include "../src/entrypoints/helpers/land_transfer_helpers.mligo"
 
 

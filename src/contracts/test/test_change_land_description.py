@@ -14,7 +14,7 @@ class TestChangeLandName(TestCase):
 
     get_storage = get_storage
 
-    def test_only_the_owner_of_a_land_can_update_its_name(self):
+    def test_only_the_owner_of_a_land_can_update_its_description(self):
         with self.assertRaises(MichelsonRuntimeError) as not_owner_error:
             # GIVEN
             land_token_id = 1
@@ -22,6 +22,7 @@ class TestChangeLandName(TestCase):
             land = {"name": "",
                     "description": "old description",
                     "position": [0, 0],
+                    "landType": "road",
                     "isOwned": True,
                     "onSale": False,
                     "price": 200,
@@ -31,7 +32,7 @@ class TestChangeLandName(TestCase):
                                        ledger={land_token_id: owner})
 
             # WHEN
-            result = self.nftContract.changeLandDescription({"token_id": land_token_id, "new_land_description": "new description"}).result(
+            self.nftContract.changeLandDescription({"token_id": land_token_id, "new_land_description": "new description"}).result(
                 storage=storage,
                 source=bob
             )
@@ -40,8 +41,7 @@ class TestChangeLandName(TestCase):
         result_error_message = str(not_owner_error.exception.args[0]['with']['string'])
         self.assertEqual("Only the owner of a land can change its description", result_error_message)
 
-
-    def test_a_land_can_be_renamed_if_it_exists(self):
+    def test_a_land_description_can_be_modified_if_it_exists(self):
         with self.assertRaises(MichelsonRuntimeError) as does_not_exist_error:
             # GIVEN
             land_token_id = 1
@@ -60,8 +60,7 @@ class TestChangeLandName(TestCase):
         result_error_message = str(does_not_exist_error.exception.args[0]['with']['string'])
         self.assertEqual("This land does not exist", result_error_message)
 
-
-    def test_the_owner_of_an_existing_land_can_rename_it(self):
+    def test_the_owner_of_an_existing_land_can_change_its_description(self):
         # GIVEN
         land_token_id = 1
         owner = alice
@@ -69,12 +68,14 @@ class TestChangeLandName(TestCase):
         new_description = "new description"
         name = ""
         position = [0, 0]
+        land_type = "road"
         isOwned = True
         onSale = False
         price = Decimal(0.000100).quantize(Decimal("0.0001"))
         land = {"name": name,
                 "description": previous_description,
                 "position": position,
+                "landType": land_type,
                 "isOwned": isOwned,
                 "onSale": onSale,
                 "price": price,
@@ -94,6 +95,7 @@ class TestChangeLandName(TestCase):
         self.assertEqual(modified_land["name"], name)
         self.assertEqual(modified_land["description"], new_description)
         self.assertEqual(modified_land["position"], position)
+        self.assertEqual(modified_land["landType"], land_type)
         self.assertEqual(modified_land["isOwned"], isOwned)
         self.assertEqual(modified_land["onSale"], onSale)
         self.assertEqual(modified_land["price"], price)

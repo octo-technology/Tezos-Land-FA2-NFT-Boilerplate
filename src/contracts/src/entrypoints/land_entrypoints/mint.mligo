@@ -1,9 +1,6 @@
-#include "../../domain_storage/storage_definition.mligo"
-#include "../helpers/fa2_transfer_helpers.mligo"
-#include "../helpers/land_transfer_helpers.mligo"
-
 type mint_param = {
     token_id: token_id;
+    land_type: land_type;
     owner: address;
     operator: address option;
 }
@@ -21,7 +18,7 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
         let ledger_with_minted_token = Big_map.add p.token_id p.owner s.ledger in
         let ledger_and_owners_are_consistent : bool = check_ownership_is_consistent_in_ledger_and_owners (({owner=p.owner; token_id=p.token_id} : ownership), ledger_with_minted_token, new_owners) in
         if ledger_and_owners_are_consistent then
-            let new_land = ({ name=""; description=(None:string option); position=convert_index_to_position(p.token_id, s.market); isOwned=true; price=(None:price option); onSale=false; id=p.token_id }:land) in
+            let new_land = ({ name=""; description=(None:string option); position=convert_index_to_position(p.token_id, s.market); landType=p.land_type; isOwned=true; price=(None:price option); onSale=false; id=p.token_id }:land) in
             let lands_with_new_land = Big_map.add p.token_id new_land s.market.lands in
             match mint_param.operator with
             | None -> ([] : operation list),  { s with ledger = ledger_with_minted_token; market = { s.market with lands=lands_with_new_land; owners=new_owners; } }

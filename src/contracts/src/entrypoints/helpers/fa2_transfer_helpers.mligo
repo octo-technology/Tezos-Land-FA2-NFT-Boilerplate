@@ -1,5 +1,3 @@
-#include "../../domain_storage/storage_definition.mligo"
-
 let exec_update_operator (updates, updater, ops_storage : update_operator list * address * operator_storage) : operator_storage =
     let process_update = (fun (ops, update : operator_storage * update_operator) ->
       let u = validate_update_operators_by_owner (update, updater) in

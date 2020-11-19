@@ -22,6 +22,7 @@ class TestChangeLandName(TestCase):
             land = {"name": "old name",
                     "description": "",
                     "position": [0, 0],
+                    "landType": "road",
                     "isOwned": True,
                     "onSale": False,
                     "price": 200,
@@ -39,7 +40,6 @@ class TestChangeLandName(TestCase):
         # THEN
         result_error_message = str(not_owner_error.exception.args[0]['with']['string'])
         self.assertEqual("Only the owner of a land can change its name", result_error_message)
-
 
     def test_a_land_can_be_renamed_if_it_exists(self):
         with self.assertRaises(MichelsonRuntimeError) as does_not_exist_error:
@@ -60,7 +60,6 @@ class TestChangeLandName(TestCase):
         result_error_message = str(does_not_exist_error.exception.args[0]['with']['string'])
         self.assertEqual("This land does not exist", result_error_message)
 
-
     def test_the_owner_of_an_existing_land_can_rename_it(self):
         # GIVEN
         land_token_id = 1
@@ -69,12 +68,14 @@ class TestChangeLandName(TestCase):
         new_name = "new name"
         description = ""
         position = [0, 0]
+        land_type = "road"
         isOwned = True
         onSale = False
         price = Decimal(0.000100).quantize(Decimal("0.0001"))
         land = {"name": previous_name,
                 "description": description,
                 "position": position,
+                "landType": land_type,
                 "isOwned": isOwned,
                 "onSale": onSale,
                 "price": price,
@@ -95,6 +96,7 @@ class TestChangeLandName(TestCase):
         self.assertEqual(modified_land["description"], description)
         self.assertEqual(modified_land["position"], position)
         self.assertEqual(modified_land["isOwned"], isOwned)
+        self.assertEqual(modified_land["landType"], land_type)
         self.assertEqual(modified_land["onSale"], onSale)
         self.assertEqual(modified_land["price"], price)
         self.assertEqual(modified_land["id"], land_token_id)

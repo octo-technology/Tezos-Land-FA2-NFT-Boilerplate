@@ -18,9 +18,11 @@ class TestTransfer(TestCase):
         with self.assertRaises(MichelsonRuntimeError) as default_price_error:
             # GIVEN
             storage = self.get_storage(admin=administrator)
+            land_type = "road"
+            token_id = 1
 
             # WHEN
-            result = self.nftContract.mint({"token_id": 1, "owner": alice}).result(
+            self.nftContract.mint({"token_id": token_id, "owner": alice, "land_type": land_type}).result(
                 storage=storage,
                 source=alice
             )
@@ -35,9 +37,10 @@ class TestTransfer(TestCase):
             bob_token_id = 1
             storage = self.get_storage(admin=administrator,
                                        ledger={bob_token_id: bob})
+            land_type = "road"
             minted_token_id = 1
             # WHEN
-            result = self.nftContract.mint({"token_id": minted_token_id, "owner": alice}).result(
+            self.nftContract.mint({"token_id": minted_token_id, "owner": alice, "land_type": land_type}).result(
                 storage=storage,
                 source=administrator
             )
@@ -49,33 +52,34 @@ class TestTransfer(TestCase):
         # GIVEN
         storage = self.get_storage(admin=administrator)
         minted_token_id = 1
+        land_type = "road"
         # WHEN
-        result = self.nftContract.mint({"token_id": minted_token_id, "owner": alice}).result(
+        result = self.nftContract.mint({"token_id": minted_token_id, "owner": alice, "land_type": land_type}).result(
             storage=storage,
             source=administrator
         )
 
         # THEN
-        expected_minted_land = {'description': None, 'id': 1, 'isOwned': True, 'name': '', 'onSale': False, 'position': [0, 0], 'price': None}
+        expected_minted_land = {'description': None, 'id': 1, 'isOwned': True, 'name': '', 'onSale': False, 'position': [0, 0], 'price': None, 'landType': land_type}
         lands_with_minted_land = {minted_token_id: expected_minted_land}
         self.assertEqual({minted_token_id: alice}, result.big_map_diff['ledger'])
         self.assertEqual({alice: [minted_token_id]}, result.big_map_diff['market/owners'])
         self.assertEqual(lands_with_minted_land, result.big_map_diff["market/lands"])
         self.assertNotIn('operators', result.big_map_diff.keys())
 
-
     def test_a_new_land_can_be_minted_with_an_operator_if_200_mutez_are_paid_and_this_land_does_not_already_exist_and_an_operator_is_specified(self):
         # GIVEN
         storage = self.get_storage(admin=administrator)
         minted_token_id = 1
+        land_type = "road"
         # WHEN
-        result = self.nftContract.mint({"token_id": minted_token_id, "owner": alice, "operator": bob}).result(
+        result = self.nftContract.mint({"token_id": minted_token_id, "owner": alice, "operator": bob, "land_type": land_type}).result(
             storage=storage,
             source=administrator
         )
 
         # THEN
-        expected_minted_land = {'description': None, 'id': 1, 'isOwned': True, 'name': '', 'onSale': False, 'position': [0, 0], 'price': None}
+        expected_minted_land = {'description': None, 'id': 1, 'isOwned': True, 'name': '', 'onSale': False, 'position': [0, 0], 'price': None, 'landType': land_type}
         lands_with_minted_land = {minted_token_id: expected_minted_land}
         minted_land_operator = {('tz1L738ifd66ah69PrmKAZzckvvHnbcSeqjf', 'tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v', 1): None}
         self.assertEqual({minted_token_id: alice}, result.big_map_diff['ledger'])
