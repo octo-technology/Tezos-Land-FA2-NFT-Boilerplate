@@ -24,24 +24,6 @@ export const Sell = () => {
   const [myTokens, setMyTokens] = useState<Token[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
-  // const [storage, setStorage] = useState(undefined)
-  // const [{ data, loading, error }, refetch] = useAxios(
-  //   `https://api.tzstats.com/explorer/bigmap/${LEDGER}/values`,
-  // )
-  // const myTokens: any[] = data?.filter((ledger: any) => (ledger.key = accountPkh))?.[0]?.value?.['0@set']
-
-  // const loadStorage = React.useCallback(async () => {
-  //   if (contract) {
-  //     const storage = await (contract as any).storage()
-  //     console.info(`storage: ${JSON.stringify(storage)}`)
-  //     setStorage(storage.toString())
-  //   }
-  // }, [setStorage, contract])
-
-  // useEffect(() => {
-  //   loadStorage()
-  // }, [loadStorage])
-
   useEffect(() => {
     ;(async () => {
       if (tezos) {
