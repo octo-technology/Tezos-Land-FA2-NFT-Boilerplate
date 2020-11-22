@@ -19,6 +19,7 @@ export const Admin = () => {
       const storage = await (contract as any).storage()
       console.info(`storage: ${JSON.stringify(storage)}`)
       setStorage(storage.toString())
+      console.log(accountPkh)
     }
   }, [setStorage, contract])
 
@@ -37,17 +38,13 @@ export const Admin = () => {
 
   useOnBlock(tezos, loadStorage)
 
-  type AddPlayer = { amount: number; player_id: number; name: string; metadata: string }
-  const addPlayer = React.useCallback(
-    ({ amount, metadata, name, player_id }: AddPlayer) =>
-      (contract as any).methods.addPlayer(accountPkh, amount, metadata, name, player_id).send(),
-    [contract],
-  )
-
-  type Mint = { amount: number; player_id: number; token_id: number }
+  type MintToken = {     token_id: string,
+    land_type: string,
+    owner: string,
+    operator?: string }
   const mint = React.useCallback(
-    ({ amount, player_id, token_id }: Mint) =>
-      (contract as any).methods.mint(accountPkh, amount, player_id, token_id).send(),
+    ({ token_id, owner, land_type}: MintToken) =>
+      (contract as any).methods.mint(land_type, [['unit']], owner , owner, parseInt(token_id)).send(),
     [contract],
   )
 
@@ -56,7 +53,7 @@ export const Admin = () => {
       {wallet ? (
         <>
           {ready ? (
-            <AdminView addPlayer={addPlayer} mint={mint} storage={storage} />
+            <AdminView mint={mint} connectedUser={(accountPkh as unknown as string)} />
           ) : (
             <div>Please connect your wallet.</div>
           )}
