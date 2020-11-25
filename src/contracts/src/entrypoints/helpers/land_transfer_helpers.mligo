@@ -27,7 +27,10 @@ let remove_token_from_owner (token_id, new_owner, owners: token_id * address * o
             owners
 
 let convert_position_to_index(x,y, s: nat * nat * marketplace_storage) : nat =
-  y * s.width + x + 1n
+    if (x < s.width && y < s.height) then
+        y * s.width + x + 1n
+    else
+        (failwith("Coordinates out of range") : nat)
 
 let convert_index_to_position(i, s: nat * marketplace_storage) : (nat * nat) =
   let fixed : nat = abs(i - 1n) in
