@@ -24,6 +24,12 @@ let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  l
           let ledger_and_owners_are_consistent : bool = check_ownership_is_consistent_in_ledger_and_owners (({owner=buyer; token_id=buy_parameters.token_id} : ownership), ledger_with_token_transferred, owners_with_updated_buyer_and_seller) in
 
             if ledger_and_owners_are_consistent then
+              let land_on_sale : land = match Big_map.find_opt buy_parameters.token_id storage.market.lands with
+                | Some(land) -> land
+                | None -> (failwith("This land does not exist") : land)
+              in
+              let updated_land : land = {land_on_sale with onSale = false} in
+              let lands_with_updated_land: lands = Big_map.update buy_parameters.token_id (Some(updated_land)) storage.market.lands in
               let sales_without_token_bought: sale set = Set.remove buy_parameters storage.market.sales in
               let operators_without_token_bought_operator: operator_storage = exec_update_operator([Remove_operator_p({owner=land_owner_before_sale; operator=Tezos.self_address; token_id=buy_parameters.token_id})], land_owner_before_sale, storage.operators) in
 
@@ -32,7 +38,7 @@ let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  l
               | None -> (failwith ("Not a contract") : unit contract)
               in
               let withdrawTransaction : operation = Tezos.transaction unit buy_parameters.price seller in
-              [withdrawTransaction], { storage with market={ storage.market with sales=sales_without_token_bought; owners=owners_with_updated_buyer_and_seller }; ledger=ledger_with_token_transferred; operators=operators_without_token_bought_operator }
+              [withdrawTransaction], { storage with market={ storage.market with sales=sales_without_token_bought; owners=owners_with_updated_buyer_and_seller; lands = lands_with_updated_land }; ledger=ledger_with_token_transferred; operators=operators_without_token_bought_operator }
             else
                 (failwith("Error: cannot transfer token"): (operation  list) * nft_token_storage)
     else
