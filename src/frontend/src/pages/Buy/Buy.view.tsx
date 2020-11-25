@@ -1,46 +1,48 @@
-import { HomeButton, HomeButtonBorder, HomeButtonText } from 'pages/Home/Home.style'
-import * as React from 'react'
+import { LandMap } from "app/App.components/LandMap/LandMap.view";
+import * as React from "react";
 import { TokenOnSale } from './Buy.controller'
-import { BuyToken, BuyTokenGrid } from './Buy.style'
+import { BuyLandBottom, BuyLandButton, BuyLandFirstRow, BuyLandLocation, BuyLandOnSale, BuyLandSecondRow, BuyLandStyled } from './Buy.style'
 
 type BuyViewProps = {
-  buyToken: ({}: any) => void
+  buyTokenCallback: ({}: any) => void
   tokensOnSale: TokenOnSale[]
 }
 
-export const BuyView = ({ buyToken, tokensOnSale }: BuyViewProps) => {
+export const BuyView = ({ buyTokenCallback: buyToken, tokensOnSale }: BuyViewProps) => {
   return (
     <>
       {tokensOnSale.map((myToken) => (
-        <BuyLand key={myToken.token_id} buyToken={buyToken} myToken={myToken} />
+        <BuyLand key={myToken.id} buyTokenCallback={buyToken} tokenOnSale={myToken} />
       ))}
     </>
   )
 }
 
-const BuyLand = ({ buyToken, myToken }: any) => {
-  return (
-    <BuyToken key={myToken.token_id}>
-      {myToken.name}
-      <BuyTokenGrid>
-        <div>{`${myToken.price / 1000000} ꜩ`}</div>
-        <HomeButton>
-          <HomeButtonBorder />
-          <HomeButtonText
-            onClick={() =>
-              buyToken({
-                token_id: myToken.token_id,
-                price: myToken.price / 1000000,
-              })
-            }
-          >
-            <svg>
-              <use xlinkHref="/icons/sprites.svg#map" />
-            </svg>
-            {`BUY LAND`}
-          </HomeButtonText>
-        </HomeButton>
-      </BuyTokenGrid>
-    </BuyToken>
-  )
+const BuyLand = ({ buyTokenCallback, tokenOnSale }: {buyTokenCallback: ({}: any) => void, tokenOnSale: TokenOnSale }) => {
+  return (    
+  <BuyLandStyled key={tokenOnSale.id}>
+    <LandMap x={tokenOnSale.position.x} y={tokenOnSale.position.y} />
+
+    <BuyLandBottom>
+      <BuyLandFirstRow>
+        <BuyLandLocation>
+          <svg>
+            <use xlinkHref="/icons/sprites.svg#location" />
+          </svg>
+          <div>{`${tokenOnSale.position.x}, ${tokenOnSale.position.y}`}</div>
+        </BuyLandLocation>
+        <BuyLandOnSale onSale={tokenOnSale.onSale} > On sale for {tokenOnSale.price} ꜩ </BuyLandOnSale>
+      </BuyLandFirstRow>
+
+      <BuyLandSecondRow>
+      {tokenOnSale.tokenOwnedByUser ? <div>You are the owner</div> : <BuyLandButton onClick={() =>
+            buyTokenCallback({
+              token_id: tokenOnSale.id,
+              price:tokenOnSale.price,
+            })
+          }>Buy</BuyLandButton> }
+      </BuyLandSecondRow>
+    </BuyLandBottom>
+  </BuyLandStyled>
+  );
 }

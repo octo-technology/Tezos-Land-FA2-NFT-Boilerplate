@@ -6,11 +6,31 @@ import { useEffect, useState } from "react";
 import { BuyStyled } from "./Buy.style";
 import { BuyView } from "./Buy.view";
 
+
+
+export type Coordinates = {
+  x: number;
+  y: number;
+};
+
+export enum LandType {
+  Road = "Road",
+  Water = "Water",
+  Land = "Land",
+  District = "District",
+  Plaza = "Plaza",
+}
+
 export type TokenOnSale = {
-  token_id: string;
-  price: number;
-  player_id?: string;
   name?: string;
+  description?: string;
+  position: Coordinates;
+  landType: LandType;
+  isOwned: boolean;
+  onSale: boolean;
+  price: number;
+  id: number;
+  tokenOwnedByUser: boolean;
 };
 
 export const Buy = () => {
@@ -36,14 +56,36 @@ export const Buy = () => {
       if (contract && accountPkh) {
         const storage = await (contract as any).storage();
         const tokensOnSaleFromStorage = storage["market"].sales;
-        const tokensOnSaleWithPrice = tokensOnSaleFromStorage.map(
-          (sale: { token_id: { c: any[] }; price: { c: any[] } }) =>
-            ({
-              token_id: sale.token_id.c[0],
-              price: sale.price.c[0],
-            } as TokenOnSale)
+        const tokenOnSaleIds: number[] = tokensOnSaleFromStorage.map(
+          (sale: { token_id: { c: any[] }; price: { c: any[] } }) => (sale.token_id.c[0])
         );
-        setTokensOnSale(tokensOnSaleWithPrice);
+
+        const tokensOwnedFromStorage = await storage.market.owners.get(
+          accountPkh
+        );
+          const userTokenIds: number[] = tokensOwnedFromStorage.map(
+            (token: { c: any[] }) => token.c[0]
+          );
+
+        const tokensOnSaleList = await Promise.all(tokenOnSaleIds.map(async (tokenId) => {
+          const tokenRaw = await storage.market.lands.get(tokenId.toString());
+          const token: TokenOnSale = {
+            name: tokenRaw.name,
+            description: tokenRaw.description,
+            position: {
+              x: tokenRaw.position[6].c[0],
+              y: tokenRaw.position[7].c[0]
+            },
+            landType: LandType.District, // TO FIX
+            isOwned: tokenRaw.isOwned,
+            onSale: tokenRaw.onSale,
+            price: tokenRaw.price.c[0] / 1000000,
+            id: tokenRaw.id.c[0],
+            tokenOwnedByUser: userTokenIds.includes(tokenRaw.id.c[0])
+          }
+          return token;
+        }));
+        setTokensOnSale(tokensOnSaleList);
         setLoading(false);
       }
     })();
@@ -69,7 +111,7 @@ export const Buy = () => {
           {ready ? (
             <>
               {tokensOnSale && tokensOnSale.length > 0 ? (
-                <BuyView buyToken={buyToken} tokensOnSale={tokensOnSale} />
+                <BuyView buyTokenCallback={buyToken} tokensOnSale={tokensOnSale} />
               ) : (
                 <div>
                   {loading ? (
