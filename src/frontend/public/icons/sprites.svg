@@ -49,12 +49,9 @@
             <rect fill="none" stroke="none" width="24" height="24"></rect>
         </g>
     </symbol>
-    <symbol id="XXXX" viewBox="0 0 24 24">
+    <symbol id="location" viewBox="0 0 12 12">
         <g id="Outline_Icons">
-
-        </g>
-        <g id="Invisible_Shape">
-            <rect fill="none" stroke="none" width="24" height="24"></rect>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 11.2222C6 11.2222 10 8.33333 10 5.22222C10 2.89067 8.33156 1 6 1C3.668 1 2 2.89067 2 5.22222C2 8.33333 6 11.2222 6 11.2222ZM8.22228 5.00005C8.22228 6.22735 7.22735 7.22228 6.00005 7.22228C4.77275 7.22228 3.77783 6.22735 3.77783 5.00005C3.77783 3.77275 4.77275 2.77783 6.00005 2.77783C7.22735 2.77783 8.22228 3.77275 8.22228 5.00005Z" fill="white"/>
         </g>
     </symbol>
     <symbol id="XXXX" viewBox="0 0 24 24">

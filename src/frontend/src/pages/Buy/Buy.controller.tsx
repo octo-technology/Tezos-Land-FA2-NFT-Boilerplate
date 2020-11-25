@@ -1,65 +1,66 @@
-import axios from 'axios'
-// import useAxios from 'axios-hooks'
-import { useAccountPkh, useOnBlock, useReady, useTezos, useWallet } from 'dapp/dapp'
-import { LEDGER, PLAYERS, TEZOSLAND_ADDRESS, TOKENS, TOKENS_ON_SALE } from 'dapp/defaults'
-import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { useAccountPkh, useReady, useTezos, useWallet } from "dapp/dapp";
+import { TEZOSLAND_ADDRESS } from "dapp/defaults";
+import * as React from "react";
+import { useEffect, useState } from "react";
 
-import { BuyStyled } from './Buy.style'
-import { BuyView } from './Buy.view'
+import { BuyStyled } from "./Buy.style";
+import { BuyView } from "./Buy.view";
 
 export type TokenOnSale = {
-  token_id: string
-  price: number
-  player_id?: string
-  name?: string
-}
+  token_id: string;
+  price: number;
+  player_id?: string;
+  name?: string;
+};
 
 export const Buy = () => {
-  const wallet = useWallet()
-  const ready = useReady()
-  const tezos = useTezos()
-  const accountPkh = useAccountPkh()
-  const [contract, setContract] = useState(undefined)
-  const [tokensOnSale, setTokensOnSale] = useState<TokenOnSale[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
+  const wallet = useWallet();
+  const ready = useReady();
+  const tezos = useTezos();
+  const accountPkh = useAccountPkh();
+  const [contract, setContract] = useState(undefined);
+  const [tokensOnSale, setTokensOnSale] = useState<TokenOnSale[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       if (tezos) {
-        const ctr = await (tezos as any).wallet.at(TEZOSLAND_ADDRESS)
-        setContract(ctr)
+        const ctr = await (tezos as any).wallet.at(TEZOSLAND_ADDRESS);
+        setContract(ctr);
       }
-    })()
-  }, [tezos])
+    })();
+  }, [tezos]);
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       if (contract && accountPkh) {
-        const storage = await (contract as any).storage()
-        const tokensOnSaleFromStorage = storage["market"].sales
-        const tokensOnSaleWithPrice = tokensOnSaleFromStorage.map((sale: { token_id: { c: any[] }; price: { c: any[] } }) => (
-          {
-            token_id: sale.token_id.c[0], 
-            price: sale.price.c[0]
-          } as TokenOnSale))
-        setTokensOnSale(tokensOnSaleWithPrice)
-        setLoading(false)
-        
+        const storage = await (contract as any).storage();
+        const tokensOnSaleFromStorage = storage["market"].sales;
+        const tokensOnSaleWithPrice = tokensOnSaleFromStorage.map(
+          (sale: { token_id: { c: any[] }; price: { c: any[] } }) =>
+            ({
+              token_id: sale.token_id.c[0],
+              price: sale.price.c[0],
+            } as TokenOnSale)
+        );
+        setTokensOnSale(tokensOnSaleWithPrice);
+        setLoading(false);
       }
-    })()
-  }, [contract, accountPkh])
+    })();
+  }, [contract, accountPkh]);
 
   // useOnBlock(tezos, loadStorage)
 
-  type BuyToken = { token_id: number; price: number }
+  type BuyToken = { token_id: number; price: number };
   const buyToken = React.useCallback(
     ({ token_id, price }: BuyToken) => {
-      console.log(token_id, price)
-      ;(contract as any).methods.buyLand(price * 1000000, token_id).send({ amount: price })
+      console.log(token_id, price);
+      (contract as any).methods
+        .buyLand(price * 1000000, token_id)
+        .send({ amount: price });
     },
-    [contract],
-  )
+    [contract]
+  );
 
   return (
     <BuyStyled>
@@ -70,7 +71,13 @@ export const Buy = () => {
               {tokensOnSale && tokensOnSale.length > 0 ? (
                 <BuyView buyToken={buyToken} tokensOnSale={tokensOnSale} />
               ) : (
-                <div>{loading ? <div>Loading lands... Please wait.</div> : <div>No land available</div>}</div>
+                <div>
+                  {loading ? (
+                    <div>Loading lands... Please wait.</div>
+                  ) : (
+                    <div>No land available</div>
+                  )}
+                </div>
               )}
             </>
           ) : (
@@ -81,5 +88,5 @@ export const Buy = () => {
         <div>Please install the Thanos Wallet Chrome Extension.</div>
       )}
     </BuyStyled>
-  )
-}
+  );
+};

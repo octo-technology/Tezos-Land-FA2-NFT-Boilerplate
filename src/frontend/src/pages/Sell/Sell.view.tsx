@@ -1,56 +1,64 @@
-import { Input } from 'app/App.components/Input/Input.controller'
-import { HomeButton, HomeButtonBorder, HomeButtonText } from 'pages/Home/Home.style'
-import * as React from 'react'
-import { useState } from 'react'
-import { Token } from './Sell.controller'
-import { SellToken, SellTokenGrid } from './Sell.style'
+import { LandMap } from "app/App.components/LandMap/LandMap.view";
+import * as React from "react";
+import { useState } from "react";
+
+import { Token } from "./Sell.controller";
+// prettier-ignore
+import { SellLandBottom, SellLandButton, SellLandFirstRow, SellLandLocation, SellLandOnSale, SellLandPriceInput, SellLandSecondRow, SellLandStyled } from "./Sell.style";
 
 type SellViewProps = {
-  sellToken: ({}: any) => void
-  myTokens: Token[]
-}
+  sellTokenCallback: ({}: any) => void;
+  myTokens: Token[];
+};
 
-export const SellView = ({ sellToken, myTokens }: SellViewProps) => {
+export const SellView = ({ sellTokenCallback, myTokens }: SellViewProps) => {
   return (
     <>
       {myTokens.map((myToken) => (
-        <SellLand key={myToken.token_id} sellToken={sellToken} myToken={myToken} />
+        <SellLand
+          key={myToken.id}
+          sellTokenCallback={sellTokenCallback}
+          myToken={myToken}
+        />
       ))}
     </>
-  )
-}
+  );
+};
 
-const SellLand = ({ sellToken, myToken }: any) => {
-  const [price, setPrice] = useState<string>('1')
+const SellLand = ({
+  sellTokenCallback,
+  myToken,
+}: {
+  sellTokenCallback: ({}: any) => void;
+  myToken: Token;
+}) => {
+  const [price, setPrice] = useState<string>("");
 
   return (
-    <SellToken key={myToken.token_id}>
-      {myToken.name}
-      <SellTokenGrid>
-        <Input
-          placeholder="Price"
-          onChange={(e) => setPrice(e.target.value)}
-          onBlur={() => {}}
-          value={price}
-          icon="sell"
-        />
-        <HomeButton>
-          <HomeButtonBorder />
-          <HomeButtonText
-            onClick={() =>
-              sellToken({
-                token_id: myToken.token_id,
+    <SellLandStyled key={myToken.id}>
+      <LandMap x={myToken.position.x} y={myToken.position.y} />
+
+      <SellLandBottom>
+        <SellLandFirstRow>
+          <SellLandLocation>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#location" />
+            </svg>
+            <div>{`${myToken.position.x}, ${myToken.position.y}`}</div>
+          </SellLandLocation>
+          <SellLandOnSale onSale={myToken.onSale} >{myToken.onSale ? `On sale for ${myToken.price}` : 'Not on sale'}</SellLandOnSale>
+        </SellLandFirstRow>
+
+        <SellLandSecondRow>
+          <SellLandPriceInput value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Enter price" />
+          <SellLandButton onClick={() =>
+              sellTokenCallback({
+                token_id: myToken.id,
                 price: parseFloat(price),
               })
-            }
-          >
-            <svg>
-              <use xlinkHref="/icons/sprites.svg#map" />
-            </svg>
-            {`SELL LAND`}
-          </HomeButtonText>
-        </HomeButton>
-      </SellTokenGrid>
-    </SellToken>
-  )
-}
+            }>Sell</SellLandButton>
+        </SellLandSecondRow>
+      </SellLandBottom>
+    </SellLandStyled>
+  );
+};
