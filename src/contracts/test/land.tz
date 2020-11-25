@@ -1688,6 +1688,18 @@
                                PAIR ;
                                SWAP ;
                                PAIR ;
+                               DIG 5 ;
+                               DUP ;
+                               DUG 6 ;
+                               CAR ;
+                               SOME ;
+                               DIP { DUP ; CAR ; SWAP ; CDR ; DUP ; CAR ; SWAP ; CDR ; CAR } ;
+                               SWAP ;
+                               PAIR ;
+                               SWAP ;
+                               PAIR ;
+                               SWAP ;
+                               PAIR ;
                                SOME ;
                                DIG 5 ;
                                CDR ;

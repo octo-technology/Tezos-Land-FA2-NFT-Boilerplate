@@ -43,6 +43,7 @@ class TestSellLand(TestCase):
         )
         # THEN
         self.assertEqual([{'price': alice_land_price, 'token_id': token_id_sold_by_alice}], result.storage["market"]["sales"])
+        self.assertEqual(alice_land_price, result.big_map_diff['market/lands'][1]['price'])
         self.assertTrue(result.big_map_diff['market/lands'][1]['onSale'])
         self.assertEqual(False, (alice, bob, 1) in result.big_map_diff['operators'].keys())
         self.assertEqual(True, (alice, self.nftContract.address, 1) in result.big_map_diff['operators'].keys())
