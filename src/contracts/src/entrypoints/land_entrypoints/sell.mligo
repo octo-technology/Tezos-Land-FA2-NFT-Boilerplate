@@ -18,5 +18,11 @@ let sell (sell_params, storage : sell_param * nft_token_storage) : (operation  l
                 let update : update_operator = Add_operator_p({ owner = seller; operator = Tezos.self_address; token_id = sell_params.token_id; }) in
                 let operators_with_contract_as_operator = exec_update_operator([update], Tezos.sender, storage.operators) in
                 let new_sale : sale = ( sell_params : sale) in
-                let sales_with_new_sale = Set.add new_sale storage.market.sales in
-                ([] : operation list), { storage with market = { storage.market with sales = sales_with_new_sale }; operators = operators_with_contract_as_operator }
+                 let land_on_sale : land = match Big_map.find_opt sell_params.token_id storage.market.lands with
+                    | Some(land) -> land
+                    | None -> (failwith("This land does not exist") : land)
+                in
+                let updated_land : land = {land_on_sale with onSale = true; price = Some(sell_params.price)} in
+                let lands_with_updated_land: lands = Big_map.update sell_params.token_id (Some(updated_land)) storage.market.lands in
+                let sales_with_new_sale: sale set = Set.add new_sale storage.market.sales in
+                ([] : operation list), { storage with market = { storage.market with sales = sales_with_new_sale; lands = lands_with_updated_land }; operators = operators_with_contract_as_operator }
