@@ -59,7 +59,6 @@ export const Sell = () => {
           const tokenIds: number[] = tokensOwnedFromStorage.map(
             (token: { c: any[] }) => token.c[0]
           );
-          console.log(tokenIds)
 
           const myTokens = await Promise.all(tokenIds.map(async (tokenId) => {
             const tokenRaw = await storage.market.lands.get(tokenId.toString());
