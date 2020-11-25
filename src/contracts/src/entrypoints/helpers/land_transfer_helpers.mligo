@@ -77,3 +77,12 @@ let check_ownership_is_consistent_in_ledger_and_owners (ownership, ledger, owner
         true
     else
         false
+
+let set_land_on_sale_flag(token_id, isOnSale, lands: token_id * bool * lands ) : lands =
+    let land_on_sale : land = match Big_map.find_opt token_id lands with
+        | Some(land) -> land
+        | None -> (failwith("This land does not exist") : land)
+    in
+    let updated_land : land = {land_on_sale with onSale = isOnSale} in
+    let lands_with_updated_land: lands = Big_map.update token_id (Some(updated_land)) lands in
+    lands_with_updated_land

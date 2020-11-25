@@ -12,12 +12,7 @@ let withdraw_from_sale (withdraw_param, storage : withdraw_param * nft_token_sto
         if token_on_sale then
             let operators_without_token_operator = exec_update_operator([Remove_operator_p({owner=Tezos.sender; operator=Tezos.self_address; token_id=withdraw_param.token_id})], Tezos.sender, storage.operators) in
             let sales_without_removed_land = Set.remove withdraw_param storage.market.sales in
-            let land_on_sale : land = match Big_map.find_opt withdraw_param.token_id storage.market.lands with
-                | Some(land) -> land
-                | None -> (failwith("This land does not exist") : land)
-            in
-            let updated_land : land = {land_on_sale with onSale = false} in
-            let lands_with_updated_land: lands = Big_map.update withdraw_param.token_id (Some(updated_land)) storage.market.lands in
+            let lands_with_updated_land: lands =  set_land_on_sale_flag(withdraw_param.token_id, false, storage.market.lands) in
             ([] : operation list),  { storage with market = { storage.market with sales = sales_without_removed_land; lands = lands_with_updated_land }; operators = operators_without_token_operator }
         else
             (failwith("This land is not on sale"): (operation  list) * nft_token_storage)
