@@ -14,8 +14,12 @@ Go to https://tezos.gitlab.io/user/sandbox.html and follow instructions
 
 Go to https://tezostaquito.io/docs/quick_start
 
+### Ligo install
 
-### Install Typescript
+Go to https://ligolang.org/docs/intro/installation
+
+
+### Typescript Install
 
 ```
 npm install -g typescript
@@ -71,11 +75,13 @@ $ truffle compile
 ### Deploy contract 
 In project folder, run:
 ```
-$ truffle migrate
+$ truffle migrate --network <development, carthagenet, mainnet, zeronet>
 ```
 
 # Run tests
-In project folder, run: 
+In project folder, run in this order: 
 ```
+$ ligo compile-contract src/entrypoints_for_helpers.mligo main > test/helpers.tz 
+$ ligo compile-contract src/land.mligo main > test/land.tz 
 $ python -m unittest
 ```
