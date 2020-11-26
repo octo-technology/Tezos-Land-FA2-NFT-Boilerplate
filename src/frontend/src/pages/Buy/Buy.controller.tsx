@@ -59,17 +59,10 @@ export const Buy = () => {
         const tokenOnSaleIds: number[] = tokensOnSaleFromStorage.map(
           (sale: { token_id: { c: any[] }; price: { c: any[] } }) => (sale.token_id.c[0])
         );
-        
-        const tokensOwnedFromStorage = await storage.market.owners.get(
-          accountPkh
-        );
-        if (tokensOwnedFromStorage) {
-          const userTokenIds: number[] = tokensOwnedFromStorage.map(
-            (token: { c: any[] }) => token.c[0]
-          );
 
         const tokensOnSaleList = await Promise.all(tokenOnSaleIds.map(async (tokenId) => {
           const tokenRaw = await storage.market.lands.get(tokenId.toString());
+          const tokenOwner = await storage.ledger.get(tokenId.toString());
           const token: TokenOnSale = {
             name: tokenRaw.name,
             description: tokenRaw.description,
@@ -82,12 +75,11 @@ export const Buy = () => {
             onSale: tokenRaw.onSale,
             price: tokenRaw.price.c[0],
             id: tokenRaw.id.c[0],
-            tokenOwnedByUser: userTokenIds.includes(tokenRaw.id.c[0])
+            tokenOwnedByUser: accountPkh == tokenOwner
           }
           return token;
         }));
         setTokensOnSale(tokensOnSaleList);
-      }
         setLoading(false);
       }
     })();
@@ -101,7 +93,7 @@ export const Buy = () => {
       console.log(token_id, price);
       (contract as any).methods
         .buyLand(price, token_id)
-        .send({ amount: price });
+        .send({ amount: price /1000000 });
     },
     [contract]
   );
