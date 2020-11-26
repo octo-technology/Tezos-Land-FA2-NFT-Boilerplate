@@ -31,7 +31,7 @@ const BuyLand = ({ buyTokenCallback, tokenOnSale }: {buyTokenCallback: ({}: any)
           </svg>
           <div>{`${tokenOnSale.position.x}, ${tokenOnSale.position.y}`}</div>
         </BuyLandLocation>
-        <BuyLandOnSale onSale={tokenOnSale.onSale} > On sale for {tokenOnSale.price} ꜩ </BuyLandOnSale>
+        <BuyLandOnSale onSale={tokenOnSale.onSale} > On sale for {tokenOnSale.price/ 1000000} ꜩ </BuyLandOnSale>
       </BuyLandFirstRow>
 
       <BuyLandSecondRow>

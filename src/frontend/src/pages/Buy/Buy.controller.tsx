@@ -80,7 +80,7 @@ export const Buy = () => {
             landType: LandType.District, // TO FIX
             isOwned: tokenRaw.isOwned,
             onSale: tokenRaw.onSale,
-            price: tokenRaw.price.c[0] / 1000000,
+            price: tokenRaw.price.c[0],
             id: tokenRaw.id.c[0],
             tokenOwnedByUser: userTokenIds.includes(tokenRaw.id.c[0])
           }
@@ -100,7 +100,7 @@ export const Buy = () => {
     ({ token_id, price }: BuyToken) => {
       console.log(token_id, price);
       (contract as any).methods
-        .buyLand(price * 1000000, token_id)
+        .buyLand(price, token_id)
         .send({ amount: price });
     },
     [contract]
