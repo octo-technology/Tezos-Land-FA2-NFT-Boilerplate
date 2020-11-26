@@ -97,3 +97,16 @@ export const SellLandButton = styled.button`
   border-radius: 5px;
   color: #FFF;
 `;
+
+export const CancelSaleButton = styled.button`
+  height: 20px;
+  font-size: 11px;
+  width: 200%;
+  background-color: #4c5170;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 5px;
+  color: #FFF;
+  margin-left: 3px;
+`;
+

@@ -95,6 +95,14 @@ export const Sell = () => {
     },
     [contract]
   );
+  type Sale = { token_id: number; price: number };
+  const cancelSaleCallback = React.useCallback(
+    ({ token_id, price }: Sale) => {
+      console.log(token_id, price);
+      (contract as any).methods.withdrawFromSale(price, token_id).send();
+    },
+    [contract]
+  );
 
   return (
     <SellStyled>
@@ -103,7 +111,7 @@ export const Sell = () => {
           {ready ? (
             <>
               {myTokens && myTokens.length > 0 ? (
-                <SellView sellTokenCallback={sellTokenCallback} myTokens={myTokens} />
+                <SellView sellTokenCallback={sellTokenCallback} cancelSaleCallback={cancelSaleCallback} myTokens={myTokens} />
               ) : (
                 <div>
                   {loading ? (
