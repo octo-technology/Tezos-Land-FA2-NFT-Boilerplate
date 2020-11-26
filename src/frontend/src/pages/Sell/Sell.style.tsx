@@ -13,16 +13,6 @@ export const SellLandStyled = styled.div`
   width: 230px;
 `;
 
-export const SellTokenGrid = styled.div`
-  display: grid;
-  grid-template-columns: 2fr 3fr;
-  grid-gap: 10px;
-  width: 240px;
-  position: relative;
-  margin: auto;
-  z-index: 2;
-`;
-
 export const SellLandBottom = styled.div`
   background-color: #141b43;
   padding: 10px;
