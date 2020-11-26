@@ -82,17 +82,69 @@ class TestSellLand(TestCase):
         result_error_message = str(not_land_owner_error.exception.args[0]['with']['string'])
         self.assertEqual("Only the owner of a land can sell it", result_error_message)
 
-    def test_a_land_cannot_be_put_on_sale_if_it_is_already_on_sale(self):
+    def test_a_land_cannot_be_put_on_sale_if_it_is_already_on_sale_with_the_same_price(self):
         with self.assertRaises(MichelsonRuntimeError) as already_on_sale_error:
             # GIVEN
             token_id_sold_by_alice = 1
-            alice_land_price = Decimal(0.0003).quantize(Decimal("0.0003"))
+            alice_land_price = Decimal(0.0003).quantize(Decimal("0.0001"))
+            name = "Land 1"
+            description = ""
+            position = [0, 0]
+            land_type = "road"
+            isOwned = True
+            onSale = True
+            land = {"name": name,
+                    "description": description,
+                    "position": position,
+                    "landType": land_type,
+                    "isOwned": isOwned,
+                    "onSale": onSale,
+                    "price": None,
+                    "id": token_id_sold_by_alice}
+            lands = {token_id_sold_by_alice: land}
             storage_with_alice_selling_her_land = self.get_storage(ledger={token_id_sold_by_alice: alice},
                                                                    sales=[{"token_id": token_id_sold_by_alice, "price": alice_land_price}],
-                                                                   operators={(alice, self.nftContract.address, 1): None})
+                                                                   operators={(alice, self.nftContract.address, 1): None},
+                                                                   lands=lands)
 
             # WHEN
             self.nftContract.sellLand({"token_id": token_id_sold_by_alice, "price": alice_land_price}).result(
+                storage=storage_with_alice_selling_her_land,
+                source=alice
+            )
+
+        # THEN
+        result_error_message = str(already_on_sale_error.exception.args[0]['with']['string'])
+        self.assertEqual("This land is already on sale", result_error_message)
+
+    def test_a_land_cannot_be_put_on_sale_if_it_is_already_on_sale_with_a_different_price(self):
+        with self.assertRaises(MichelsonRuntimeError) as already_on_sale_error:
+            # GIVEN
+            token_id_sold_by_alice = 1
+            alice_land_price = Decimal(0.0003).quantize(Decimal("0.0001"))
+            alice_land_price_for_second_sale = Decimal(0.0004).quantize(Decimal("0.0001"))
+            name = "Land 1"
+            description = ""
+            position = [0, 0]
+            land_type = "road"
+            isOwned = True
+            onSale = True
+            land = {"name": name,
+                    "description": description,
+                    "position": position,
+                    "landType": land_type,
+                    "isOwned": isOwned,
+                    "onSale": onSale,
+                    "price": None,
+                    "id": token_id_sold_by_alice}
+            lands = {token_id_sold_by_alice: land}
+            storage_with_alice_selling_her_land = self.get_storage(ledger={token_id_sold_by_alice: alice},
+                                                                   sales=[{"token_id": token_id_sold_by_alice, "price": alice_land_price}],
+                                                                   operators={(alice, self.nftContract.address, 1): None},
+                                                                   lands=lands)
+
+            # WHEN
+            self.nftContract.sellLand({"token_id": token_id_sold_by_alice, "price": alice_land_price_for_second_sale}).result(
                 storage=storage_with_alice_selling_her_land,
                 source=alice
             )

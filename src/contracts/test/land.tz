@@ -1668,12 +1668,22 @@
                           DUG 3 ;
                           CAR ;
                           CDR ;
+                          CAR ;
                           CDR ;
                           CAR ;
                           DIG 2 ;
                           DUP ;
                           DUG 3 ;
-                          MEM ;
+                          CDR ;
+                          PAIR ;
+                          DIG 4 ;
+                          DUP ;
+                          DUG 5 ;
+                          SWAP ;
+                          EXEC ;
+                          CDR ;
+                          CAR ;
+                          CDR ;
                           IF { DROP 5 ; PUSH string "This land is already on sale" ; FAILWITH }
                              { SWAP ;
                                DUP ;

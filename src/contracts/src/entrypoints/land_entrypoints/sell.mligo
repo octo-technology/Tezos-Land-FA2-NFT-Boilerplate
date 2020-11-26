@@ -11,8 +11,8 @@ let sell (sell_params, storage : sell_param * nft_token_storage) : (operation  l
     if not (seller = Tezos.sender)
     then (failwith("Only the owner of a land can sell it") : (operation  list) * nft_token_storage)
     else
-        let token_already_on_sale : bool = Set.mem sell_params storage.market.sales in
-            if token_already_on_sale then
+        let land : land = get_land_from_lands(sell_params.token_id, storage.market.lands) in
+            if land.onSale then
                 (failwith("This land is already on sale"): (operation  list) * nft_token_storage)
             else
                 let update : update_operator = Add_operator_p({ owner = seller; operator = Tezos.self_address; token_id = sell_params.token_id; }) in
