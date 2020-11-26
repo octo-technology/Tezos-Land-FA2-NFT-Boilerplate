@@ -4,6 +4,7 @@ import { Admin } from 'pages/Admin/Admin.controller'
 import { Buy } from 'pages/Buy/Buy.controller'
 import { Home } from 'pages/Home/Home.controller'
 import { Sell } from 'pages/Sell/Sell.controller'
+import { Map } from 'pages/Map/Map.controller'
 import React from 'react'
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 
@@ -30,6 +31,9 @@ export const App = () => {
               </Route>
               <Route exact path="/sell">
                 <Sell />
+              </Route>
+              <Route exact path="/map">
+                <Map />
               </Route>
             </Switch>
           </AppContainer>
