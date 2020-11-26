@@ -7,7 +7,7 @@ type InputViewProps = {
   icon?: string
   placeholder: string
   name?: string
-  value?: string
+  value?: string | number
   onChange: any
   onBlur: any
   inputStatus?: 'success' | 'error'
