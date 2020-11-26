@@ -19,5 +19,5 @@ let sell (sell_params, storage : sell_param * nft_token_storage) : (operation  l
                 let operators_with_contract_as_operator = exec_update_operator([update], Tezos.sender, storage.operators) in
                 let new_sale : sale = ( sell_params : sale) in
                 let sales_with_new_sale: sale set = Set.add new_sale storage.market.sales in
-                let lands_with_updated_land: lands =  set_land_on_sale_flag(sell_params.token_id, true, storage.market.lands) in
+                let lands_with_updated_land: lands =  update_price_on_sale_flag_for_a_land(sell_params.token_id, true, sell_params.price, storage.market.lands) in
                 ([] : operation list), { storage with market = { storage.market with sales = sales_with_new_sale; lands = lands_with_updated_land }; operators = operators_with_contract_as_operator }

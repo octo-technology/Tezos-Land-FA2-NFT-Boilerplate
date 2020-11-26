@@ -30,7 +30,7 @@ class TestSellLand(TestCase):
                 "landType": land_type,
                 "isOwned": isOwned,
                 "onSale": onSale,
-                "price": alice_land_price,
+                "price": None,
                 "id": token_id_sold_by_alice}
         lands = {token_id_sold_by_alice: land}
         storage_with_alice_owning_a_land = self.get_storage(ledger={token_id_sold_by_alice: alice},
