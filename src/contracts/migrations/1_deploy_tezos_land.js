@@ -20,6 +20,7 @@ metadata_bigmap.set(
 const admin = "tz1V4yYUaga5AHuoeK7jM6tvDBD7wm9ZpiLn"
 const empty_lands = new MichelsonMap()
 const empty_sales = []
+const empty_land_ids = []
 const empty_ledger = new MichelsonMap()
 const empty_owners = new MichelsonMap()
 const empty_operators = new MichelsonMap()
@@ -31,6 +32,7 @@ const token_defs = [{"from_": 1, "to_": 100}]
 const initial_storage = {
     "market": {
         "lands": empty_lands,
+        "landIds": empty_land_ids,
         "admin": admin,
         "height": lands_grid_height,
         "width": lands_grid_width,

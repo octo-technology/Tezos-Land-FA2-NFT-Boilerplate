@@ -44,7 +44,8 @@ class TestMint(TestCase):
             bob_token_id = 1
 
             storage = self.get_storage(admin=administrator,
-                                       ledger={bob_token_id: bob})
+                                       ledger={bob_token_id: bob},
+                                       land_ids=[bob_token_id])
             land_type = "road"
             name = "My Land"
             description = "This is my land"
@@ -156,6 +157,7 @@ class TestMint(TestCase):
         lands_with_minted_land = {expected_minted_token_id: expected_minted_land}
         self.assertEqual({expected_minted_token_id: alice}, result.big_map_diff['ledger'])
         self.assertEqual({alice: [expected_minted_token_id]}, result.big_map_diff['market/owners'])
+        self.assertEqual([expected_minted_token_id], result.storage['market']['landIds'])
         self.assertEqual(lands_with_minted_land, result.big_map_diff["market/lands"])
         self.assertNotIn('operators', result.big_map_diff.keys())
 
@@ -199,6 +201,7 @@ class TestMint(TestCase):
         minted_land_operator = {('tz1L738ifd66ah69PrmKAZzckvvHnbcSeqjf', 'tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v', expected_minted_token_id): None}
         self.assertEqual({expected_minted_token_id: alice}, result.big_map_diff['ledger'])
         self.assertEqual({alice: [expected_minted_token_id]}, result.big_map_diff['market/owners'])
+        self.assertEqual([expected_minted_token_id], result.storage['market']['landIds'])
         self.assertEqual(lands_with_minted_land, result.big_map_diff["market/lands"])
         self.assertEqual(minted_land_operator, result.big_map_diff["operators"])
 

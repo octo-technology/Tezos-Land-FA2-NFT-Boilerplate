@@ -12,6 +12,7 @@ type marketplace_storage = {
   width: nat;
   sales: sale set;
   lands: lands;
+  landIds: token_id set;
   owners: owners;
 }
 

@@ -24,12 +24,13 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
         if ledger_and_owners_are_consistent then
             let new_land = ({ name=p.name; description=p.description; position=p.coordinates; landType=p.land_type; isOwned=true; price=(None:price option); onSale=false; id=token_id }:land) in
             let lands_with_new_land = Big_map.add token_id new_land s.market.lands in
+            let lands_ids_with_new_id = Set.add token_id s.market.landIds in
             match mint_param.operator with
-            | None -> ([] : operation list),  { s with ledger = ledger_with_minted_token; market = { s.market with lands=lands_with_new_land; owners=new_owners; } }
+            | None -> ([] : operation list),  { s with ledger = ledger_with_minted_token; market = { s.market with lands=lands_with_new_land; landIds=lands_ids_with_new_id; owners=new_owners; } }
             | Some(operator_address) ->
                 let update : update_operator = Add_operator_p({ owner = p.owner; operator = operator_address; token_id = token_id; }) in
                 let operators_with_minted_token_operator = update_operators (update, s.operators) in
-                ([] : operation list),  { s with ledger = ledger_with_minted_token; operators = operators_with_minted_token_operator; market = { s.market with lands=lands_with_new_land; owners=new_owners; } }
+                ([] : operation list),  { s with ledger = ledger_with_minted_token; operators = operators_with_minted_token_operator; market = { s.market with lands=lands_with_new_land; landIds=lands_ids_with_new_id; owners=new_owners; } }
         else
             (failwith("Error: cannot mint this token") : (operation  list) * nft_token_storage)
     in
