@@ -59,10 +59,11 @@ export const Buy = () => {
         const tokenOnSaleIds: number[] = tokensOnSaleFromStorage.map(
           (sale: { token_id: { c: any[] }; price: { c: any[] } }) => (sale.token_id.c[0])
         );
-
+        
         const tokensOwnedFromStorage = await storage.market.owners.get(
           accountPkh
         );
+        if (tokensOwnedFromStorage) {
           const userTokenIds: number[] = tokensOwnedFromStorage.map(
             (token: { c: any[] }) => token.c[0]
           );
@@ -86,6 +87,7 @@ export const Buy = () => {
           return token;
         }));
         setTokensOnSale(tokensOnSaleList);
+      }
         setLoading(false);
       }
     })();
