@@ -1,96 +1,97 @@
-import { DropDown } from "app/App.components/DropDown/DropDown.controller";
-import { Input } from "app/App.components/Input/Input.controller";
-import {AdminButton, AdminInput} from "./Admin.style";
-import {
-  HomeButton,
-  HomeButtonBorder,
-  HomeButtonText,
-} from "pages/Home/Home.style";
+import { LandMap } from "app/App.components/LandMap/LandMap.view";
 import * as React from "react";
 import { useState } from "react";
+// prettier-ignore
+import { AdminLandBottom, AdminLandButton, AdminLandCoordinateInput, AdminLandDescriptionInput, AdminLandFirstRow, AdminLandLocation, AdminLandNameInput, AdminLandStyled } from "./Admin.style";
+
 type AdminViewProps = {
-  mint: ({}: any) => void;
+  mintCallBack: ({}: any) => void;
   connectedUser: string;
 };
 
-export const AdminView = ({ mint, connectedUser }: AdminViewProps) => {
-  const values: ReadonlyArray<string> = [
-    "Road",
-    "Land",
-    "Water",
-    "Plaza",
-    "District",
-  ];
-  const [xCoordinate, setXCoordinate] = useState<number>();
-  const [yCoordinate, setYCoordinate] = useState<number>();
-  const [landName, setLandName] = useState<string>();
-  const [landDescription, setLandDescription] = useState<string>();
-  const [isOpen, setOpen] = useState(false);
-  const [itemSelected, setItemSelected] = useState(values[0]);
-  const clickItem = (value: string) => {
-    setItemSelected(value);
-    setOpen(!isOpen);
-  };
-  const clickCallback = () => {
-    setOpen(!isOpen);
-  };
-  const test: boolean = true;
+export const AdminView = ({ mintCallBack, connectedUser }: AdminViewProps) => {
   return (
     <>
-      <AdminInput
-        placeholder="x coordinate"
-        onChange={(e) => {
-          console.log(e.target.value)
-          if(!isNaN(Number(e.target.value))) {
-            if(e.target.value){
-              setXCoordinate(parseInt(e.target.value))
-            } else {
-              setXCoordinate(undefined)
-            }
-            }}
+      <AdminLand mintCallBack={mintCallBack} connectedUser={connectedUser} />
+    </>
+  );
+};
 
-          }
-        onBlur={() => {}}
-        value={xCoordinate}
-      />
-      <AdminInput
-        placeholder="y coordinate"
-        onChange={(e) => {
-          console.log(e.target.value)
-          if(!isNaN(Number(e.target.value))) {
-            if(e.target.value){
-              setYCoordinate(parseInt(e.target.value))
-            } else {
-              setYCoordinate(undefined)
-            }
-            }}
+const AdminLand = ({ mintCallBack, connectedUser }: AdminViewProps) => {
+  const [landName, setName] = useState<string>("");
+  const [landDescription, setDescription] = useState<string>("");
+  const [xCoordinate, setXCoordinate] = useState<number>(0);
+  const [yCoordinate, setYCoordinate] = useState<number>(0);
 
-          }
-        onBlur={() => {}}
-        value={yCoordinate}
+  return (
+    <AdminLandStyled>
+      <LandMap
+        x={xCoordinate}
+        y={yCoordinate}
+        isAdmin={true}
+        setXCoordinatesCallback={setXCoordinate}
+        setYCoordinatesCallback={setYCoordinate}
       />
-      <AdminInput
-        placeholder="name"
-        onChange={(e) => setLandName(e.target.value)}
-        onBlur={() => {}}
-        value={landName}
-      />
-      <AdminInput
-        placeholder="description"
-        onChange={(e) => setLandDescription(e.target.value)}
-        onBlur={() => {}}
-        value={landDescription}
-      />
-      <AdminButton onClick={() =>
-            mint({
+
+      <AdminLandBottom>
+        <AdminLandFirstRow>
+          <AdminLandLocation>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#location" />
+            </svg>
+            <AdminLandCoordinateInput
+              value={xCoordinate}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  if (e.target.value) {
+                    setXCoordinate(parseInt(e.target.value));
+                  } else {
+                    setXCoordinate(0);
+                  }
+                }
+              }}
+              placeholder="x"
+            ></AdminLandCoordinateInput>
+            <AdminLandCoordinateInput
+              value={yCoordinate}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  if (e.target.value) {
+                    setYCoordinate(parseInt(e.target.value));
+                  } else {
+                    setYCoordinate(0);
+                  }
+                }
+              }}
+              placeholder="y"
+            ></AdminLandCoordinateInput>
+          </AdminLandLocation>
+        </AdminLandFirstRow>
+        <AdminLandNameInput
+          value={landName}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Name"
+        />
+        <AdminLandDescriptionInput
+          value={landDescription}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Description"
+        />
+        <AdminLandButton
+          onClick={() =>
+            mintCallBack({
               owner: connectedUser,
-              landType: itemSelected.toLowerCase(),
+              landType: "land",
               xCoordinates: xCoordinate,
               yCoordinates: yCoordinate,
               landName: landName,
               description: landDescription,
             })
-          }>Mint a land</AdminButton>
-    </>
+          }
+        >
+          Mint a land
+        </AdminLandButton>
+      </AdminLandBottom>
+    </AdminLandStyled>
   );
 };

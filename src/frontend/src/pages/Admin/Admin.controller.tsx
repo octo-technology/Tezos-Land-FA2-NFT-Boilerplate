@@ -3,9 +3,13 @@ import { useAccountPkh, useOnBlock, useReady, useTezos, useWallet } from "dapp/d
 import { TEZOSLAND_ADDRESS } from "dapp/defaults";
 import * as React from "react";
 import { useEffect, useState } from "react";
-
 import { AdminStyled } from "./Admin.style";
 import { AdminView } from "./Admin.view";
+
+export type Coordinates = {
+  x: number;
+  y: number;
+};
 
 export const Admin = () => {
   const wallet = useWallet();
@@ -77,11 +81,11 @@ export const Admin = () => {
     <AdminStyled>
       {wallet ? (
         <>
-          {ready? (
+          {ready ? (
             <>
-              {accountPkh == adminAdress  ? (
+              {accountPkh == adminAdress ? (
                 <AdminView
-                  mint={mint}
+                  mintCallBack={mint}
                   connectedUser={(accountPkh as unknown) as string}
                 />
               ) : (

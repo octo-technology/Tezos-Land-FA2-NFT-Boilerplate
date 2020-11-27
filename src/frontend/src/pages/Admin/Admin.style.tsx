@@ -1,20 +1,53 @@
-import styled from 'styled-components/macro'
+import styled from "styled-components/macro";
 
 export const AdminStyled = styled.div`
-  margin: 100px;
-  display: grid;
-  grid-template-columns: 2fr 2fr 3fr 4fr 3fr ;
-  grid-gap: 10px;
-  width: 1250px;
-  background-color: #141b43;
-  position: relative;
-  margin: auto;
-  z-index: 2;
-`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;`;
 
-export const AdminInput = styled.input`
+export const AdminLandStyled = styled.div`
+  position: relative;
+  width: 500px;
+`;
+
+export const AdminLandBottom = styled.div`
+  background-color: #141b43;
+  padding: 10px;
+  border-radius: 0 0 10px 10px;
+`;
+
+export const AdminLandFirstRow = styled.div`
+  position: relative;
+  width: 500px;
+`;
+
+export const AdminLandLocation = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  grid-gap: 1px;
   height: 40px;
-  width: 100%;
+  width: 100px;
+  line-height: 20px;
+  border-radius: 5px;
+  background-color: #4c5170;
+
+  > svg {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 4px;
+    margin-top: 6px;
+  }
+`;
+
+export const AdminLandCoordinateInput = styled.input`
+  height: 25px;
+  text-align: center;
+  width: 75%;
+  margin-top: 8px;
   background-color: #202337;
   box-sizing: border-box;
   border: 0;
@@ -27,13 +60,47 @@ export const AdminInput = styled.input`
   }
 `;
 
-export const AdminButton = styled.button`
+export const AdminLandNameInput = styled.input`
+  height: 30px;
+  width: 100%;
+  margin-top: 5px;
+  background-color: #202337;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 5px;
+  font-size: 11px;
+
+  ::placeholder {
+    color: "#727272";
+    font-size: 11px;
+  }
+`;
+
+export const AdminLandDescriptionInput = styled.input`
+  height: 60px;
+  width: 100%;
+  margin-top: 5px;
+  background-color: #202337;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 5px;
+  font-size: 11px;
+  text-align: left top;
+
+  ::placeholder {
+    color: "#727272";
+    font-size: 11px;
+  }
+`;
+
+export const AdminLandButton = styled.button`
   height: 40px;
   font-size: 11px;
   width: 100%;
   background-color: #4c5170;
   box-sizing: border-box;
   border: 0;
+  margin-top: 5px;
   border-radius: 5px;
-  color: #FFF;
+  color: #fff;
 `;
