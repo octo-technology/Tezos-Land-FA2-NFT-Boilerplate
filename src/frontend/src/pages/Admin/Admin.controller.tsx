@@ -61,8 +61,8 @@ export const Admin = () => {
       landType,
       landName,
       owner,
-    }: MintToken) =>
-      (contract as any).methods
+    }: MintToken) => {
+      return (contract as any).methods
         .mint(
           xCoordinates,
           yCoordinates,
@@ -73,7 +73,8 @@ export const Admin = () => {
           owner,
           owner
         )
-        .send(),
+        .send();
+    },
     [contract]
   );
 

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { AdminLandBottom, AdminLandButton, AdminLandCoordinateInput, AdminLandDescriptionInput, AdminLandFirstRow, AdminLandLocation, AdminLandNameInput, AdminLandStyled } from "./Admin.style";
 
 type AdminViewProps = {
-  mintCallBack: ({}: any) => void;
+  mintCallBack: ({}: any) => Promise<any>;
   connectedUser: string;
 };
 
@@ -86,7 +86,7 @@ const AdminLand = ({ mintCallBack, connectedUser }: AdminViewProps) => {
               yCoordinates: yCoordinate,
               landName: landName,
               description: landDescription,
-            })
+            }).catch((e: any) => console.error(e.message))
           }
         >
           Mint a land

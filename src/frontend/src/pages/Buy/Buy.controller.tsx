@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { BuyStyled } from "./Buy.style";
 import { BuyView } from "./Buy.view";
 
-
-
 export type Coordinates = {
   x: number;
   y: number;
@@ -57,28 +55,31 @@ export const Buy = () => {
         const storage = await (contract as any).storage();
         const tokensOnSaleFromStorage = storage["market"].sales;
         const tokenOnSaleIds: number[] = tokensOnSaleFromStorage.map(
-          (sale: { token_id: { c: any[] }; price: { c: any[] } }) => (sale.token_id.c[0])
+          (sale: { token_id: { c: any[] }; price: { c: any[] } }) =>
+            sale.token_id.c[0]
         );
 
-        const tokensOnSaleList = await Promise.all(tokenOnSaleIds.map(async (tokenId) => {
-          const tokenRaw = await storage.market.lands.get(tokenId.toString());
-          const tokenOwner = await storage.ledger.get(tokenId.toString());
-          const token: TokenOnSale = {
-            name: tokenRaw.name,
-            description: tokenRaw.description,
-            position: {
-              x: tokenRaw.position[6].c[0],
-              y: tokenRaw.position[7].c[0]
-            },
-            landType: LandType.District, // TO FIX
-            isOwned: tokenRaw.isOwned,
-            onSale: tokenRaw.onSale,
-            price: tokenRaw.price.c[0],
-            id: tokenRaw.id.c[0],
-            tokenOwnedByUser: accountPkh == tokenOwner
-          }
-          return token;
-        }));
+        const tokensOnSaleList = await Promise.all(
+          tokenOnSaleIds.map(async (tokenId) => {
+            const tokenRaw = await storage.market.lands.get(tokenId.toString());
+            const tokenOwner = await storage.ledger.get(tokenId.toString());
+            const token: TokenOnSale = {
+              name: tokenRaw.name,
+              description: tokenRaw.description,
+              position: {
+                x: tokenRaw.position[6].c[0],
+                y: tokenRaw.position[7].c[0],
+              },
+              landType: LandType.District, // TO FIX
+              isOwned: tokenRaw.isOwned,
+              onSale: tokenRaw.onSale,
+              price: tokenRaw.price.c[0],
+              id: tokenRaw.id.c[0],
+              tokenOwnedByUser: accountPkh == tokenOwner,
+            };
+            return token;
+          })
+        );
         setTokensOnSale(tokensOnSaleList);
         setLoading(false);
       }
@@ -90,10 +91,9 @@ export const Buy = () => {
   type BuyToken = { token_id: number; price: number };
   const buyToken = React.useCallback(
     ({ token_id, price }: BuyToken) => {
-      console.log(token_id, price);
-      (contract as any).methods
+      return (contract as any).methods
         .buyLand(price, token_id)
-        .send({ amount: price /1000000 });
+        .send({ amount: price / 1000000 });
     },
     [contract]
   );
@@ -105,7 +105,10 @@ export const Buy = () => {
           {ready ? (
             <>
               {tokensOnSale && tokensOnSale.length > 0 ? (
-                <BuyView buyTokenCallback={buyToken} tokensOnSale={tokensOnSale} />
+                <BuyView
+                  buyTokenCallback={buyToken}
+                  tokensOnSale={tokensOnSale}
+                />
               ) : (
                 <div>
                   {loading ? (
