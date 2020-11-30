@@ -1,5 +1,6 @@
 const TezosLand = artifacts.require("TezosLand");
 const { MichelsonMap } = require("@taquito/taquito");
+const { pkh } = require("../faucet.json");
 
 const metadata_bigmap = new MichelsonMap();
 metadata_bigmap.set(
@@ -17,7 +18,7 @@ metadata_bigmap.set(
     }
 );
 
-const admin = "tz1V4yYUaga5AHuoeK7jM6tvDBD7wm9ZpiLn"
+const admin = pkh
 const empty_lands = new MichelsonMap()
 const empty_sales = []
 const empty_land_ids = []
