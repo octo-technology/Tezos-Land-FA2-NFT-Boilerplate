@@ -17,8 +17,6 @@ class TestMint(TestCase):
         with self.assertRaises(MichelsonRuntimeError) as not_administrator_error:
             # GIVEN
             storage = self.get_storage(admin=administrator)
-            land_type = "road"
-            token_id = 1
             name = "My Land"
             description = "This is my land"
             coordinates = [1,5]
@@ -26,7 +24,6 @@ class TestMint(TestCase):
 
             # WHEN
             self.nftContract.mint({"owner": alice,
-                                   "land_type": land_type,
                                    "name": name,
                                    "description": description,
                                    "coordinates": coordinates}).result(
@@ -46,7 +43,6 @@ class TestMint(TestCase):
             storage = self.get_storage(admin=administrator,
                                        ledger={bob_token_id: bob},
                                        land_ids=[bob_token_id])
-            land_type = "road"
             name = "My Land"
             description = "This is my land"
             coordinates = [0, 0]
@@ -55,8 +51,7 @@ class TestMint(TestCase):
             self.nftContract.mint({"name": name,
                                    "description": description,
                                    "coordinates": coordinates,
-                                   "owner": alice,
-                                   "land_type": land_type}).result(
+                                   "owner": alice}).result(
                 storage=storage,
                 source=administrator
             )
@@ -73,7 +68,6 @@ class TestMint(TestCase):
             y_coordinates = 5
             storage = self.get_storage(admin=administrator,
                                        height=map_height, width=map_width)
-            land_type = "road"
             name = "My Land"
             description = "This is my land"
             coordinates = [x_coordinates, y_coordinates]
@@ -82,8 +76,7 @@ class TestMint(TestCase):
             self.nftContract.mint({"name": name,
                                    "description": description,
                                    "coordinates": coordinates,
-                                   "owner": alice,
-                                   "land_type": land_type}).result(
+                                   "owner": alice}).result(
                 storage=storage,
                 source=administrator
             )
@@ -100,7 +93,6 @@ class TestMint(TestCase):
             y_coordinates = map_height
             storage = self.get_storage(admin=administrator,
                                        height=map_height, width=map_width)
-            land_type = "road"
             name = "My Land"
             description = "This is my land"
             coordinates = [x_coordinates, y_coordinates]
@@ -109,8 +101,7 @@ class TestMint(TestCase):
             self.nftContract.mint({"name": name,
                                    "description": description,
                                    "coordinates": coordinates,
-                                   "owner": alice,
-                                   "land_type": land_type}).result(
+                                   "owner": alice}).result(
                 storage=storage,
                 source=administrator
             )
@@ -125,7 +116,6 @@ class TestMint(TestCase):
         x_coordinates = map_width - 1
         y_coordinates = map_height - 1
         expected_minted_token_id = 100
-        land_type = "road"
         name = "My Land"
         description = "This is my land"
         coordinates = [x_coordinates, y_coordinates]
@@ -139,8 +129,7 @@ class TestMint(TestCase):
         result = self.nftContract.mint({"name": name,
                                         "description": description,
                                         "coordinates": coordinates,
-                                        "owner": alice,
-                                        "land_type": land_type}).result(
+                                        "owner": alice}).result(
             storage=storage,
             source=administrator
         )
@@ -152,8 +141,7 @@ class TestMint(TestCase):
                                 'name': name,
                                 'onSale': False,
                                 'position': coordinates,
-                                'price': None,
-                                'landType': land_type}
+                                'price': None}
         lands_with_minted_land = {expected_minted_token_id: expected_minted_land}
         self.assertEqual({expected_minted_token_id: alice}, result.big_map_diff['ledger'])
         self.assertEqual({alice: [expected_minted_token_id]}, result.big_map_diff['market/owners'])
@@ -168,7 +156,6 @@ class TestMint(TestCase):
         x_coordinates = map_width - 1
         y_coordinates = map_height - 1
         expected_minted_token_id = 100
-        land_type = "road"
         name = "My Land"
         description = "This is my land"
         coordinates = [x_coordinates, y_coordinates]
@@ -182,8 +169,7 @@ class TestMint(TestCase):
                                         "description": description,
                                         "coordinates": coordinates,
                                         "owner": alice,
-                                        "operator": bob,
-                                        "land_type": land_type}).result(
+                                        "operator": bob}).result(
             storage=storage,
             source=administrator
         )
@@ -195,8 +181,7 @@ class TestMint(TestCase):
                                 'name': name,
                                 'onSale': False,
                                 'position': coordinates,
-                                'price': None,
-                                'landType': land_type}
+                                'price': None}
         lands_with_minted_land = {expected_minted_token_id: expected_minted_land}
         minted_land_operator = {('tz1L738ifd66ah69PrmKAZzckvvHnbcSeqjf', 'tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v', expected_minted_token_id): None}
         self.assertEqual({expected_minted_token_id: alice}, result.big_map_diff['ledger'])

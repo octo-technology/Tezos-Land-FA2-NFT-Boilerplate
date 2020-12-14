@@ -5,7 +5,7 @@ from test.tests_utils import *
 from decimal import Decimal
 
 
-class TestChangeLandName(TestCase):
+class TestChangeLandDescription(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -22,7 +22,6 @@ class TestChangeLandName(TestCase):
             land = {"name": "",
                     "description": "old description",
                     "position": [0, 0],
-                    "landType": "road",
                     "isOwned": True,
                     "onSale": False,
                     "price": 200,
@@ -68,14 +67,12 @@ class TestChangeLandName(TestCase):
         new_description = "new description"
         name = ""
         position = [0, 0]
-        land_type = "road"
         isOwned = True
         onSale = False
         price = Decimal(0.000100).quantize(Decimal("0.0001"))
         land = {"name": name,
                 "description": previous_description,
                 "position": position,
-                "landType": land_type,
                 "isOwned": isOwned,
                 "onSale": onSale,
                 "price": price,
@@ -95,7 +92,6 @@ class TestChangeLandName(TestCase):
         self.assertEqual(modified_land["name"], name)
         self.assertEqual(modified_land["description"], new_description)
         self.assertEqual(modified_land["position"], position)
-        self.assertEqual(modified_land["landType"], land_type)
         self.assertEqual(modified_land["isOwned"], isOwned)
         self.assertEqual(modified_land["onSale"], onSale)
         self.assertEqual(modified_land["price"], price)

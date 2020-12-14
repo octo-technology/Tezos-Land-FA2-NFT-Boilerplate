@@ -47,7 +47,6 @@ export const Admin = () => {
     xCoordinates: number;
     yCoordinates: number;
     description: string;
-    landType: string;
     landName: string;
     owner: string;
     operator?: string;
@@ -58,7 +57,6 @@ export const Admin = () => {
       xCoordinates,
       yCoordinates,
       description,
-      landType,
       landName,
       owner,
     }: MintToken) => {
@@ -67,8 +65,6 @@ export const Admin = () => {
           xCoordinates,
           yCoordinates,
           description,
-          landType,
-          [["unit"]],
           landName,
           owner,
           owner

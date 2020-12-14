@@ -21,13 +21,11 @@ class TestSellLand(TestCase):
         name = "Land 1"
         description = ""
         position = [0, 0]
-        land_type = "road"
         isOwned = True
         onSale = False
         land = {"name": name,
                 "description": description,
                 "position": position,
-                "landType": land_type,
                 "isOwned": isOwned,
                 "onSale": onSale,
                 "price": None,
@@ -90,13 +88,11 @@ class TestSellLand(TestCase):
             name = "Land 1"
             description = ""
             position = [0, 0]
-            land_type = "road"
             isOwned = True
             onSale = True
             land = {"name": name,
                     "description": description,
                     "position": position,
-                    "landType": land_type,
                     "isOwned": isOwned,
                     "onSale": onSale,
                     "price": None,
@@ -126,13 +122,11 @@ class TestSellLand(TestCase):
             name = "Land 1"
             description = ""
             position = [0, 0]
-            land_type = "road"
             isOwned = True
             onSale = True
             land = {"name": name,
                     "description": description,
                     "position": position,
-                    "landType": land_type,
                     "isOwned": isOwned,
                     "onSale": onSale,
                     "price": None,

@@ -23,11 +23,8 @@
                       unit))
                 (pair %mint
                    (pair (pair (pair %coordinates nat nat) (option %description string))
-                         (pair (or %land_type
-                                  (or (or (unit %district) (unit %land)) (or (unit %plaza) (unit %road)))
-                                  (unit %water))
-                               (string %name)))
-                   (pair (option %operator address) (address %owner))))
+                         (pair (string %name) (option %operator address)))
+                   (address %owner)))
             (or (pair %sellLand (mutez %price) (nat %token_id))
                 (pair %withdrawFromSale (mutez %price) (nat %token_id))))) ;
   storage
@@ -38,12 +35,8 @@
                                (big_map %lands
                                   nat
                                   (pair (pair (pair (option %description string) (nat %id))
-                                              (pair (bool %isOwned)
-                                                    (or %landType
-                                                       (or (or (unit %district) (unit %land)) (or (unit %plaza) (unit %road)))
-                                                       (unit %water))))
-                                        (pair (pair (string %name) (bool %onSale))
-                                              (pair (pair %position nat nat) (option %price mutez)))))))
+                                              (pair (bool %isOwned) (string %name)))
+                                        (pair (pair (bool %onSale) (pair %position nat nat)) (option %price mutez))))))
                    (pair (pair (big_map %owners address (set nat))
                                (set %sales (pair (mutez %price) (nat %token_id))))
                          (nat %width))))
@@ -417,10 +410,10 @@
            (pair nat
                  (big_map
                     nat
-                    (pair (pair (pair (option string) nat) (pair bool (or (or (or unit unit) (or unit unit)) unit)))
-                          (pair (pair string bool) (pair (pair nat nat) (option mutez))))))
-           (pair (pair (pair (option string) nat) (pair bool (or (or (or unit unit) (or unit unit)) unit)))
-                 (pair (pair string bool) (pair (pair nat nat) (option mutez))))
+                    (pair (pair (pair (option string) nat) (pair bool string))
+                          (pair (pair bool (pair nat nat)) (option mutez)))))
+           (pair (pair (pair (option string) nat) (pair bool string))
+                 (pair (pair bool (pair nat nat)) (option mutez)))
            { DUP ;
              CDR ;
              SWAP ;
@@ -433,19 +426,19 @@
                     (pair nat
                           (big_map
                              nat
-                             (pair (pair (pair (option string) nat) (pair bool (or (or (or unit unit) (or unit unit)) unit)))
-                                   (pair (pair string bool) (pair (pair nat nat) (option mutez))))))
-                    (pair (pair (pair (option string) nat) (pair bool (or (or (or unit unit) (or unit unit)) unit)))
-                          (pair (pair string bool) (pair (pair nat nat) (option mutez)))))
+                             (pair (pair (pair (option string) nat) (pair bool string))
+                                   (pair (pair bool (pair nat nat)) (option mutez)))))
+                    (pair (pair (pair (option string) nat) (pair bool string))
+                          (pair (pair bool (pair nat nat)) (option mutez))))
                  (pair (pair nat bool)
                        (big_map
                           nat
-                          (pair (pair (pair (option string) nat) (pair bool (or (or (or unit unit) (or unit unit)) unit)))
-                                (pair (pair string bool) (pair (pair nat nat) (option mutez)))))))
+                          (pair (pair (pair (option string) nat) (pair bool string))
+                                (pair (pair bool (pair nat nat)) (option mutez))))))
            (big_map
               nat
-              (pair (pair (pair (option string) nat) (pair bool (or (or (or unit unit) (or unit unit)) unit)))
-                    (pair (pair string bool) (pair (pair nat nat) (option mutez)))))
+              (pair (pair (pair (option string) nat) (pair bool string))
+                    (pair (pair bool (pair nat nat)) (option mutez))))
            { DUP ;
              CDR ;
              SWAP ;
@@ -473,8 +466,7 @@
              DIG 3 ;
              CAR ;
              CDR ;
-             DIP { DUP ; CAR ; SWAP ; CDR ; DUP ; CDR ; SWAP ; CAR ; CAR } ;
-             SWAP ;
+             DIP { DUP ; CAR ; SWAP ; CDR ; DUP ; CDR ; SWAP ; CAR ; CDR } ;
              PAIR ;
              PAIR ;
              SWAP ;
@@ -986,10 +978,11 @@
                               DUP ;
                               DUG 4 ;
                               CAR ;
-                              DIP { DUP ; CAR ; SWAP ; CDR ; DUP ; CDR ; SWAP ; CAR ; CDR } ;
-                              PAIR ;
+                              DIP { DUP ; CDR ; SWAP ; CAR ; DUP ; CAR ; SWAP ; CDR ; CAR } ;
+                              SWAP ;
                               PAIR ;
                               SWAP ;
+                              PAIR ;
                               PAIR ;
                               SOME ;
                               DIG 3 ;
@@ -1435,7 +1428,6 @@
                               DUP ;
                               DUG 2 ;
                               CDR ;
-                              CDR ;
                               DIG 4 ;
                               DUP ;
                               DUG 5 ;
@@ -1452,7 +1444,6 @@
                               DIG 2 ;
                               DUP ;
                               DUG 3 ;
-                              CDR ;
                               CDR ;
                               DIG 5 ;
                               DUP ;
@@ -1473,7 +1464,6 @@
                               DIG 5 ;
                               DUP ;
                               DUG 6 ;
-                              CDR ;
                               CDR ;
                               PAIR ;
                               PAIR ;
@@ -1496,14 +1486,7 @@
                                    CAR ;
                                    CAR ;
                                    CAR ;
-                                   PAIR ;
                                    PUSH bool False ;
-                                   DIG 5 ;
-                                   DUP ;
-                                   DUG 6 ;
-                                   CAR ;
-                                   CDR ;
-                                   CDR ;
                                    PAIR ;
                                    PAIR ;
                                    DIG 4 ;
@@ -1548,8 +1531,9 @@
                                    SWAP ;
                                    UPDATE ;
                                    DIG 7 ;
-                                   CDR ;
                                    CAR ;
+                                   CDR ;
+                                   CDR ;
                                    IF_NONE
                                      { DIG 4 ;
                                        DROP ;
@@ -1599,7 +1583,6 @@
                                        CDR ;
                                        DIG 8 ;
                                        DIG 7 ;
-                                       CDR ;
                                        CDR ;
                                        DIG 3 ;
                                        PAIR ;
@@ -1717,7 +1700,7 @@
                           EXEC ;
                           CDR ;
                           CAR ;
-                          CDR ;
+                          CAR ;
                           IF { DROP 5 ; PUSH string "This land is already on sale" ; FAILWITH }
                              { SWAP ;
                                DUP ;
@@ -1788,8 +1771,7 @@
                                DUG 4 ;
                                CAR ;
                                CDR ;
-                               DIP { DUP ; CAR ; SWAP ; CDR ; DUP ; CDR ; SWAP ; CAR ; CAR } ;
-                               SWAP ;
+                               DIP { DUP ; CAR ; SWAP ; CDR ; DUP ; CDR ; SWAP ; CAR ; CDR } ;
                                PAIR ;
                                PAIR ;
                                SWAP ;
@@ -1798,9 +1780,7 @@
                                CDR ;
                                CAR ;
                                SOME ;
-                               DIP { DUP ; CAR ; SWAP ; CDR ; DUP ; CAR ; SWAP ; CDR ; CAR } ;
-                               SWAP ;
-                               PAIR ;
+                               DIP { DUP ; CAR ; SWAP ; CDR ; CAR } ;
                                SWAP ;
                                PAIR ;
                                SWAP ;

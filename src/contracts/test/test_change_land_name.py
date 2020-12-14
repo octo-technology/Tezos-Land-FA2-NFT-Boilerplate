@@ -22,7 +22,6 @@ class TestChangeLandName(TestCase):
             land = {"name": "old name",
                     "description": "",
                     "position": [0, 0],
-                    "landType": "road",
                     "isOwned": True,
                     "onSale": False,
                     "price": 200,
@@ -68,14 +67,12 @@ class TestChangeLandName(TestCase):
         new_name = "new name"
         description = ""
         position = [0, 0]
-        land_type = "road"
         isOwned = True
         onSale = False
         price = Decimal(0.000100).quantize(Decimal("0.0001"))
         land = {"name": previous_name,
                 "description": description,
                 "position": position,
-                "landType": land_type,
                 "isOwned": isOwned,
                 "onSale": onSale,
                 "price": price,
@@ -96,7 +93,6 @@ class TestChangeLandName(TestCase):
         self.assertEqual(modified_land["description"], description)
         self.assertEqual(modified_land["position"], position)
         self.assertEqual(modified_land["isOwned"], isOwned)
-        self.assertEqual(modified_land["landType"], land_type)
         self.assertEqual(modified_land["onSale"], onSale)
         self.assertEqual(modified_land["price"], price)
         self.assertEqual(modified_land["id"], land_token_id)

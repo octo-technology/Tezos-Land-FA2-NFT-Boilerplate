@@ -67,8 +67,8 @@ export const Buy = () => {
               name: tokenRaw.name,
               description: tokenRaw.description,
               position: {
-                x: tokenRaw.position[6].c[0],
-                y: tokenRaw.position[7].c[0],
+                x: tokenRaw.position[5].c[0],
+                y: tokenRaw.position[6].c[0],
               },
               landType: LandType.District, // TO FIX
               isOwned: tokenRaw.isOwned,
