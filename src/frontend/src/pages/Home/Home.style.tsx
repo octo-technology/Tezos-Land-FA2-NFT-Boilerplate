@@ -118,3 +118,11 @@ export const HomeButtonText = styled.div`
     vertical-align: text-bottom;
   }
 `
+
+
+export const HomeHeaderButtons = styled.div`
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 20px;
+`
+
