@@ -4,18 +4,12 @@ The Tezos FA2 NFT Marketplace Boilerplate
 
 Demo on [TezosLand.io](https://TezosLand.io) 
 
-## How to
+## Get started
 
-goto https://faucet.tzalpha.net/
+Check out our 3 parts article on "How to create your own NFT marketplace on Tezos"
 
-```
-$ cd src/contracts
-$ npm install -g truffle@tezos
-$ truffle compile
-$ truffle migrate --network carthagenet (TODO with Delphi)
-// copy > contract address:    KT1SS5CMP6wfqt63jtwzisb22QgpRq13b77W
-// paste address to TEZOSLAND_ADDRESS in dapp/defaults.ts (TODO move to .env)
-$ cd ../frontend
-$ npm install
-$ npm start
-```
+Part 1 - Get started : [https://docs.google.com/document/d/1IeJQppDh9fO3mZ0FIGkggtZKuIomB_fHOpWtrgWCIQ8/edit?usp=sharing](https://docs.google.com/document/d/1IeJQppDh9fO3mZ0FIGkggtZKuIomB_fHOpWtrgWCIQ8/edit?usp=sharing)
+
+Part 2 - Smart contracts : [https://docs.google.com/document/d/1k8EQwJGLbgbVV3eKEIfGzx1R8Ip2Ky4mSfYB59GRz8s/edit?usp=sharing](https://docs.google.com/document/d/1k8EQwJGLbgbVV3eKEIfGzx1R8Ip2Ky4mSfYB59GRz8s/edit?usp=sharing)
+
+Part 3 - Frontend : [https://docs.google.com/document/d/1XlYtFq9aLntrTjQQ8Uzu1U5iDXJy2Uyk4CCjuW0lPic/edit?usp=sharing](https://docs.google.com/document/d/1XlYtFq9aLntrTjQQ8Uzu1U5iDXJy2Uyk4CCjuW0lPic/edit?usp=sharing)
