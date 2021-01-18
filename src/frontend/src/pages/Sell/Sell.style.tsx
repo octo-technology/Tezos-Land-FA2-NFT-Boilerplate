@@ -1,16 +1,13 @@
 import styled from "styled-components/macro";
+import { GridPage } from "styles";
 
-export const SellStyled = styled.div`
-  margin: 30px;
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 30px;
+export const SellStyled =  styled(GridPage)`
 `;
 
 export const SellLandStyled = styled.div`
   position: relative;
   width: 230px;
+  margin: auto;
 `;
 
 export const SellLandBottom = styled.div`
@@ -55,8 +52,8 @@ export const SellLandLocation = styled.div`
   }
 `;
 
-export const SellLandOnSale = styled.div<{ onSale: boolean }>`
-  color: ${(props) => (props.onSale ? "#E50000" : "#FFF")};
+export const SellLandOnSale = styled.div<{ isOnSale: boolean }>`
+  color: ${(props) => (props.isOnSale ? "#E50000" : "#FFF")};
   line-height: 20px;
   text-align: right;
   font-size: 11px;
@@ -86,6 +83,7 @@ export const SellLandButton = styled.button`
   border: 0;
   border-radius: 5px;
   color: #FFF;
+  cursor: pointer;
 `;
 
 export const CancelSaleButton = styled.button`
@@ -98,5 +96,6 @@ export const CancelSaleButton = styled.button`
   border-radius: 5px;
   color: #FFF;
   margin-left: 3px;
+  cursor: pointer;
 `;
 

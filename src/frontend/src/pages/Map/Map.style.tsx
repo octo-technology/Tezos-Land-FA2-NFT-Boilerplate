@@ -1,12 +1,9 @@
 import styled from "styled-components/macro";
+import { GridPage } from "styles";
 
-export const MapStyled = styled.div`
-  margin: 30px;
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 30px;
+export const MapStyled =  styled(GridPage)`
 `;
+
 
 export const MapLandStyled = styled.div`
   position: relative;
@@ -58,8 +55,8 @@ export const MapLandLocation = styled.div`
   }
 `;
 
-export const MapLandOnSale = styled.div<{ onSale: boolean }>`
-  color: ${(props) => (props.onSale ? "#E50000" : "#FFF")};
+export const MapLandOnSale = styled.div<{ isOnSale: boolean }>`
+  color: ${(props) => (props.isOnSale ? "#E50000" : "#FFF")};
   line-height: 20px;
   text-align: right;
   font-size: 11px;

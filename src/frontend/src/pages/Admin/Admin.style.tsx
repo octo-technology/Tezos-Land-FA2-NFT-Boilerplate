@@ -1,12 +1,9 @@
 import styled from "styled-components/macro";
 
 export const AdminStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  min-height: 100vh;`;
+  margin: 30px auto;
+  width: 500px;
+`;
 
 export const AdminLandStyled = styled.div`
   position: relative;
@@ -103,4 +100,5 @@ export const AdminLandButton = styled.button`
   margin-top: 5px;
   border-radius: 5px;
   color: #fff;
+  cursor: pointer;
 `;

@@ -1,19 +1,30 @@
 import { LandMap } from "app/App.components/LandMap/LandMap.view";
 import * as React from "react";
 import { useState } from "react";
+import { useAlert } from 'react-alert'
+
 // prettier-ignore
-import { AdminLandBottom, AdminLandButton, AdminLandCoordinateInput, AdminLandDescriptionInput, AdminLandFirstRow, AdminLandLocation, AdminLandNameInput, AdminLandStyled } from "./Admin.style";
+import { AdminLandBottom, AdminLandButton, AdminLandCoordinateInput, AdminLandDescriptionInput, AdminLandFirstRow, AdminLandLocation, AdminLandNameInput, AdminLandStyled, AdminStyled } from "./Admin.style";
+
+type MintPorps = {
+  owner: string;
+  landType: string;
+  xCoordinates: number;
+  yCoordinates: number;
+  landName: string;
+  description: string;
+};
 
 type AdminViewProps = {
-  mintCallBack: ({}: any) => Promise<any>;
+  mintCallBack: (mintProps: MintPorps) => Promise<any>;
   connectedUser: string;
 };
 
 export const AdminView = ({ mintCallBack, connectedUser }: AdminViewProps) => {
   return (
-    <>
+    <AdminStyled>
       <AdminLand mintCallBack={mintCallBack} connectedUser={connectedUser} />
-    </>
+    </AdminStyled>
   );
 };
 
@@ -22,7 +33,8 @@ const AdminLand = ({ mintCallBack, connectedUser }: AdminViewProps) => {
   const [landDescription, setDescription] = useState<string>("");
   const [xCoordinate, setXCoordinate] = useState<number>(0);
   const [yCoordinate, setYCoordinate] = useState<number>(0);
-
+  const alert = useAlert()
+  
   return (
     <AdminLandStyled>
       <LandMap
@@ -86,7 +98,10 @@ const AdminLand = ({ mintCallBack, connectedUser }: AdminViewProps) => {
               yCoordinates: yCoordinate,
               landName: landName,
               description: landDescription,
-            }).catch((e: any) => console.error(e.message))
+            }).catch((e: any) => {
+              alert.show(e.message)
+              console.error(e.message)
+            })
           }
         >
           Mint a land

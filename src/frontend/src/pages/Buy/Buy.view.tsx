@@ -1,18 +1,18 @@
 import { LandMap } from "app/App.components/LandMap/LandMap.view";
 import * as React from "react";
+import { useAlert } from 'react-alert'
+
 import { TokenOnSale } from "./Buy.controller";
-import {
-  BuyLandBottom,
-  BuyLandButton,
-  BuyLandFirstRow,
-  BuyLandLocation,
-  BuyLandOnSale,
-  BuyLandSecondRow,
-  BuyLandStyled,
-} from "./Buy.style";
+// prettier-ignore
+import { BuyLandBottom, BuyLandButton, BuyLandFirstRow, BuyLandLocation, BuyLandOnSale, BuyLandSecondRow, BuyLandStyled, BuyStyled } from "./Buy.style";
+
+type BuyProps = {
+  token_id: number;
+  price: number;
+};
 
 type BuyViewProps = {
-  buyTokenCallback: ({}: any) => Promise<any>;
+  buyTokenCallback: (buyProps: BuyProps) => Promise<any>;
   tokensOnSale: TokenOnSale[];
 };
 
@@ -21,7 +21,7 @@ export const BuyView = ({
   tokensOnSale,
 }: BuyViewProps) => {
   return (
-    <>
+    <BuyStyled>
       {tokensOnSale.map((myToken) => (
         <BuyLand
           key={myToken.id}
@@ -29,7 +29,7 @@ export const BuyView = ({
           tokenOnSale={myToken}
         />
       ))}
-    </>
+    </BuyStyled>
   );
 };
 
@@ -37,9 +37,11 @@ const BuyLand = ({
   buyTokenCallback,
   tokenOnSale,
 }: {
-  buyTokenCallback: ({}: any) => Promise<any>;
+  buyTokenCallback: (buyProps: BuyProps) => Promise<any>;
   tokenOnSale: TokenOnSale;
 }) => {
+  const alert = useAlert()
+
   return (
     <BuyLandStyled key={tokenOnSale.id}>
       <LandMap x={tokenOnSale.position.x} y={tokenOnSale.position.y} />
@@ -52,8 +54,7 @@ const BuyLand = ({
             </svg>
             <div>{`${tokenOnSale.position.x}, ${tokenOnSale.position.y}`}</div>
           </BuyLandLocation>
-          <BuyLandOnSale onSale={tokenOnSale.onSale}>
-            {" "}
+          <BuyLandOnSale>
             On sale for {tokenOnSale.price / 1000000} ꜩ{" "}
           </BuyLandOnSale>
         </BuyLandFirstRow>
@@ -67,7 +68,10 @@ const BuyLand = ({
                 buyTokenCallback({
                   token_id: tokenOnSale.id,
                   price: tokenOnSale.price,
-                }).catch((e: any) => console.error(e.message))
+                }).catch((e: any) => {
+                  alert.show(e.message)
+                  console.error(e.message)
+                })
               }
             >
               Buy

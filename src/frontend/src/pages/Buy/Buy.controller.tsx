@@ -2,8 +2,8 @@ import { useAccountPkh, useReady, useTezos, useWallet } from "dapp/dapp";
 import { TEZOSLAND_ADDRESS } from "dapp/defaults";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { Message, Page } from "styles";
 
-import { BuyStyled } from "./Buy.style";
 import { BuyView } from "./Buy.view";
 
 export type Coordinates = {
@@ -75,7 +75,7 @@ export const Buy = () => {
               onSale: tokenRaw.onSale,
               price: tokenRaw.price.c[0],
               id: tokenRaw.id.c[0],
-              tokenOwnedByUser: accountPkh == tokenOwner,
+              tokenOwnedByUser: accountPkh === tokenOwner,
             };
             return token;
           })
@@ -99,7 +99,7 @@ export const Buy = () => {
   );
 
   return (
-    <BuyStyled>
+    <Page>
       {wallet ? (
         <>
           {ready ? (
@@ -112,20 +112,20 @@ export const Buy = () => {
               ) : (
                 <div>
                   {loading ? (
-                    <div>Loading lands... Please wait.</div>
+                    <Message>Loading lands... Please wait.</Message>
                   ) : (
-                    <div>No land available</div>
+                    <Message>No land available</Message>
                   )}
                 </div>
               )}
             </>
           ) : (
-            <div>Please connect your wallet.</div>
+            <Message>Please connect your wallet</Message>
           )}
         </>
       ) : (
-        <div>Please install the Thanos Wallet Chrome Extension.</div>
+        <Message>Please install the Thanos Wallet Chrome Extension.</Message>
       )}
-    </BuyStyled>
+    </Page>
   );
 };

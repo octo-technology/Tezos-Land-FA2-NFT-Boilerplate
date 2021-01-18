@@ -2,8 +2,8 @@ import { useAccountPkh, useReady, useTezos, useWallet } from "dapp/dapp";
 import { TEZOSLAND_ADDRESS } from "dapp/defaults";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { Message, Page } from "styles";
 
-import { MapStyled } from "./Map.style";
 import { MapView } from "./Map.view";
 
 export type Coordinates = {
@@ -53,7 +53,6 @@ export const Map = () => {
       if (contract) {
         const storage = await (contract as any).storage();
         const allTokensFromStorage = storage["market"].landIds;
-        console.log(allTokensFromStorage)
         if (allTokensFromStorage) {
           const tokenIds: number[] = allTokensFromStorage.map(
             (token: { c: any[] }) => token.c[0]
@@ -84,13 +83,10 @@ export const Map = () => {
     })();
   }, [contract, accountPkh]);
 
-  // useOnBlock(tezos, loadStorage)
-
-  type MapToken = { token_id: number; price: number };
-  
+  // useOnBlock(tezos, loadStorage)  
 
   return (
-    <MapStyled>
+    <Page>
       {wallet ? (
         <>
           {ready ? (
@@ -100,20 +96,20 @@ export const Map = () => {
               ) : (
                 <div>
                   {loading ? (
-                    <div>Loading lands... Please wait.</div>
+                    <Message>Loading lands... Please wait.</Message>
                   ) : (
-                    <div>No land available</div>
+                    <Message>No land available</Message>
                   )}
                 </div>
               )}
             </>
           ) : (
-            <div>Please connect your wallet.</div>
+            <Message>Please connect your wallet</Message>
           )}
         </>
       ) : (
-        <div>Please install the Thanos Wallet Chrome Extension.</div>
+        <Message>Please install the Thanos Wallet Chrome Extension.</Message>
       )}
-    </MapStyled>
+    </Page>
   );
 };

@@ -1,12 +1,7 @@
 import styled from 'styled-components/macro'
+import { GridPage } from 'styles';
 
-
-export const BuyStyled = styled.div`
-  margin: 30px;
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 30px;
+export const BuyStyled = styled(GridPage)`
 `;
 
 export const BuyLandStyled = styled.div`
@@ -54,7 +49,7 @@ export const BuyLandLocation = styled.div`
   }
 `;
 
-export const BuyLandOnSale = styled.div<{ onSale: boolean }>`
+export const BuyLandOnSale = styled.div`
   color: #E50000;
   line-height: 20px;
   text-align: right;

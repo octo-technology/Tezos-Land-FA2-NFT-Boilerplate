@@ -1,10 +1,9 @@
 import { LandMap } from "app/App.components/LandMap/LandMap.view";
 import * as React from "react";
-import { useState } from "react";
 
 import { Token } from "./Map.controller";
 // prettier-ignore
-import { MapLandBottom, MapLandFirstRow, MapLandLocation, MapLandOnSale, MapLandSecondRow, MapLandThirdRow, MapLandStyled, MapLandDescription, MapLandName} from "./Map.style";
+import { MapLandBottom, MapLandDescription, MapLandFirstRow, MapLandLocation, MapLandName, MapLandOnSale, MapLandSecondRow, MapLandStyled, MapLandThirdRow, MapStyled } from "./Map.style";
 
 type MapViewProps = {
   existingTokens: Token[];
@@ -12,14 +11,14 @@ type MapViewProps = {
 
 export const MapView = ({ existingTokens }: MapViewProps) => {
   return (
-    <>
+    <MapStyled>
       {existingTokens.map((existingToken) => (
         <MapLand
           key={existingToken.id}
           token={existingToken}
         />
       ))}
-    </>
+    </MapStyled>
   );
 };
 
@@ -28,8 +27,6 @@ const MapLand = ({
 }: {
   token: Token;
 }) => {
-  const [price, setPrice] = useState<string>("");
-
   return (
     <MapLandStyled key={token.id}>
       <LandMap x={token.position.x} y={token.position.y} />
@@ -42,7 +39,7 @@ const MapLand = ({
             </svg>
             <div>{`${token.position.x}, ${token.position.y}`}</div>
           </MapLandLocation>
-          <MapLandOnSale onSale={token.onSale}>
+          <MapLandOnSale isOnSale={token.onSale}>
             {token.onSale ? `On sale for ${token.price / 1000000 } ꜩ` : "Not on sale"}
           </MapLandOnSale>
         </MapLandFirstRow>

@@ -1,6 +1,7 @@
-import { useTezos, useAccountPkh, useConnect, useOnBlock, useReady, useWallet } from 'dapp/dapp'
+import { useAccountPkh, useConnect, useOnBlock, useReady, useTezos, useWallet } from 'dapp/dapp'
 import { NETWORK } from 'dapp/defaults'
 import * as React from 'react'
+import { useAlert } from 'react-alert'
 
 import { HeaderView } from './Header.view'
 
@@ -11,14 +12,16 @@ export const Header = () => {
   const wallet = useWallet()
   const ready = useReady()
   const connect = useConnect()
+  const alert = useAlert()
 
   const handleConnect = React.useCallback(async () => {
     try {
       await connect(NETWORK)
     } catch (err) {
-      alert(err.message)
+      alert.show(err.message)
+      console.error(err.message)
     }
-  }, [connect])
+  }, [alert, connect])
 
   const accountPkhPreview = React.useMemo(() => {
     if (!accountPkh) return undefined

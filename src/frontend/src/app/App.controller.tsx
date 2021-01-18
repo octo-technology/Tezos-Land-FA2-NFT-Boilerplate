@@ -3,17 +3,28 @@ import { APP_NAME } from 'dapp/defaults'
 import { Admin } from 'pages/Admin/Admin.controller'
 import { Buy } from 'pages/Buy/Buy.controller'
 import { Home } from 'pages/Home/Home.controller'
-import { Sell } from 'pages/Sell/Sell.controller'
 import { Map } from 'pages/Map/Map.controller'
+import { Sell } from 'pages/Sell/Sell.controller'
 import React from 'react'
+import { positions, Provider, types } from "react-alert";
+//@ts-ignore
+import AlertTemplate from "react-alert-template-basic";
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 
 import { Header } from './App.components/Header/Header.controller'
 import { AppBg, AppContainer } from './App.style'
 
+const options = {
+  timeout: 5000,
+  position: positions.TOP_RIGHT,
+  type: types.ERROR
+};
+
+
 export const App = () => {
   return (
     <Router>
+        <Provider template={AlertTemplate} {...options}>
       <DAppProvider appName={APP_NAME}>
         <React.Suspense fallback={null}>
           <AppContainer>
@@ -39,6 +50,7 @@ export const App = () => {
           </AppContainer>
         </React.Suspense>
       </DAppProvider>
+      </Provider>
     </Router>
   )
 }

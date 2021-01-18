@@ -3,7 +3,8 @@ import { useAccountPkh, useOnBlock, useReady, useTezos, useWallet } from "dapp/d
 import { TEZOSLAND_ADDRESS } from "dapp/defaults";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { AdminStyled } from "./Admin.style";
+import { Message, Page } from "styles";
+
 import { AdminView } from "./Admin.view";
 
 export type Coordinates = {
@@ -18,15 +19,13 @@ export const Admin = () => {
   const accountPkh = useAccountPkh();
   const [contract, setContract] = useState(undefined);
   const [adminAdress, setAdminAdress] = useState(undefined);
-  const [storage, setStorage] = useState(undefined);
 
   const loadStorage = React.useCallback(async () => {
     if (contract) {
       const storage = await (contract as any).storage();
       setAdminAdress(storage.market.admin);
-      setStorage(storage.toString());
     }
-  }, [setStorage, contract]);
+  }, [contract]);
 
   useEffect(() => {
     loadStorage();
@@ -75,27 +74,27 @@ export const Admin = () => {
   );
 
   return (
-    <AdminStyled>
+    <Page>
       {wallet ? (
         <>
           {ready ? (
             <>
-              {accountPkh == adminAdress ? (
+              {accountPkh === adminAdress ? (
                 <AdminView
                   mintCallBack={mint}
                   connectedUser={(accountPkh as unknown) as string}
                 />
               ) : (
-                <div>Please connect your wallet</div>
+                <Message>You are not the admin of this smart contract</Message>
               )}
             </>
           ) : (
-            <div>Unauthorized</div>
+            <Message>Please connect your wallet</Message>
           )}
         </>
       ) : (
-        <div>Please install the Thanos Wallet Chrome Extension.</div>
+        <Message>Please install the Thanos Wallet Chrome Extension.</Message>
       )}
-    </AdminStyled>
+    </Page>
   );
 };

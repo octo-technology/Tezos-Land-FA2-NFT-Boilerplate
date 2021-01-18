@@ -27,7 +27,7 @@ export const HomeView = () => {
                 </HomeButtonText>
               </HomeButton>
             </Link>
-            <a href="https://github.com/octo-technology/Tezos-Land-FA2-NFT-Boilerplate" target="_blank">
+            <a href="https://github.com/octo-technology/Tezos-Land-FA2-NFT-Boilerplate" target="_blank" rel="noreferrer">
               <HomeButton>
                 <HomeButtonBorder />
                 <HomeButtonText onClick={() => {}}>

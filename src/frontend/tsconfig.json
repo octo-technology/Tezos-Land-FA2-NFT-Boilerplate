@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["dom", "dom.iterable", "ESNext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "ESNext"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "isolatedModules": true,
     "sourceMap": true,
-    //"noUnusedLocals": true,
-    //"noUnusedParameters": true,
     "strict": true,
     "alwaysStrict": true,
     "removeComments": true,
-    //"noImplicitAny": true,
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
@@ -29,8 +30,16 @@
     "experimentalDecorators": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "baseUrl": "src/"
+    "baseUrl": "src"
   },
-  "include": ["src", "**/*.spec.ts"],
-  "exclude": ["node_modules", "./node_modules", "./node_modules/*", "./node_modules/@types/node/index.d.ts"]
+  "include": [
+    "src",
+    "**/*.spec.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "./node_modules",
+    "./node_modules/*",
+    "./node_modules/@types/node/index.d.ts"
+  ]
 }

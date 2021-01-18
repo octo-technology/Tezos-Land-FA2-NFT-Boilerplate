@@ -1,99 +1,43 @@
-import styled from 'styled-components/macro'
+import styled from "styled-components/macro";
 
-import { fadeIn, fadeInFromBottom, fadeInFromLeft, fadeInFromRight, fadeInFromTop } from './animations'
-import { backgroundColorLight, primaryColor, upColor } from './colors'
+export const Page = styled.div`
+  margin: 30px;
+  position: relative;
+`;
 
-export const Ellipsis = styled.div`
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-`
-
-export const CardPage = styled.div`
-  margin: 100px auto 20px auto;
-  width: 400px;
-  max-width: 90vw;
-`
-
-export const FullPage = styled.div`
-  width: 90vw;
-  max-width: 1280px;
-  margin: 100px auto 20px auto;
-`
-
-export const BannerPage = styled.div`
-  width: 100vw;
-  margin: 100px auto 20px auto;
-`
-
-export const GridTitle = styled.div`
+export const GridPage = styled.div`
+  margin: 30px;
+  position: relative;
   display: grid;
-  grid-template-columns: auto auto;
-`
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 30px;
 
-export const GreenDot = styled.div`
-  display: inline-block;
-  margin-bottom: 1px;
-  margin-right: 8px;
-  border-radius: 12px;
-  width: 6px;
-  height: 6px;
-  background-color: ${upColor};
-  animation: flickerAnimation 3s infinite;
-
-  @keyframes flickerAnimation {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.1;
-    }
-    100% {
-      opacity: 1;
-    }
+  @media (max-width: 1900px) {
+    grid-template-columns: repeat(5, 1fr);
   }
-`
 
-export const PrimaryText = styled.div`
-  color: ${primaryColor};
-  display: inline-block;
-`
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 
-export const Card = styled.div`
-  background: rgba(0, 44, 69, 0.6);
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(10, 86, 136);
-  border-image: initial;
-  box-shadow: 0 1px 10px ${backgroundColorLight}19;
-`
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
-export const AnimatedCard = styled(Card)`
-  will-change: opacity, transform;
-  animation: ${fadeInFromLeft} 500ms;
-`
+  @media (max-width: 800px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-export const FadeIn = styled.div`
-  will-change: opacity;
-  animation: ${fadeIn} 500ms;
-`
+  @media (max-width: 500px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
 
-export const FadeInFromTop = styled.div`
-  will-change: opacity, transform;
-  animation: ${fadeInFromTop} 500ms;
-`
-
-export const FadeInFromRight = styled.div`
-  will-change: opacity, transform;
-  animation: ${fadeInFromRight} 500ms;
-`
-
-export const FadeInFromBottom = styled.div`
-  will-change: opacity, transform;
-  animation: ${fadeInFromBottom} 500ms;
-`
-
-export const FadeInFromLeft = styled.div`
-  will-change: opacity, transform;
-  animation: ${fadeInFromLeft} 500ms;
-`
+export const Message = styled.div`
+    text-align: center;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 50vh;
+`;

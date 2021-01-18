@@ -1,6 +1,7 @@
-import React from 'react'
-import constate from 'constate'
 import { ThanosWallet } from '@thanos-wallet/dapp'
+import constate from 'constate'
+import React from 'react'
+import { useAlert } from 'react-alert'
 
 export const [DAppProvider, useWallet, useTezos, useAccountPkh, useReady, useConnect] = constate(
   useDApp,
@@ -17,6 +18,7 @@ function useDApp({ appName }) {
     tezos: undefined,
     accountPkh: undefined,
   }))
+  const alert = useAlert()
 
   const ready = Boolean(tezos)
 
@@ -45,10 +47,11 @@ function useDApp({ appName }) {
           accountPkh: pkh,
         })
       } catch (err) {
-        alert(`Failed to connect ThanosWallet: ${err.message}`)
+        alert.show(err.message)
+        console.error(`Failed to connect ThanosWallet: ${err.message}`)
       }
     },
-    [setState, wallet],
+    [alert, setState, wallet],
   )
 
   return {

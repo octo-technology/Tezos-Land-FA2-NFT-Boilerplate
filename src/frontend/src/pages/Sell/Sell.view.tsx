@@ -1,13 +1,25 @@
 import { LandMap } from "app/App.components/LandMap/LandMap.view";
 import * as React from "react";
 import { useState } from "react";
+import { useAlert } from 'react-alert'
+
 import { Token } from "./Sell.controller";
 // prettier-ignore
-import { CancelSaleButton, SellLandBottom, SellLandButton, SellLandFirstRow, SellLandLocation, SellLandOnSale, SellLandPriceInput, SellLandSecondRow, SellLandStyled } from "./Sell.style";
+import { CancelSaleButton, SellLandBottom, SellLandButton, SellLandFirstRow, SellLandLocation, SellLandOnSale, SellLandPriceInput, SellLandSecondRow, SellLandStyled, SellStyled } from "./Sell.style";
+
+type SellPorps = {
+  token_id: number;
+  price: number;
+};
+
+type CancelPorps = {
+  token_id: number;
+  price: number;
+};
 
 type SellViewProps = {
-  sellTokenCallback: ({}: any) => Promise<any>;
-  cancelSaleCallback: ({}: any) => Promise<any>;
+  sellTokenCallback: (sellProps: SellPorps) => Promise<any>;
+  cancelSaleCallback: (cancelProps: CancelPorps) => Promise<any>;
   myTokens: Token[];
 };
 
@@ -17,7 +29,7 @@ export const SellView = ({
   myTokens,
 }: SellViewProps) => {
   return (
-    <>
+    <SellStyled>
       {myTokens.map((myToken) => (
         <SellLand
           key={myToken.id}
@@ -26,7 +38,7 @@ export const SellView = ({
           myToken={myToken}
         />
       ))}
-    </>
+    </SellStyled>
   );
 };
 
@@ -35,11 +47,12 @@ const SellLand = ({
   cancelSaleCallback,
   myToken,
 }: {
-  sellTokenCallback: ({}: any) => Promise<any>;
-  cancelSaleCallback: ({}: any) => Promise<any>;
+  sellTokenCallback: (sellProps: SellPorps) => Promise<any>;
+  cancelSaleCallback: (cancelProps: CancelPorps) => Promise<any>;
   myToken: Token;
 }) => {
   const [price, setPrice] = useState<string>("");
+  const alert = useAlert()
 
   return (
     <SellLandStyled key={myToken.id}>
@@ -53,7 +66,7 @@ const SellLand = ({
             </svg>
             <div>{`${myToken.position.x}, ${myToken.position.y}`}</div>
           </SellLandLocation>
-          <SellLandOnSale onSale={myToken.onSale}>
+          <SellLandOnSale isOnSale={myToken.onSale}>
             {myToken.onSale
               ? `On sale for ${myToken.price / 1000000} ꜩ`
               : "Not on sale"}
@@ -68,10 +81,13 @@ const SellLand = ({
                   cancelSaleCallback({
                     token_id: myToken.id,
                     price: myToken.price,
-                  }).catch((e: any) => console.error(e.message))
+                  }).catch((e: any) => {
+                    alert.show(e.message)
+                    console.error(e.message)
+                  })
                 }
               >
-                Cancell sale
+                Cancel sale
               </CancelSaleButton>
             </>
           ) : (
@@ -86,7 +102,10 @@ const SellLand = ({
                   sellTokenCallback({
                     token_id: myToken.id,
                     price: parseFloat(price),
-                  }).catch((e: any) => console.error(e.message))
+                  }).catch((e: any) => {
+                    alert.show(e.message)
+                    console.error(e.message)
+                  })
                 }
               >
                 Sell

@@ -1,5 +1,6 @@
 import * as PropTypes from "prop-types";
 import * as React from "react";
+
 import { LandMapStyled, LandMapTile } from "./LandMap.style";
 
 type LandMapProps = {
@@ -24,6 +25,7 @@ export const LandMap = ({
           <LandMapTile
             selected={x === ix && y === iy}
             isAdmin={!!isAdmin}
+            key={`${iy}-${ix}`}
             onClick={() => {
               if (setXCoordinatesCallback && setYCoordinatesCallback) {
                 setXCoordinatesCallback(ix);

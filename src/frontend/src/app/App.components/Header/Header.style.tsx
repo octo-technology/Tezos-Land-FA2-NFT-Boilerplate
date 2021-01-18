@@ -84,4 +84,19 @@ export const HeaderAccount = styled.div`
   display: grid;
   grid-template-columns: auto auto auto;
   grid-gap: 20px;
+
+  @media (max-width: 1300px) {
+    grid-template-columns: auto auto ;
+    > :nth-child(3) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    grid-template-columns: auto;
+    > :nth-child(1), :nth-child(3) {
+      display: none;
+    }
+  }
+
 `

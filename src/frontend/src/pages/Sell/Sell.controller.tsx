@@ -2,7 +2,9 @@ import { useAccountPkh, useReady, useTezos, useWallet } from "dapp/dapp";
 import { TEZOSLAND_ADDRESS } from "dapp/defaults";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { SellStyled } from "./Sell.style";
+import { useAlert } from 'react-alert'
+import { Message } from "styles";
+
 import { SellView } from "./Sell.view";
 
 export type Coordinates = {
@@ -36,6 +38,7 @@ export const Sell = () => {
   const [contract, setContract] = useState(undefined);
   const [myTokens, setMyTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const alert = useAlert()
 
   useEffect(() => {
     (async () => {
@@ -78,16 +81,16 @@ export const Sell = () => {
                 return token;
               })
             );
-            console.log(myTokens);
             setMyTokens(myTokens);
             setLoading(false);
           }
         } catch (e) {
+          alert.show(e.message)
           setLoading(false);
         }
       }
     })();
-  }, [contract, accountPkh]);
+  }, [alert, contract, accountPkh]);
 
   // useOnBlock(tezos, loadStorage)
 
@@ -109,7 +112,7 @@ export const Sell = () => {
   );
 
   return (
-    <SellStyled>
+    <>
       {wallet ? (
         <>
           {ready ? (
@@ -123,20 +126,20 @@ export const Sell = () => {
               ) : (
                 <div>
                   {loading ? (
-                    <div>Loading lands... Please wait.</div>
+                    <Message>Loading lands... Please wait.</Message>
                   ) : (
-                    <div>No land available</div>
+                    <Message>No land available</Message>
                   )}
                 </div>
               )}
             </>
           ) : (
-            <div>Please connect your wallet.</div>
+            <Message>Please connect your wallet</Message>
           )}
         </>
       ) : (
-        <div>Please install the Thanos Wallet Chrome Extension.</div>
+        <Message>Please install the Thanos Wallet Chrome Extension.</Message>
       )}
-    </SellStyled>
+    </>
   );
 };

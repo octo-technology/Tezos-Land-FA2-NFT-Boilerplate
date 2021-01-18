@@ -5,6 +5,14 @@ export const LandMapStyled = styled.div<{ isAdmin: boolean }>`
   width: ${(props) => (props.isAdmin ? "500px" : "230px")};
   display: grid;
   grid-template-columns: repeat(10, 1fr);
+
+  > :nth-child(1) {
+    border-radius: 10px 0 0 0;
+  }
+
+  > :nth-child(10) {
+    border-radius: 0 10px 0 0;
+  }
 `;
 
 export const LandMapTile = styled.div<{ selected: boolean; isAdmin: boolean }>`
