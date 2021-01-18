@@ -1,56 +1,55 @@
-import { DAppProvider } from 'dapp/dapp'
-import { APP_NAME } from 'dapp/defaults'
-import { Admin } from 'pages/Admin/Admin.controller'
-import { Buy } from 'pages/Buy/Buy.controller'
-import { Home } from 'pages/Home/Home.controller'
-import { Map } from 'pages/Map/Map.controller'
-import { Sell } from 'pages/Sell/Sell.controller'
-import React from 'react'
+import { DAppProvider } from "dapp/dapp";
+import { APP_NAME } from "dapp/defaults";
+import { Admin } from "pages/Admin/Admin.controller";
+import { Buy } from "pages/Buy/Buy.controller";
+import { Home } from "pages/Home/Home.controller";
+import { Map } from "pages/Map/Map.controller";
+import { Sell } from "pages/Sell/Sell.controller";
+import React from "react";
 import { positions, Provider, types } from "react-alert";
 //@ts-ignore
 import AlertTemplate from "react-alert-template-basic";
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
-import { Header } from './App.components/Header/Header.controller'
-import { AppBg, AppContainer } from './App.style'
+import { Header } from "./App.components/Header/Header.controller";
+import { AppBg, AppContainer } from "./App.style";
 
 const options = {
   timeout: 5000,
   position: positions.TOP_RIGHT,
-  type: types.ERROR
+  type: types.ERROR,
 };
-
 
 export const App = () => {
   return (
     <Router>
-        <Provider template={AlertTemplate} {...options}>
-      <DAppProvider appName={APP_NAME}>
-        <React.Suspense fallback={null}>
-          <AppContainer>
-            <AppBg />
-            <Header />
-            <Switch>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route exact path="/admin">
-                <Admin />
-              </Route>
-              <Route exact path="/buy">
-                <Buy />
-              </Route>
-              <Route exact path="/sell">
-                <Sell />
-              </Route>
-              <Route exact path="/map">
-                <Map />
-              </Route>
-            </Switch>
-          </AppContainer>
-        </React.Suspense>
-      </DAppProvider>
+      <Provider template={AlertTemplate} {...options}>
+        <DAppProvider appName={APP_NAME}>
+          <React.Suspense fallback={null}>
+            <AppContainer>
+              <AppBg />
+              <Header />
+              <Switch>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <Route exact path="/admin">
+                  <Admin />
+                </Route>
+                <Route exact path="/buy">
+                  <Buy />
+                </Route>
+                <Route exact path="/sell">
+                  <Sell />
+                </Route>
+                <Route exact path="/map">
+                  <Map />
+                </Route>
+              </Switch>
+            </AppContainer>
+          </React.Suspense>
+        </DAppProvider>
       </Provider>
     </Router>
-  )
-}
+  );
+};
