@@ -14,7 +14,7 @@ let get_balance (p, ledger : balance_of_param * ledger) : operation =
     balance_of_response_to_michelson response
   in
   let responses = List.map to_balance p.requests in
-  Operation.transaction responses 0mutez p.callback
+  Tezos.transaction responses 0mutez p.callback
 
 
 let fa2_balance (pm, storage: balance_of_param_michelson * nft_token_storage): (operation  list) * nft_token_storage =
