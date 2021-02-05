@@ -26,7 +26,7 @@ let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  l
             if ledger_and_owners_are_consistent then
               let lands_with_updated_land: lands =  set_land_on_sale_flag(buy_parameters.token_id, false, storage.market.lands) in
               let sales_without_token_bought: sale set = Set.remove buy_parameters storage.market.sales in
-              let operators_without_token_bought_operator: operator_storage = exec_update_operator([Remove_operator_p({owner=land_owner_before_sale; operator=Tezos.self_address; token_id=buy_parameters.token_id})], land_owner_before_sale, storage.operators) in
+              let operators_without_token_bought_operator: operator_storage = exec_update_operator([Remove_operator({owner=land_owner_before_sale; operator=Tezos.self_address; token_id=buy_parameters.token_id})], land_owner_before_sale, storage.operators) in
 
               let seller : unit contract = match (Tezos.get_contract_opt land_owner_before_sale: unit contract option) with
               | Some (contract) -> contract

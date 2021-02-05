@@ -10,7 +10,7 @@ let withdraw_from_sale (withdraw_param, storage : withdraw_param * nft_token_sto
     else
         let token_on_sale : bool = Set.mem withdraw_param storage.market.sales in
         if token_on_sale then
-            let operators_without_token_operator = exec_update_operator([Remove_operator_p({owner=Tezos.sender; operator=Tezos.self_address; token_id=withdraw_param.token_id})], Tezos.sender, storage.operators) in
+            let operators_without_token_operator = exec_update_operator([Remove_operator({owner=Tezos.sender; operator=Tezos.self_address; token_id=withdraw_param.token_id})], Tezos.sender, storage.operators) in
             let sales_without_removed_land = Set.remove withdraw_param storage.market.sales in
             let lands_with_updated_land: lands =  set_land_on_sale_flag(withdraw_param.token_id, false, storage.market.lands) in
             ([] : operation list),  { storage with market = { storage.market with sales = sales_without_removed_land; lands = lands_with_updated_land }; operators = operators_without_token_operator }

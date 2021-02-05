@@ -27,7 +27,7 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
             match mint_param.operator with
             | None -> ([] : operation list),  { s with ledger = ledger_with_minted_token; market = { s.market with lands=lands_with_new_land; landIds=lands_ids_with_new_id; owners=new_owners; } }
             | Some(operator_address) ->
-                let update : update_operator = Add_operator_p({ owner = p.owner; operator = operator_address; token_id = token_id; }) in
+                let update : update_operator = Add_operator({ owner = p.owner; operator = operator_address; token_id = token_id; }) in
                 let operators_with_minted_token_operator = update_operators (update, s.operators) in
                 ([] : operation list),  { s with ledger = ledger_with_minted_token; operators = operators_with_minted_token_operator; market = { s.market with lands=lands_with_new_land; landIds=lands_ids_with_new_id; owners=new_owners; } }
         else
