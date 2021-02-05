@@ -17,7 +17,7 @@ class TestSellLand(TestCase):
     def test_the_owner_of_a_land_can_put_it_on_sale_and_the_contract_becomes_an_operator(self):
         # GIVEN
         token_id_sold_by_alice = 1
-        alice_land_price = Decimal(0.0003).quantize(Decimal("0.0003"))
+        alice_land_price = Decimal(0.0003).quantize(Decimal("0.0001"))
         name = "Land 1"
         description = ""
         position = [0, 0]
@@ -43,14 +43,14 @@ class TestSellLand(TestCase):
         self.assertEqual([{'price': alice_land_price, 'token_id': token_id_sold_by_alice}], result.storage["market"]["sales"])
         self.assertEqual(alice_land_price, result.big_map_diff['market/lands'][1]['price'])
         self.assertTrue(result.big_map_diff['market/lands'][1]['onSale'])
-        self.assertEqual(False, (alice, bob, 1) in result.big_map_diff['operators'].keys())
-        self.assertEqual(True, (alice, self.nftContract.address, 1) in result.big_map_diff['operators'].keys())
+        self.assertFalse((alice, bob, token_id_sold_by_alice) in result.big_map_diff['operators'].keys())
+        self.assertTrue((alice, self.nftContract.address, token_id_sold_by_alice) in result.big_map_diff['operators'].keys())
 
     def test_the_owner_of_a_land_cannot_put_it_on_sale_if_this_land_is_not_in_market_lands(self):
         with self.assertRaises(MichelsonRuntimeError) as land_not_in_lands:
             # GIVEN
             token_id_sold_by_alice = 1
-            alice_land_price = Decimal(0.0003).quantize(Decimal("0.0003"))
+            alice_land_price = Decimal(0.0003).quantize(Decimal("0.0001"))
             storage_with_alice_owning_a_land = self.get_storage(ledger={token_id_sold_by_alice: alice},
                                                                 lands={})
 
@@ -67,7 +67,7 @@ class TestSellLand(TestCase):
         with self.assertRaises(MichelsonRuntimeError) as not_land_owner_error:
             # GIVEN
             token_id_sold_by_alice = 1
-            alice_land_price = Decimal(0.0003).quantize(Decimal("0.0003"))
+            alice_land_price = Decimal(0.0003).quantize(Decimal("0.0001"))
             storage_with_alice_owning_a_land = self.get_storage(ledger={token_id_sold_by_alice: alice})
 
             # WHEN
