@@ -29,13 +29,11 @@ let fa2_main (param, storage : fa2_entry_points * nft_token_storage)
     | Transfer txs_michelson -> fa2_transfer (txs_michelson, storage)
     | Balance_of pm -> fa2_balance (pm, storage)
     | Update_operators updates_michelson -> fa2_update_operators (updates_michelson, storage)
-    | Token_metadata_registry callback -> fa2_token_metadata_registry (callback, storage)
 
 let main (param, storage : nft_entry_points * nft_token_storage)
       : (operation  list) * nft_token_storage =
     match param with
     | Fa2 fa2 -> fa2_main (fa2, storage)
-    | Metadata m -> get_metadata_entrypoint(m, storage)
     | Mint p -> mint(p,storage)
     | ChangeLandName p -> change_land_name(p, storage)
     | ChangeLandDescription p -> changeLandDescription(p, storage)
