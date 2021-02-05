@@ -10,21 +10,17 @@ which supports sender/receiver hooks.
 
 #include "../fa2_interface.mligo"
 #include "../fa2_errors.mligo"
+#include "../fa2_permissions_descriptor.mligo"
 
 type get_owners = transfer_descriptor -> (address option) list
 
-type hook_entry_point = transfer_descriptor_param_michelson contract
+type hook_entry_point = transfer_descriptor_param contract
 
 type hook_result =
   | Hook_entry_point of hook_entry_point
   | Hook_undefined of string
 
 type to_hook = address -> hook_result
-
-(* type transfer_hook_params = {
-  ligo_param : transfer_descriptor_param;
-  michelson_param : transfer_descriptor_param_michelson;
-} *)
 
 (**
 Extracts a set of unique `from_` or `to_` addresses from the transfer batch.
@@ -77,7 +73,7 @@ Given an address of the token receiver, tries to get an entrypoint for
  *)
 let to_receiver_hook : to_hook = fun (a : address) ->
     let c : hook_entry_point option = 
-    Operation.get_entrypoint_opt "%tokens_received" a in
+    Tezos.get_entrypoint_opt "%tokens_received" a in
     match c with
     | Some c -> Hook_entry_point c
     | None -> Hook_undefined fa2_receiver_hook_undefined
@@ -99,7 +95,7 @@ Given an address of the token sender, tries to get an entrypoint for
  *)
 let to_sender_hook : to_hook = fun (a : address) ->
     let c : hook_entry_point option = 
-    Operation.get_entrypoint_opt "%tokens_sent" a in
+    Tezos.get_entrypoint_opt "%tokens_sent" a in
     match c with
     | Some c -> Hook_entry_point c
     | None -> Hook_undefined fa2_sender_hook_undefined
@@ -163,9 +159,8 @@ let get_owner_hook_ops_for (tx_descriptor, pd
   match hook_calls with
   | [] -> ([] : operation list)
   | h :: t -> 
-    let tx_descriptor_michelson = transfer_descriptor_param_to_michelson tx_descriptor in 
     List.map (fun(call: hook_entry_point) -> 
-      Operation.transaction tx_descriptor_michelson 0mutez call) 
+      Tezos.transaction tx_descriptor 0mutez call) 
       hook_calls
 
 #endif

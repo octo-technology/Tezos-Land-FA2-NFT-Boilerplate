@@ -11,24 +11,24 @@
 #define FA2_HOOK_LIB
 
 #include "../fa2_hook.mligo"
-#include "fa2_convertors.mligo"
 
 let get_hook_entrypoint (hook_contract : address) (u : unit) 
-    : transfer_descriptor_param_michelson contract =
-  let hook_entry : transfer_descriptor_param_michelson contract = 
-    Operation.get_entrypoint "%tokens_transferred_hook" hook_contract in
-  hook_entry
+    : transfer_descriptor_param contract =
+  let hook_entry : transfer_descriptor_param contract option = 
+    Tezos.get_entrypoint_opt "%tokens_transferred_hook" hook_contract in
+  match hook_entry with
+  | Some he -> he
+  | None -> (failwith "NO_TRANSFER_HOOK" : transfer_descriptor_param contract)
 
 
 let create_register_hook_op 
     (fa2, descriptor : (fa2_with_hook_entry_points contract) * permissions_descriptor) : operation =
   let hook_fn = get_hook_entrypoint Current.self_address in
-  let p : set_hook_param_aux = {
+  let p : set_hook_param = {
     hook = hook_fn;
-    permissions_descriptor = permissions_descriptor_to_michelson descriptor;
+    permissions_descriptor = descriptor;
   } in
-  let pm = Layout.convert_to_right_comb (p : set_hook_param_aux) in
-  Operation.transaction (Set_transfer_hook pm) 0mutez fa2
+  Tezos.transaction (Set_transfer_hook p) 0mutez fa2
 
 
 type fa2_registry = address set
