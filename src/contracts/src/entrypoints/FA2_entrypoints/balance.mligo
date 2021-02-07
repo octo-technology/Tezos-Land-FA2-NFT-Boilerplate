@@ -11,13 +11,12 @@ let get_balance (p, ledger : balance_of_param * ledger) : operation =
       let bal = if o = r.owner then 1n else 0n in
       { request = r; balance = bal; }
     in
-    balance_of_response_to_michelson response
+    response
   in
   let responses = List.map to_balance p.requests in
   Tezos.transaction responses 0mutez p.callback
 
 
-let fa2_balance (pm, storage: balance_of_param_michelson * nft_token_storage): (operation  list) * nft_token_storage =
-    let p = balance_of_param_from_michelson pm in
-    let op = get_balance (p, storage.ledger) in
+let fa2_balance (pm, storage: balance_of_param * nft_token_storage): (operation  list) * nft_token_storage =
+    let op = get_balance (pm, storage.ledger) in
     [op], storage

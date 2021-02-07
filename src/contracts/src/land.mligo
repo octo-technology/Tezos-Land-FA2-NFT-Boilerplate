@@ -15,7 +15,7 @@ types of NFTs. Each NFT type is represented by the range of token IDs - `token_d
 
 type nft_entry_points =
     | Fa2 of fa2_entry_points
-    | Metadata of fa2_token_metadata
+    // | Metadata of fa2_token_metadata
     | Mint of mint_param
     | ChangeLandName of change_land_name_param
     | ChangeLandDescription of change_land_description_param
