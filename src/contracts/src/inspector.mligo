@@ -54,6 +54,7 @@ let main (p, s : param * storage) : (operation list) * storage =
     ([] : operation list), State responses
 
   | Verify_not_fungible qmp -> 
+  // to rework
     let pmm = Layout.convert_to_right_comb ({ token_ids=qmp.ids; handler=fun(l: token_metadata_michelson list)-> let verify = (fun(tmm: token_metadata_michelson)-> let tm : token_metadata = Layout.convert_from_right_comb(tmm) in if tm.decimals <> 0n then failwith("not a NFT") else unit) in List.iter verify l } : token_metadata_param) in
     let ci : token_metadata_param_michelson contract option = Tezos.get_entrypoint_opt "%token_metadata" qmp.fa2 in
     let c : token_metadata_param_michelson contract = match ci with
