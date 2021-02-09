@@ -28,8 +28,10 @@ type ledger = (token_id, address) big_map
 type nft_token_storage = {
   ledger : ledger;
   operators : operator_storage;
-  metadata : token_storage;
+  // metadata_legacy : token_storage;
+  metadata: contract_metadata;
   market : marketplace_storage;
+  token_metadata: token_metadata_storage;
 }
 
 #endif
