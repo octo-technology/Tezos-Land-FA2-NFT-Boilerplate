@@ -1,3 +1,7 @@
+#include "checks/check_ownership.mligo"
+#include "checks/check_admin.mligo"
+#include "helpers/owners_mutation.mligo"
+#include "helpers/lands_mutation.mligo"
 #include "helpers/fa2_transfer_helpers.mligo"
 #include "helpers/land_transfer_helpers.mligo"
 #include "land_entrypoints/buy.mligo"
