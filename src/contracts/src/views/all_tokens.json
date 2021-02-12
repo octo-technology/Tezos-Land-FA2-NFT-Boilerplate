@@ -1,0 +1,71 @@
+{
+    "name": "TezosLand",
+    "description": "NFT marketplace",
+    "version": "0.1.0",
+    "license": {
+      "name": "MIT",
+      "details": "The MIT License"
+    },
+    "homepage": "https://tezosland.io/",
+    "interfaces": [
+      "TZIP-12"
+    ],
+    "views": [
+      { "name": "all_tokens",
+        "description": "This is the `all_tokens` view required by TZIP-012.",
+        "implementations": [
+            { "michelsonStorageView": {
+                "parameter": {
+                    "prim": "unit"
+                },
+                "returnType": {"prim": "list", "args":[{"prim": "nat"}]},
+                "code": [
+                    {
+                        "prim": "CDAADADAR"
+                    },
+                    {
+                      "prim": "NIL",
+                      "args": [
+                        {
+                          "prim": "nat"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "ITER",
+                      "args": [
+                        [
+                          {
+                            "prim": "CONS"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "prim": "NIL",
+                      "args": [
+                        {
+                          "prim": "nat"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "ITER",
+                      "args": [
+                        [
+                          {
+                            "prim": "CONS"
+                          }
+                        ]
+                      ]
+                    }
+                ]
+                }
+            }]
+    }]
+}
+
+
+
+
+
