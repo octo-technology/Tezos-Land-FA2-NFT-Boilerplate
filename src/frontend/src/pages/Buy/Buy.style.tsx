@@ -1,14 +1,14 @@
-import styled from 'styled-components/macro'
-import { GridPage } from 'styles';
+import styled from "styled-components/macro";
 
-export const BuyStyled = styled(GridPage)`
+export const BuyStyled = styled.div`
+  margin: 30px auto;
+  width: 500px;
 `;
 
 export const BuyLandStyled = styled.div`
   position: relative;
-  width: 230px;
+  width: 500px;
 `;
-
 
 export const BuyLandBottom = styled.div`
   background-color: #141b43;
@@ -17,52 +17,78 @@ export const BuyLandBottom = styled.div`
 `;
 
 export const BuyLandFirstRow = styled.div`
-  display: grid;
-  grid-template-columns: 50px auto;
-  grid-gap: 10px;
+  position: relative;
+  width: 500px;
 `;
 
 export const BuyLandSecondRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
   margin-top: 10px;
 `;
 
 export const BuyLandLocation = styled.div`
-  height: 20px;
-  width: 50px;
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  grid-gap: 1px;
+  height: 40px;
+  width: 100px;
   line-height: 20px;
   border-radius: 5px;
   background-color: #4c5170;
 
   > svg {
     display: inline-block;
-    width: 12px;
-    height: 12px;
+    width: 24px;
+    height: 24px;
     margin: 4px;
-  }
-
-  > div {
-    display: inline-block;
-    font-size: 11px;
-    vertical-align: super;
-    line-height: 17px;
-    margin-left: 3px;
+    margin-top: 6px;
   }
 `;
 
-export const BuyLandOnSale = styled.div`
-  color: #E50000;
-  line-height: 20px;
-  text-align: right;
+export const BuyLandCoordinateInput = styled.input`
+  height: 25px;
+  text-align: center;
+  width: 75%;
+  margin-top: 8px;
+  background-color: #202337;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 5px;
   font-size: 11px;
+
+  ::placeholder {
+    color: "#727272";
+    font-size: 11px;
+  }
+`;
+
+export const BuyLandPriceInput = styled.input`
+  height: 30px;
+  width: 100%;
+  margin-top: 5px;
+  background-color: #202337;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 5px;
+  font-size: 11px;
+
+  ::placeholder {
+    color: "#727272";
+    font-size: 11px;
+  }
 `;
 
 export const BuyLandButton = styled.button`
-  height: 20px;
+  height: 40px;
   font-size: 11px;
   width: 100%;
   background-color: #4c5170;
   box-sizing: border-box;
   border: 0;
+  margin-top: 5px;
   border-radius: 5px;
-  color: #FFF;
+  color: #fff;
+  cursor: pointer;
 `;

@@ -26,6 +26,7 @@ export type TokenOnSale = {
   landType: LandType;
   isOwned: boolean;
   onSale: boolean;
+  owner: string;
   price: number;
   id: number;
   tokenOwnedByUser: boolean;
@@ -75,6 +76,7 @@ export const Buy = () => {
               onSale: tokenRaw.onSale,
               price: tokenRaw.price.c[0],
               id: tokenRaw.id.c[0],
+              owner: tokenOwner,
               tokenOwnedByUser: accountPkh === tokenOwner,
             };
             return token;
@@ -108,6 +110,7 @@ export const Buy = () => {
                 <BuyView
                   buyTokenCallback={buyToken}
                   tokensOnSale={tokensOnSale}
+                  connectedUser={(accountPkh as unknown) as string}
                 />
               ) : (
                 <div>

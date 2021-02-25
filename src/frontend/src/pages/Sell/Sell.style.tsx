@@ -1,13 +1,13 @@
 import styled from "styled-components/macro";
-import { GridPage } from "styles";
 
-export const SellStyled =  styled(GridPage)`
+export const SellStyled = styled.div`
+  margin: 30px auto;
+  width: 500px;
 `;
 
 export const SellLandStyled = styled.div`
   position: relative;
-  width: 230px;
-  margin: auto;
+  width: 500px;
 `;
 
 export const SellLandBottom = styled.div`
@@ -17,9 +17,8 @@ export const SellLandBottom = styled.div`
 `;
 
 export const SellLandFirstRow = styled.div`
-  display: grid;
-  grid-template-columns: 50px auto;
-  grid-gap: 10px;
+  position: relative;
+  width: 500px;
 `;
 
 export const SellLandSecondRow = styled.div`
@@ -30,38 +29,45 @@ export const SellLandSecondRow = styled.div`
 `;
 
 export const SellLandLocation = styled.div`
-  height: 20px;
-  width: 50px;
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  grid-gap: 1px;
+  height: 40px;
+  width: 100px;
   line-height: 20px;
   border-radius: 5px;
   background-color: #4c5170;
 
   > svg {
     display: inline-block;
-    width: 12px;
-    height: 12px;
+    width: 24px;
+    height: 24px;
     margin: 4px;
-  }
-
-  > div {
-    display: inline-block;
-    font-size: 11px;
-    vertical-align: super;
-    line-height: 17px;
-    margin-left: 3px;
+    margin-top: 6px;
   }
 `;
 
-export const SellLandOnSale = styled.div<{ isOnSale: boolean }>`
-  color: ${(props) => (props.isOnSale ? "#E50000" : "#FFF")};
-  line-height: 20px;
-  text-align: right;
+export const SellLandCoordinateInput = styled.input`
+  height: 25px;
+  text-align: center;
+  width: 75%;
+  margin-top: 8px;
+  background-color: #202337;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 5px;
   font-size: 11px;
+
+  ::placeholder {
+    color: "#727272";
+    font-size: 11px;
+  }
 `;
 
 export const SellLandPriceInput = styled.input`
-  height: 20px;
+  height: 30px;
   width: 100%;
+  margin-top: 5px;
   background-color: #202337;
   box-sizing: border-box;
   border: 0;
@@ -75,14 +81,15 @@ export const SellLandPriceInput = styled.input`
 `;
 
 export const SellLandButton = styled.button`
-  height: 20px;
+  height: 40px;
   font-size: 11px;
   width: 100%;
   background-color: #4c5170;
   box-sizing: border-box;
   border: 0;
+  margin-top: 5px;
   border-radius: 5px;
-  color: #FFF;
+  color: #fff;
   cursor: pointer;
 `;
 
@@ -98,4 +105,3 @@ export const CancelSaleButton = styled.button`
   margin-left: 3px;
   cursor: pointer;
 `;
-

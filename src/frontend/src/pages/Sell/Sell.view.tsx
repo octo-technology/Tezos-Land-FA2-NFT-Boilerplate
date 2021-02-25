@@ -1,11 +1,10 @@
-import { LandMap } from "app/App.components/LandMap/LandMap.view";
+import { SellLandMap } from "app/App.components/SellLandMap/SellLandMap.view";
 import * as React from "react";
 import { useState } from "react";
 import { useAlert } from 'react-alert'
-
 import { Token } from "./Sell.controller";
 // prettier-ignore
-import { CancelSaleButton, SellLandBottom, SellLandButton, SellLandFirstRow, SellLandLocation, SellLandOnSale, SellLandPriceInput, SellLandSecondRow, SellLandStyled, SellStyled } from "./Sell.style";
+import { SellLandBottom, SellLandSecondRow, CancelSaleButton, SellLandButton, SellLandCoordinateInput, SellLandFirstRow, SellLandLocation, SellLandPriceInput, SellLandStyled, SellStyled } from "./Sell.style";
 
 type SellPorps = {
   token_id: number;
@@ -23,40 +22,34 @@ type SellViewProps = {
   myTokens: Token[];
 };
 
-export const SellView = ({
-  sellTokenCallback,
-  cancelSaleCallback,
-  myTokens,
-}: SellViewProps) => {
+export const SellView = ({ sellTokenCallback, cancelSaleCallback, myTokens }: SellViewProps) => {
   return (
     <SellStyled>
-      {myTokens.map((myToken) => (
-        <SellLand
-          key={myToken.id}
-          sellTokenCallback={sellTokenCallback}
-          cancelSaleCallback={cancelSaleCallback}
-          myToken={myToken}
-        />
-      ))}
+      <SellLand sellTokenCallback={sellTokenCallback} cancelSaleCallback={cancelSaleCallback}
+        myTokens={myTokens} />
     </SellStyled>
   );
 };
 
-const SellLand = ({
-  sellTokenCallback,
+const SellLand = ({ sellTokenCallback,
   cancelSaleCallback,
-  myToken,
-}: {
-  sellTokenCallback: (sellProps: SellPorps) => Promise<any>;
-  cancelSaleCallback: (cancelProps: CancelPorps) => Promise<any>;
-  myToken: Token;
-}) => {
-  const [price, setPrice] = useState<string>("");
+  myTokens }: SellViewProps) => {
+  const [landPrice, setPrice] = useState<string>("");
+  const [xCoordinate, setXCoordinate] = useState<number>(0);
+  const [yCoordinate, setYCoordinate] = useState<number>(0);
+  const [selectedToken, setSelectedToken] = useState<number>(1);
   const alert = useAlert()
 
   return (
-    <SellLandStyled key={myToken.id}>
-      <LandMap x={myToken.position.x} y={myToken.position.y} />
+    <SellLandStyled>
+      <SellLandMap
+        x={xCoordinate}
+        y={yCoordinate}
+        landsOwned={myTokens.map(token => [token.position.x, token.position.y])}
+        setSelectedTokenCallback={setSelectedToken}
+        setXCoordinatesCallback={setXCoordinate}
+        setYCoordinatesCallback={setYCoordinate}
+      />
 
       <SellLandBottom>
         <SellLandFirstRow>
@@ -64,23 +57,43 @@ const SellLand = ({
             <svg>
               <use xlinkHref="/icons/sprites.svg#location" />
             </svg>
-            <div>{`${myToken.position.x}, ${myToken.position.y}`}</div>
+            <SellLandCoordinateInput
+              value={xCoordinate}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  if (e.target.value) {
+                    setXCoordinate(parseInt(e.target.value));
+                  } else {
+                    setXCoordinate(0);
+                  }
+                }
+              }}
+              placeholder="x"
+            ></SellLandCoordinateInput>
+            <SellLandCoordinateInput
+              value={yCoordinate}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  if (e.target.value) {
+                    setYCoordinate(parseInt(e.target.value));
+                  } else {
+                    setYCoordinate(0);
+                  }
+                }
+              }}
+              placeholder="y"
+            ></SellLandCoordinateInput>
           </SellLandLocation>
-          <SellLandOnSale isOnSale={myToken.onSale}>
-            {myToken.onSale
-              ? `On sale for ${myToken.price / 1000000} ꜩ`
-              : "Not on sale"}
-          </SellLandOnSale>
         </SellLandFirstRow>
 
         <SellLandSecondRow>
-          {myToken.onSale ? (
+          {myTokens.filter(token => selectedToken == token.id).length == 0 ? (<> You don't own this land </>) : (<> {myTokens.filter(token => token.position.x == xCoordinate && token.position.y == yCoordinate)[0].onSale ? (
             <>
               <CancelSaleButton
                 onClick={() =>
                   cancelSaleCallback({
-                    token_id: myToken.id,
-                    price: myToken.price,
+                    token_id: myTokens.filter(token => token.position.x == xCoordinate && token.position.y == yCoordinate)[0].id,
+                    price: myTokens.filter(token => token.position.x == xCoordinate && token.position.y == yCoordinate)[0].price,
                   }).catch((e: any) => {
                     alert.show(e.message)
                     console.error(e.message)
@@ -91,28 +104,39 @@ const SellLand = ({
               </CancelSaleButton>
             </>
           ) : (
-            <>
-              <SellLandPriceInput
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                placeholder="Enter price"
-              />
-              <SellLandButton
-                onClick={() =>
-                  sellTokenCallback({
-                    token_id: myToken.id,
-                    price: parseFloat(price),
-                  }).catch((e: any) => {
-                    alert.show(e.message)
-                    console.error(e.message)
-                  })
-                }
-              >
-                Sell
-              </SellLandButton>
-            </>
-          )}
+              <>
+                <SellLandPriceInput
+                  value={landPrice}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="Price"
+                />
+                <SellLandButton
+                  onClick={() => {
+                    var tokenToSell = myTokens.filter(token => token.position.x == xCoordinate && token.position.y == yCoordinate);
+                    if (tokenToSell.length > 0) {
+                      sellTokenCallback({
+                        token_id: tokenToSell[0].id,
+                        price: parseFloat(landPrice),
+                      }).catch((e: any) => {
+                        alert.show(e.message)
+                        console.error(e.message)
+                      })
+
+                    } else {
+                      alert.show("You don't own this token. You cannot sell it")
+                      console.error("You don't own this token. You cannot sell it")
+                    }
+                  }
+
+                  }
+                >
+                  Sell this land
+        </SellLandButton>
+              </>
+            )} </>)}
+
         </SellLandSecondRow>
+
       </SellLandBottom>
     </SellLandStyled>
   );

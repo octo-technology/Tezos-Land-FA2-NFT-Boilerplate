@@ -44,7 +44,9 @@ export const Sell = () => {
     (async () => {
       if (tezos) {
         const ctr = await (tezos as any).wallet.at(TEZOSLAND_ADDRESS);
+        console.log(ctr);
         setContract(ctr);
+        console.log("test2")
       }
     })();
   }, [tezos]);
@@ -52,11 +54,15 @@ export const Sell = () => {
   useEffect(() => {
     (async () => {
       if (contract && accountPkh) {
+        console.log("storage avant")
+        console.log(contract)
         const storage = await (contract as any).storage();
+        console.log("storage")
         try {
           const tokensOwnedFromStorage = await storage.market.owners.get(
             accountPkh
           );
+          console.log(tokensOwnedFromStorage)
           if (tokensOwnedFromStorage) {
             const tokenIds: number[] = tokensOwnedFromStorage.map(
               (token: { c: any[] }) => token.c[0]
