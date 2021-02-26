@@ -6,8 +6,8 @@ import { SellLandMapStyled, SellLandMapTile } from "./SellLandMap.style";
 type SellLandMapProps = {
   x: number;
   y: number;
-  landsOwned: Array<[any, any]>;
-  setSelectedTokenCallback?: (tokenId: number) => void;
+  landsOwned: Array<any>;
+  setSelectedTokenCallback?: (token: any) => void;
   setXCoordinatesCallback?: (coordinate: number) => void;
   setYCoordinatesCallback?: (coordinate: number) => void;
 };
@@ -26,14 +26,23 @@ export const SellLandMap = ({
         return (
           <SellLandMapTile
             selected={x === ix && y === iy}
-            isOwned={landsOwned.filter( land => land.length > 0 ? land[0] == ix && land[1] == iy : null).length > 0}
+            isOwned={landsOwned.filter( land => land.position.x == ix && land.position.y == iy).length > 0}
             key={`${iy}-${ix}`}
             onClick={() => {
               if (setXCoordinatesCallback && setYCoordinatesCallback && setSelectedTokenCallback) {
                 var tokenIdFromCoordinates = 10 * iy + ix + 1;
                 setXCoordinatesCallback(ix);
                 setYCoordinatesCallback(iy);
-                setSelectedTokenCallback(tokenIdFromCoordinates);
+                var selectedLand = landsOwned.find( land => land.id == tokenIdFromCoordinates)
+                console.log(selectedLand)
+                console.log(landsOwned)
+                console.log(landsOwned.filter( land => land.position.x == ix && land.position.y == iy))
+                if (!!selectedLand) {
+                  setSelectedTokenCallback(selectedLand)
+                } else {
+                  setSelectedTokenCallback(undefined)
+                }
+                
               }
             }}
           />

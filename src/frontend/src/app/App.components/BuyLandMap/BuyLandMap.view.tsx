@@ -7,20 +7,18 @@ type BuyLandMapProps = {
   x: number;
   y: number;
   landsOnSale: Array<any>;
-  setSelectedTokenCallback?: (tokenId: number) => void;
+  setSelectedTokenCallback?: (token: any) => void;
   setXCoordinatesCallback?: (coordinate: number) => void;
   setYCoordinatesCallback?: (coordinate: number) => void;
-  setSelectedTokenPriceCallback?: (price: number) => void;
 };
 
 export const BuyLandMap = ({
   x,
   y,
   landsOnSale,
-  setSelectedTokenCallback,
-  setSelectedTokenPriceCallback,
   setXCoordinatesCallback,
   setYCoordinatesCallback,
+  setSelectedTokenCallback
 }: BuyLandMapProps) => (
   <BuyLandMapStyled>
     {[...Array(10).keys()].map((iy) => {
@@ -32,19 +30,19 @@ export const BuyLandMap = ({
             isOnSale={landsOnSale.filter( land => land.position.x == ix && land.position.y == iy).length > 0}
             key={`${iy}-${ix}`}
             onClick={() => {
-              if (setXCoordinatesCallback && setYCoordinatesCallback && setSelectedTokenCallback && setSelectedTokenPriceCallback) {
+              if (setXCoordinatesCallback && setYCoordinatesCallback && setSelectedTokenCallback) {
                 var tokenIdFromCoordinates = 10 * iy + ix + 1;
                 setXCoordinatesCallback(ix);
                 setYCoordinatesCallback(iy);
-                setSelectedTokenCallback(tokenIdFromCoordinates);
                 var selectedLand = landsOnSale.find( land => land.id == tokenIdFromCoordinates)
                 if (!!selectedLand) {
-                  setSelectedTokenPriceCallback(selectedLand.price)
+                  setSelectedTokenCallback(selectedLand)
                 } else {
-                  setSelectedTokenPriceCallback(0)
+                  setSelectedTokenCallback(undefined)
                 }
                console.log(landsOnSale)
                console.log(tokenIdFromCoordinates)
+               console.log(selectedLand)
               }
             }}
           />

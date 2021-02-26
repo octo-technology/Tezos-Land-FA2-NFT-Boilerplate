@@ -81,7 +81,7 @@ export const SellLandPriceInput = styled.input`
 `;
 
 export const SellLandButton = styled.button`
-  height: 40px;
+  height: 30px;
   font-size: 11px;
   width: 100%;
   background-color: #4c5170;
@@ -94,12 +94,13 @@ export const SellLandButton = styled.button`
 `;
 
 export const CancelSaleButton = styled.button`
-  height: 20px;
+  height: 30px;
   font-size: 11px;
-  width: 200%;
+  width: 100%;
   background-color: #4c5170;
   box-sizing: border-box;
   border: 0;
+  margin-top: 5px;
   border-radius: 5px;
   color: #FFF;
   margin-left: 3px;

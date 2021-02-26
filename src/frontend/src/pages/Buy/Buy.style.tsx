@@ -22,6 +22,11 @@ export const BuyLandFirstRow = styled.div`
 `;
 
 export const BuyLandSecondRow = styled.div`
+  position: relative;
+  width: 500px;
+`;
+
+export const BuyLandThirdRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 10px;
@@ -64,6 +69,14 @@ export const BuyLandCoordinateInput = styled.input`
   }
 `;
 
+export const BuyOwnerDiv = styled.div`
+  color: #FFF;
+  line-height: 20px;
+  margin-top: 8px;
+  text-align: left;
+  font-size: 14px;
+`;
+
 export const BuyLandPriceInput = styled.input`
   height: 30px;
   width: 100%;
@@ -81,7 +94,7 @@ export const BuyLandPriceInput = styled.input`
 `;
 
 export const BuyLandButton = styled.button`
-  height: 40px;
+  height: 30px;
   font-size: 11px;
   width: 100%;
   background-color: #4c5170;

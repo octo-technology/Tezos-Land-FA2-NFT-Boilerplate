@@ -1,4 +1,4 @@
-import { useAccountPkh, useReady, useTezos, useWallet } from "dapp/dapp";
+import { useAccountPkh, useReady, useTezos, useWallet, useOnBlock } from "dapp/dapp";
 import { TEZOSLAND_ADDRESS } from "dapp/defaults";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -30,7 +30,12 @@ export type Token = {
   id: number;
 };
 
-export const Sell = () => {
+type SellProp = {
+  setTransactionPendingCallback: (b: boolean) => void;
+  transactionPending: boolean;
+};
+
+export const Sell = ({ transactionPending, setTransactionPendingCallback }: SellProp) => {
   const wallet = useWallet();
   const ready = useReady();
   const tezos = useTezos();
@@ -44,61 +49,57 @@ export const Sell = () => {
     (async () => {
       if (tezos) {
         const ctr = await (tezos as any).wallet.at(TEZOSLAND_ADDRESS);
-        console.log(ctr);
         setContract(ctr);
-        console.log("test2")
       }
     })();
   }, [tezos]);
 
-  useEffect(() => {
-    (async () => {
-      if (contract && accountPkh) {
-        console.log("storage avant")
-        console.log(contract)
-        const storage = await (contract as any).storage();
-        console.log("storage")
-        try {
-          const tokensOwnedFromStorage = await storage.market.owners.get(
-            accountPkh
+  const loadStorage = React.useCallback(async () => {
+    if (contract && accountPkh) {
+      const storage = await (contract as any).storage();
+      try {
+        const tokensOwnedFromStorage = await storage.market.owners.get(
+          accountPkh
+        );
+        if (tokensOwnedFromStorage) {
+          const tokenIds: number[] = tokensOwnedFromStorage.map(
+            (token: { c: any[] }) => token.c[0]
           );
-          console.log(tokensOwnedFromStorage)
-          if (tokensOwnedFromStorage) {
-            const tokenIds: number[] = tokensOwnedFromStorage.map(
-              (token: { c: any[] }) => token.c[0]
-            );
-            const myTokens = await Promise.all(
-              tokenIds.map(async (tokenId) => {
-                const tokenRaw = await storage.market.lands.get(
-                  tokenId.toString()
-                );
-                const token: Token = {
-                  name: tokenRaw.name,
-                  description: tokenRaw.description,
-                  position: {
-                    x: tokenRaw.position[5].c[0],
-                    y: tokenRaw.position[6].c[0],
-                  },
-                  isOwned: tokenRaw.isOwned,
-                  onSale: tokenRaw.onSale,
-                  price: tokenRaw.price, // TO FIX
-                  id: tokenRaw.id.c[0],
-                };
-                return token;
-              })
-            );
-            setMyTokens(myTokens);
-            setLoading(false);
-          }
-        } catch (e) {
-          alert.show(e.message)
+          const myTokens = await Promise.all(
+            tokenIds.map(async (tokenId) => {
+              const tokenRaw = await storage.market.lands.get(
+                tokenId.toString()
+              );
+              const token: Token = {
+                name: tokenRaw.name,
+                description: tokenRaw.description,
+                position: {
+                  x: tokenRaw.position[5].c[0],
+                  y: tokenRaw.position[6].c[0],
+                },
+                isOwned: tokenRaw.isOwned,
+                onSale: tokenRaw.onSale,
+                price: tokenRaw.price, // TO FIX
+                id: tokenRaw.id.c[0],
+              };
+              return token;
+            })
+          );
+          setMyTokens(myTokens);
           setLoading(false);
         }
+      } catch (e) {
+        alert.show(e.message)
+        setLoading(false);
       }
-    })();
+    }
   }, [alert, contract, accountPkh]);
 
-  // useOnBlock(tezos, loadStorage)
+  useEffect(() => {
+    loadStorage();
+  }, [loadStorage]);
+  
+  useOnBlock(tezos, loadStorage)
 
   type SellToken = { token_id: number; price: number };
   const sellTokenCallback = React.useCallback(
@@ -128,24 +129,26 @@ export const Sell = () => {
                   sellTokenCallback={sellTokenCallback}
                   cancelSaleCallback={cancelSaleCallback}
                   myTokens={myTokens}
+                  transactionPending={transactionPending}
+                  setTransactionPendingCallback={setTransactionPendingCallback}
                 />
               ) : (
-                <div>
-                  {loading ? (
-                    <Message>Loading lands... Please wait.</Message>
-                  ) : (
-                    <Message>No land available</Message>
-                  )}
-                </div>
-              )}
+                  <div>
+                    {loading ? (
+                      <Message>Loading lands... Please wait.</Message>
+                    ) : (
+                        <Message>No land available</Message>
+                      )}
+                  </div>
+                )}
             </>
           ) : (
-            <Message>Please connect your wallet</Message>
-          )}
+              <Message>Please connect your wallet</Message>
+            )}
         </>
       ) : (
-        <Message>Please install the Thanos Wallet Chrome Extension.</Message>
-      )}
+          <Message>Please install the Thanos Wallet Chrome Extension.</Message>
+        )}
     </>
   );
 };

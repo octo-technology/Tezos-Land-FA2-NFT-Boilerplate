@@ -1,4 +1,4 @@
-import { useAccountPkh, useReady, useTezos, useWallet } from "dapp/dapp";
+import { useAccountPkh, useReady, useTezos, useWallet, useOnBlock } from "dapp/dapp";
 import { TEZOSLAND_ADDRESS } from "dapp/defaults";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -32,7 +32,13 @@ export type TokenOnSale = {
   tokenOwnedByUser: boolean;
 };
 
-export const Buy = () => {
+type BuyProp = {
+  setTransactionPendingCallback: (b: boolean) => void;
+  transactionPending: boolean;
+};
+
+
+export const Buy = ({ setTransactionPendingCallback, transactionPending }: BuyProp) => {
   const wallet = useWallet();
   const ready = useReady();
   const tezos = useTezos();
@@ -50,45 +56,47 @@ export const Buy = () => {
     })();
   }, [tezos]);
 
-  useEffect(() => {
-    (async () => {
-      if (contract && accountPkh) {
-        const storage = await (contract as any).storage();
-        const tokensOnSaleFromStorage = storage["market"].sales;
-        const tokenOnSaleIds: number[] = tokensOnSaleFromStorage.map(
-          (sale: { token_id: { c: any[] }; price: { c: any[] } }) =>
-            sale.token_id.c[0]
-        );
+  const loadStorage = React.useCallback(async () => {
+    if (contract && accountPkh) {
+      const storage = await (contract as any).storage();
+      const tokensOnSaleFromStorage = storage["market"].sales;
+      const tokenOnSaleIds: number[] = tokensOnSaleFromStorage.map(
+        (sale: { token_id: { c: any[] }; price: { c: any[] } }) =>
+          sale.token_id.c[0]
+      );
 
-        const tokensOnSaleList = await Promise.all(
-          tokenOnSaleIds.map(async (tokenId) => {
-            const tokenRaw = await storage.market.lands.get(tokenId.toString());
-            const tokenOwner = await storage.ledger.get(tokenId.toString());
-            const token: TokenOnSale = {
-              name: tokenRaw.name,
-              description: tokenRaw.description,
-              position: {
-                x: tokenRaw.position[5].c[0],
-                y: tokenRaw.position[6].c[0],
-              },
-              landType: LandType.District, // TO FIX
-              isOwned: tokenRaw.isOwned,
-              onSale: tokenRaw.onSale,
-              price: tokenRaw.price.c[0],
-              id: tokenRaw.id.c[0],
-              owner: tokenOwner,
-              tokenOwnedByUser: accountPkh === tokenOwner,
-            };
-            return token;
-          })
-        );
-        setTokensOnSale(tokensOnSaleList);
-        setLoading(false);
-      }
-    })();
+      const tokensOnSaleList = await Promise.all(
+        tokenOnSaleIds.map(async (tokenId) => {
+          const tokenRaw = await storage.market.lands.get(tokenId.toString());
+          const tokenOwner = await storage.ledger.get(tokenId.toString());
+          const token: TokenOnSale = {
+            name: tokenRaw.name,
+            description: tokenRaw.description,
+            position: {
+              x: tokenRaw.position[5].c[0],
+              y: tokenRaw.position[6].c[0],
+            },
+            landType: LandType.District, // TO FIX
+            isOwned: tokenRaw.isOwned,
+            onSale: tokenRaw.onSale,
+            price: tokenRaw.price.c[0],
+            id: tokenRaw.id.c[0],
+            owner: tokenOwner,
+            tokenOwnedByUser: accountPkh === tokenOwner,
+          };
+          return token;
+        })
+      );
+      setTokensOnSale(tokensOnSaleList);
+      setLoading(false);
+    }
   }, [contract, accountPkh]);
+  
+  useEffect(() => {
+    loadStorage();
+  }, [loadStorage]);
 
-  // useOnBlock(tezos, loadStorage)
+  useOnBlock(tezos, loadStorage)
 
   type BuyToken = { token_id: number; price: number };
   const buyToken = React.useCallback(
@@ -111,24 +119,26 @@ export const Buy = () => {
                   buyTokenCallback={buyToken}
                   tokensOnSale={tokensOnSale}
                   connectedUser={(accountPkh as unknown) as string}
+                  transactionPending={transactionPending}
+                  setTransactionPendingCallback={setTransactionPendingCallback}
                 />
               ) : (
-                <div>
-                  {loading ? (
-                    <Message>Loading lands... Please wait.</Message>
-                  ) : (
-                    <Message>No land available</Message>
-                  )}
-                </div>
-              )}
+                  <div>
+                    {loading ? (
+                      <Message>Loading lands... Please wait.</Message>
+                    ) : (
+                        <Message>No land available</Message>
+                      )}
+                  </div>
+                )}
             </>
           ) : (
-            <Message>Please connect your wallet</Message>
-          )}
+              <Message>Please connect your wallet</Message>
+            )}
         </>
       ) : (
-        <Message>Please install the Thanos Wallet Chrome Extension.</Message>
-      )}
+          <Message>Please install the Thanos Wallet Chrome Extension.</Message>
+        )}
     </Page>
   );
 };

@@ -19,33 +19,46 @@ type CancelPorps = {
 type SellViewProps = {
   sellTokenCallback: (sellProps: SellPorps) => Promise<any>;
   cancelSaleCallback: (cancelProps: CancelPorps) => Promise<any>;
+  setTransactionPendingCallback: (b: boolean) => void;
+  transactionPending: boolean;
   myTokens: Token[];
 };
 
-export const SellView = ({ sellTokenCallback, cancelSaleCallback, myTokens }: SellViewProps) => {
+export const SellView = ({ sellTokenCallback, cancelSaleCallback, setTransactionPendingCallback, transactionPending, myTokens }: SellViewProps) => {
   return (
     <SellStyled>
-      <SellLand sellTokenCallback={sellTokenCallback} cancelSaleCallback={cancelSaleCallback}
-        myTokens={myTokens} />
+      <SellLand sellTokenCallback={sellTokenCallback}
+        cancelSaleCallback={cancelSaleCallback}
+        myTokens={myTokens}
+        setTransactionPendingCallback={setTransactionPendingCallback}
+        transactionPending={transactionPending} />
     </SellStyled>
   );
 };
 
 const SellLand = ({ sellTokenCallback,
   cancelSaleCallback,
+  setTransactionPendingCallback, transactionPending,
   myTokens }: SellViewProps) => {
   const [landPrice, setPrice] = useState<string>("");
-  const [xCoordinate, setXCoordinate] = useState<number>(0);
-  const [yCoordinate, setYCoordinate] = useState<number>(0);
-  const [selectedToken, setSelectedToken] = useState<number>(1);
+  const [selectedToken, setSelectedToken] = useState<Token>(myTokens[0])
+
+  var x = myTokens.length > 0 ? myTokens[0].position.x : 0
+  var y = myTokens.length > 0 ? myTokens[0].position.y : 0
+  const [xCoordinate, setXCoordinate] = useState<number>(x);
+  const [yCoordinate, setYCoordinate] = useState<number>(y);
   const alert = useAlert()
+  console.log("****")
+  console.log(selectedToken)
+  console.log(myTokens)
+  console.log(myTokens.includes(selectedToken))
 
   return (
     <SellLandStyled>
       <SellLandMap
         x={xCoordinate}
         y={yCoordinate}
-        landsOwned={myTokens.map(token => [token.position.x, token.position.y])}
+        landsOwned={myTokens}
         setSelectedTokenCallback={setSelectedToken}
         setXCoordinatesCallback={setXCoordinate}
         setYCoordinatesCallback={setYCoordinate}
@@ -87,17 +100,35 @@ const SellLand = ({ sellTokenCallback,
         </SellLandFirstRow>
 
         <SellLandSecondRow>
-          {myTokens.filter(token => selectedToken == token.id).length == 0 ? (<> You don't own this land </>) : (<> {myTokens.filter(token => token.position.x == xCoordinate && token.position.y == yCoordinate)[0].onSale ? (
-            <>
+          {myTokens.filter(token => !!selectedToken ? token.id === selectedToken.id : false).length === 0 ? (<> You don't own this land </>) : (<> {selectedToken.onSale ? (
+            <><SellLandPriceInput
+              value={selectedToken.price / 1000000 + " ꜩ"}
+              placeholder="Price (ꜩ)"
+            />
               <CancelSaleButton
-                onClick={() =>
-                  cancelSaleCallback({
-                    token_id: myTokens.filter(token => token.position.x == xCoordinate && token.position.y == yCoordinate)[0].id,
-                    price: myTokens.filter(token => token.position.x == xCoordinate && token.position.y == yCoordinate)[0].price,
-                  }).catch((e: any) => {
-                    alert.show(e.message)
-                    console.error(e.message)
-                  })
+                onClick={() => {
+                  if (transactionPending) {
+                    alert.info("A transaction is pending. Try again later")
+                    console.info("A transaction is pending. Try again later")
+                  } else {
+                    cancelSaleCallback({
+                      token_id: selectedToken.id,
+                      price: selectedToken.price,
+                    }).then(e => {
+                      alert.info("Removing land from sales ...")
+                      setTransactionPendingCallback(true)
+                      e.confirmation().then((e: any) => {
+                        alert.success("Land is not on sale anymore")
+                        setTransactionPendingCallback(false)
+                        return e
+                      })
+                      return e
+                    }).catch((e: any) => {
+                      alert.show(e.message)
+                      console.error(e.message)
+                    })
+                  }
+                }
                 }
               >
                 Cancel sale
@@ -108,25 +139,36 @@ const SellLand = ({ sellTokenCallback,
                 <SellLandPriceInput
                   value={landPrice}
                   onChange={(e) => setPrice(e.target.value)}
-                  placeholder="Price"
+                  placeholder="Price (ꜩ)"
                 />
                 <SellLandButton
                   onClick={() => {
-                    var tokenToSell = myTokens.filter(token => token.position.x == xCoordinate && token.position.y == yCoordinate);
-                    if (tokenToSell.length > 0) {
+                    if (transactionPending) {
+                      alert.info("A transaction is pending. Try again later")
+                      console.info("A transaction is pending. Try again later")
+                    } else {
                       sellTokenCallback({
-                        token_id: tokenToSell[0].id,
+                        token_id: selectedToken.id,
                         price: parseFloat(landPrice),
+                      }).then(e => {
+                        alert.info("Putting land on sale ...")
+                        setTransactionPendingCallback(true)
+                        e.confirmation().then((e: any) => {
+                          alert.success("Land is on sale")
+                          setTransactionPendingCallback(false)
+                          return e
+                        })
+                        return e
                       }).catch((e: any) => {
                         alert.show(e.message)
                         console.error(e.message)
                       })
 
-                    } else {
-                      alert.show("You don't own this token. You cannot sell it")
-                      console.error("You don't own this token. You cannot sell it")
+
                     }
                   }
+
+
 
                   }
                 >

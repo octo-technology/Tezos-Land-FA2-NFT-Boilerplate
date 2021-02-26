@@ -4,16 +4,7 @@ import { useState } from "react";
 import { useAlert } from 'react-alert'
 import { Token } from "./Map.controller";
 // prettier-ignore
-import { MapLandBottom, MapLandButton, MapLandCoordinateInput, MapLandDescriptionInput, MapLandFirstRow, MapLandLocation, MapLandNameInput, MapLandStyled, MapStyled } from "./Map.style";
-
-type MintProps = {
-  owner: string;
-  landType: string;
-  xCoordinates: number;
-  yCoordinates: number;
-  landName: string;
-  description: string;
-};
+import { MapLandBottom, MapLandSecondRow ,MapLandCoordinateInput, MapLandDescriptionInput, MapLandFirstRow, MapLandLocation, MapLandNameInput, MapLandStyled, MapStyled } from "./Map.style";
 
 type MapViewProps = {
   existingTokens: Token[];
@@ -30,7 +21,7 @@ export const MapView = ({ existingTokens }: MapViewProps) => {
 const MapLand = ({ existingTokens }: MapViewProps) => {
   const [xCoordinate, setXCoordinate] = useState<number>(0);
   const [yCoordinate, setYCoordinate] = useState<number>(0);
-  const [selectedToken, setSelectedToken] = useState<number>(1);
+  const [selectedToken, setSelectedToken] = useState<Token> (existingTokens[0])
   const alert = useAlert()
   
   return (
@@ -78,12 +69,15 @@ const MapLand = ({ existingTokens }: MapViewProps) => {
             ></MapLandCoordinateInput>
           </MapLandLocation>
         </MapLandFirstRow>
+        <MapLandSecondRow>
+        {selectedToken === undefined ? "This land does not exist" : selectedToken.owner}
+        </MapLandSecondRow>
         <MapLandNameInput
-          value={existingTokens.filter( token => token.id == selectedToken ).length == 1 ? existingTokens.filter( token => token.id == selectedToken )[0].name : ""}
+          value={selectedToken === undefined ? "" : selectedToken.name}
           placeholder="Name"
         />
         <MapLandDescriptionInput
-          value={existingTokens.filter( token => token.id == selectedToken ).length == 1 ? existingTokens.filter( token => token.id == selectedToken )[0].description  : "" }
+          value={selectedToken === undefined ? "" : selectedToken.description }
           placeholder="Description"
         />
       </MapLandBottom>

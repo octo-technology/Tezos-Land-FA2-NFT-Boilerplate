@@ -9,7 +9,7 @@ type AllLandMapProps = {
   existingTokens: Array<any>;
   setXCoordinatesCallback?: (coordinate: number) => void;
   setYCoordinatesCallback?: (coordinate: number) => void;
-  setSelectedTokenCallback?: (coordinate: number) => void;
+  setSelectedTokenCallback: (token: any) => void;
 };
 
 export const AllLandMap = ({
@@ -31,9 +31,17 @@ export const AllLandMap = ({
             onClick={() => {
               if (setXCoordinatesCallback && setYCoordinatesCallback && setSelectedTokenCallback) {
                 var tokenIdFromCoordinates = 10 * iy + ix + 1;
+                var selectedLand = existingTokens.find( land => land.id == tokenIdFromCoordinates)
                 setXCoordinatesCallback(ix);
                 setYCoordinatesCallback(iy);
-                setSelectedTokenCallback(tokenIdFromCoordinates);
+                if (!!selectedLand) {
+                  setSelectedTokenCallback(selectedLand)
+                } else {
+                  setSelectedTokenCallback(undefined)
+                }
+                console.log(selectedLand)
+                console.log(existingTokens)
+                console.log(existingTokens.filter( token => token.position.x == ix && token.position.y == iy))
               }
             }}
           />

@@ -25,6 +25,7 @@ export type Token = {
   position: Coordinates;
   landType: LandType;
   isOwned: boolean;
+  owner: string
   onSale: boolean;
   price: number;
   id: number;
@@ -60,6 +61,7 @@ export const Map = () => {
 
           const tokens = await Promise.all(tokenIds.map(async (tokenId) => {
             const tokenRaw = await storage.market.lands.get(tokenId.toString());
+            const tokenOwner = await storage.ledger.get(tokenId.toString());
             const token: Token = {
               name: tokenRaw.name,
               description: tokenRaw.description,
@@ -69,6 +71,7 @@ export const Map = () => {
               },
               landType: LandType.District,
               isOwned: tokenRaw.isOwned,
+              owner: tokenOwner,
               onSale: tokenRaw.onSale,
               price: tokenRaw.price,
               id: tokenRaw.id.c[0],

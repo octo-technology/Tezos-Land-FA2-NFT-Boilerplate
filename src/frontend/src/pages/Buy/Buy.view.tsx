@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAlert } from 'react-alert'
 import { TokenOnSale } from "./Buy.controller";
 // prettier-ignore
-import { BuyLandBottom, BuyLandSecondRow, BuyLandButton, BuyLandCoordinateInput, BuyLandFirstRow, BuyLandLocation, BuyLandPriceInput, BuyLandStyled as BuyLandStyled, BuyStyled as BuyStyled } from "./Buy.style";
+import { BuyLandBottom, BuyOwnerDiv, BuyLandSecondRow, BuyLandThirdRow, BuyLandButton, BuyLandCoordinateInput, BuyLandFirstRow, BuyLandLocation, BuyLandPriceInput, BuyLandStyled as BuyLandStyled, BuyStyled as BuyStyled } from "./Buy.style";
 
 type BuyProps = {
   token_id: number;
@@ -13,27 +13,29 @@ type BuyProps = {
 
 type BuyViewProps = {
   buyTokenCallback: (sellProps: BuyProps) => Promise<any>;
+  setTransactionPendingCallback: (b: boolean) => void;
+  transactionPending: boolean;
   tokensOnSale: TokenOnSale[];
   connectedUser: string;
 };
 
-export const BuyView = ({ buyTokenCallback: buyTokenCallback, tokensOnSale, connectedUser }: BuyViewProps) => {
+export const BuyView = ({ buyTokenCallback: buyTokenCallback, tokensOnSale, connectedUser, setTransactionPendingCallback, transactionPending }: BuyViewProps) => {
   return (
     <BuyStyled>
       <BuyLand buyTokenCallback={buyTokenCallback}
         tokensOnSale={tokensOnSale}
-        connectedUser={connectedUser}/>
+        connectedUser={connectedUser}
+        transactionPending={transactionPending}
+        setTransactionPendingCallback={setTransactionPendingCallback} />
     </BuyStyled>
   );
 };
 
 const BuyLand = ({ buyTokenCallback: buyTokenCallback,
-  tokensOnSale, connectedUser }: BuyViewProps) => {
-  const [landPrice, setPrice] = useState<string>("");
+  tokensOnSale, connectedUser, transactionPending, setTransactionPendingCallback }: BuyViewProps) => {
   const [xCoordinate, setXCoordinate] = useState<number>(0);
   const [yCoordinate, setYCoordinate] = useState<number>(0);
-  const [selectedToken, setSelectedToken] = useState<number>(1);
-  const [selectedTokenPrice, setSelectedTokenPrice] = useState<number>(0);
+  const [selectedToken, setSelectedToken] = useState<any>(tokensOnSale[0]);
   const alert = useAlert()
 
   return (
@@ -45,7 +47,6 @@ const BuyLand = ({ buyTokenCallback: buyTokenCallback,
         setXCoordinatesCallback={setXCoordinate}
         setYCoordinatesCallback={setYCoordinate}
         setSelectedTokenCallback={setSelectedToken}
-        setSelectedTokenPriceCallback={setSelectedTokenPrice}
       />
 
       <BuyLandBottom>
@@ -82,31 +83,44 @@ const BuyLand = ({ buyTokenCallback: buyTokenCallback,
             ></BuyLandCoordinateInput>
           </BuyLandLocation>
         </BuyLandFirstRow>
-
         <BuyLandSecondRow>
-          {tokensOnSale.filter(token => String(token.id) == String(selectedToken)).length == 0 ? (<>This land is not on sale </>) : (<>{
-            tokensOnSale.filter(token => String(token.id) == String(selectedToken)).filter(token => token.owner == connectedUser).length > 0 ? (<> You are the owner </>) : (<> <BuyLandPriceInput
-              value={selectedTokenPrice}
-              placeholder="Price"
-            />
+          <BuyOwnerDiv>
+            {selectedToken == undefined ? "" : selectedToken.owner}
+          </BuyOwnerDiv>
+        </BuyLandSecondRow>
+        <BuyLandThirdRow>
+          {selectedToken == undefined ? (<>This land is not on sale </>) : (<>{
+            selectedToken.owner == connectedUser ? (<> You are the owner </>) : (<>
+              <BuyLandPriceInput
+                value={selectedToken.price / 1000000 + " ꜩ"}
+                placeholder="Price"
+              />
               <BuyLandButton
                 onClick={() => {
-                  var tokenToSell = tokensOnSale.filter(token => token.position.x == xCoordinate && token.position.y == yCoordinate);
-                  if (tokenToSell.length > 0) {
+                  if (transactionPending) {
+                    alert.info("A transaction is pending. Try again later")
+                    console.info("A transaction is pending. Try again later")
+                  } else {
                     buyTokenCallback({
-                      token_id: tokenToSell[0].id,
-                      price: parseFloat(landPrice),
+                      token_id: selectedToken.id,
+                      price: parseFloat(String(selectedToken.price)),
+                    }).then(e => {
+                      alert.info("Buying land ...")
+                      setTransactionPendingCallback(true)
+                      e.confirmation().then((e: any) => {
+                        alert.success("Land bought")
+                        setTransactionPendingCallback(false)
+                        return e
+                      })
+                      return e
                     }).catch((e: any) => {
                       alert.show(e.message)
                       console.error(e.message)
                     })
-  
-                  } else {
-                    alert.show("You don't own this token. You cannot sell it")
-                    console.error("You don't own this token. You cannot sell it")
                   }
+
                 }
-  
+
                 }
               >
                 Buy this land
@@ -115,7 +129,7 @@ const BuyLand = ({ buyTokenCallback: buyTokenCallback,
 
 
 
-        </BuyLandSecondRow>
+        </BuyLandThirdRow>
 
       </BuyLandBottom>
     </BuyLandStyled>

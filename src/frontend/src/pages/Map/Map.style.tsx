@@ -21,6 +21,12 @@ export const MapLandFirstRow = styled.div`
   width: 500px;
 `;
 
+export const MapLandSecondRow = styled.div`
+  position: relative;
+  margin-top: 8px;
+  width: 500px;
+`;
+
 export const MapLandLocation = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr 2fr;
