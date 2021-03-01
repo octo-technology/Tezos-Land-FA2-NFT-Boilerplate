@@ -28,17 +28,28 @@ const token_metadata = new MichelsonMap();
 const empty_ledger = new MichelsonMap()
 const empty_operators = new MichelsonMap()
 
-metadata.set("", "");
-metadata.set("interfaces", web3.utils.asciiToHex("TZIP-012").slice(2));
-token_info.set(
-    "symbol", web3.utils.asciiToHex("TLD").slice(2)
-);
-token_info.set(
-    "name", web3.utils.asciiToHex("TezosLand").slice(2)
-);
-token_info.set(
-    "decimals", web3.utils.asciiToHex("0").slice(2)
-);
+// Set TZIP-16 contract metadata, with a JSON Blob
+metadata.set("", web3.utils.asciiToHex("https://ipfs.io/ipfs/QmaqGDgx4nVYPHnNHTPYD3Uz3KrXx1JBamr4qkC6j5K6vd").slice(2));
+
+// Set TZIP-16 token metadata with a JSON Blob
+// token_info.set(
+//     "", web3.utils.asciiToHex("https://ipfs.io/ipfs/QmZKJKce6Y9yyuPvatGZuqsvY3dYd6TH6qt9AsTW22xtgq").slice(2)
+// );
+
+// Set TZIP-12 token metadata, in the token_metadata big map
+// token_info.set(
+//     "symbol", web3.utils.asciiToHex("TLD").slice(2)
+// );
+// token_info.set(
+//     "name", web3.utils.asciiToHex("TezosLand").slice(2)
+// );
+// token_info.set(
+//     "decimals", web3.utils.asciiToHex("0").slice(2)
+// );
+// token_info.set(
+//     "thumbnailUri", web3.utils.asciiToHex("https://tezosland.io/logo512.png").slice(2)
+// );
+
 
 token_metadata.set(
     1, {
