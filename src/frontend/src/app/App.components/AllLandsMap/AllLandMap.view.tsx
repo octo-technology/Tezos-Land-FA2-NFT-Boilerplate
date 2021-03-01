@@ -41,7 +41,11 @@ export const AllLandMap = ({
                 }
               }
             }}
-          />
+          >
+                     { existingTokens.filter(land => land.position.x == ix && land.position.y == iy && land.onSale).length > 0 ? (
+            <img src="/images/tezos.svg" alt="land" />) :
+            (<></>)}
+          </AllLandMapTile>
         );
       });
     })}

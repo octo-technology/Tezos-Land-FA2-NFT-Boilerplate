@@ -1,6 +1,6 @@
 import * as PropTypes from "prop-types";
 import * as React from "react";
-
+import ReactLogo from './../../../../public/Tezos_logo.svg';
 import { SellLandMapStyled, SellLandMapTile } from "./SellLandMap.style";
 
 type SellLandMapProps = {
@@ -42,7 +42,14 @@ export const SellLandMap = ({
 
               }
             }}
-          />
+          >   
+         { landsOwned.filter(land => land.position.x == ix && land.position.y == iy && land.onSale).length > 0 ? (
+            <img src="/images/tezos.svg" alt="land" />) :
+            (<></>)}
+          
+          
+
+          </SellLandMapTile>
         );
       });
     })}

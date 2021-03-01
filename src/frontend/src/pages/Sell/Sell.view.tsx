@@ -95,7 +95,8 @@ const SellLand = ({ sellTokenCallback,
         </SellLandFirstRow>
 
         <SellLandSecondRow>
-          {myTokens.filter(token => !!selectedToken ? token.id === selectedToken.id : false).length === 0 ? (<> You don't own this land </>) : (<> {selectedToken.onSale ? (
+          {myTokens.filter(token => !!selectedToken ? token.id === selectedToken.id : false).length === 0 ? (<> You don't own this land </>) : 
+          (<> {selectedToken.onSale ? (
             <><SellLandPriceInput
               value={selectedToken.price / 1000000 + " ꜩ"}
               placeholder="Price (ꜩ)"

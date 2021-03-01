@@ -20,4 +20,11 @@ export const SellLandMapTile = styled.div<{ selected?: boolean; isOwned: boolean
   width: 50px;
   border: ${(props) => (props.selected ? "1px solid #FFFFFF" : "1px solid #141b43 ")};
   background-color: ${(props) => (props.isOwned ? "#E50000" : "#202337")};
+
+  > img {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 13px;
+  }
 `;

@@ -20,4 +20,11 @@ export const AllLandMapTile = styled.div<{ selected: boolean; exists: boolean }>
   width: 50px;
   border: ${(props) => (props.selected ? "1px solid #FFFFFF" : "1px solid #141b43 ")};
   background-color: ${(props) => (props.exists ? "#E50000" : "#202337")};
+
+  > img {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 13px;
+  }
 `;
