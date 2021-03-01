@@ -19,8 +19,7 @@ class TestMint(TestCase):
             storage = self.get_storage(admin=administrator)
             name = "My Land"
             description = "This is my land"
-            coordinates = [1,5]
-
+            coordinates = [1, 5]
 
             # WHEN
             self.nftContract.mint({"owner": alice,
@@ -138,6 +137,7 @@ class TestMint(TestCase):
         expected_minted_land = {'description': description,
                                 'id': expected_minted_token_id,
                                 'isOwned': True,
+                                'owner': alice,
                                 'name': name,
                                 'onSale': False,
                                 'position': coordinates,
@@ -149,7 +149,8 @@ class TestMint(TestCase):
         self.assertEqual(lands_with_minted_land, result.big_map_diff["market/lands"])
         self.assertNotIn('operators', result.big_map_diff.keys())
 
-    def test_a_new_land_can_be_minted_with_an_operator_if_200_mutez_are_paid_and_this_land_does_not_already_exist_and_an_operator_is_specified_and_token_is_in_range(self):
+    def test_a_new_land_can_be_minted_with_an_operator_if_200_mutez_are_paid_and_this_land_does_not_already_exist_and_an_operator_is_specified_and_token_is_in_range(
+            self):
         # GIVEN
         map_height = 10
         map_width = 10
@@ -178,12 +179,14 @@ class TestMint(TestCase):
         expected_minted_land = {'description': description,
                                 'id': expected_minted_token_id,
                                 'isOwned': True,
+                                'owner': alice,
                                 'name': name,
                                 'onSale': False,
                                 'position': coordinates,
                                 'price': None}
         lands_with_minted_land = {expected_minted_token_id: expected_minted_land}
-        minted_land_operator = {('tz1L738ifd66ah69PrmKAZzckvvHnbcSeqjf', 'tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v', expected_minted_token_id): None}
+        minted_land_operator = {('tz1L738ifd66ah69PrmKAZzckvvHnbcSeqjf', 'tz1LFuHW4Z9zsCwg1cgGTKU12WZAs27ZD14v',
+                                 expected_minted_token_id): None}
         self.assertEqual({expected_minted_token_id: alice}, result.big_map_diff['ledger'])
         self.assertEqual({alice: [expected_minted_token_id]}, result.big_map_diff['market/owners'])
         self.assertEqual([expected_minted_token_id], result.storage['market']['landIds'])

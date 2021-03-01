@@ -15,9 +15,9 @@ export const LandMapStyled = styled.div<{ isAdmin: boolean }>`
   }
 `;
 
-export const LandMapTile = styled.div<{ selected: boolean; isAdmin: boolean }>`
+export const LandMapTile = styled.div<{ selected: boolean; isAdmin: boolean; exists: boolean }>`
   height: ${(props) => (props.isAdmin ? "50px" : "23px")};
   width: ${(props) => (props.isAdmin ? "50px" : "23px")};
-  border: 1px solid #141b43;
-  background-color: ${(props) => (props.selected ? "#E50000" : "#202337")};
+  border: ${(props) => (props.selected ? "1px solid #FFFFFF" : "1px solid #141b43 ")};
+  background-color: ${(props) => (props.exists ? "#E50000" : "#202337")};
 `;

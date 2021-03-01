@@ -2,4 +2,4 @@
 
 export const APP_NAME = 'TEZOSLAND';
 export const NETWORK = 'delphinet';
-export const TEZOSLAND_ADDRESS = 'KT1FH1mzMw7EqPQvCPqW9eKBZv2Qez2LCynF';
+export const TEZOSLAND_ADDRESS = 'KT1S5hgipNSTFehZo7v81gq6fcLChbRwptqy';

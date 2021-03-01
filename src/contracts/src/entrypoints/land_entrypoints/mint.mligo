@@ -6,7 +6,9 @@ type mint_param = {
     operator: address option;
 }
 (**
-Create a land, and a token (they both have the same id), associate token to given owner, (and possibly setup an operator for this newly minted token)
+Create a land, and a token (they both have the same id), associate token to given owner, (and possibly setup an operator for this newly minted token).
+Several checks are carried out: the token must be within the market range (width and height) and must be a new token (and not an already existing token).
+Only the administrator, defined in the storage (market/admin), can execute this entrypoint 
 @return storage with new token, and operators
 *)
 let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list) * nft_token_storage =
@@ -21,13 +23,13 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
         let ledger_with_minted_token = Big_map.add token_id p.owner s.ledger in
         let ledger_and_owners_are_consistent : bool = check_ownership_is_consistent_in_ledger_and_owners (({owner=p.owner; token_id=token_id} : ownership), ledger_with_minted_token, new_owners) in
         if ledger_and_owners_are_consistent then
-            let new_land = ({ name=p.name; description=p.description; position=p.coordinates; isOwned=true; price=(None:price option); onSale=false; id=token_id }:land) in
+            let new_land = ({ name=p.name; description=p.description; position=p.coordinates; isOwned=true; owner=p.owner; price=(None:price option); onSale=false; id=token_id }:land) in
             let lands_with_new_land = Big_map.add token_id new_land s.market.lands in
             let lands_ids_with_new_id = Set.add token_id s.market.landIds in
             match mint_param.operator with
             | None -> ([] : operation list),  { s with ledger = ledger_with_minted_token; market = { s.market with lands=lands_with_new_land; landIds=lands_ids_with_new_id; owners=new_owners; } }
             | Some(operator_address) ->
-                let update : update_operator = Add_operator_p({ owner = p.owner; operator = operator_address; token_id = token_id; }) in
+                let update : update_operator = Add_operator({ owner = p.owner; operator = operator_address; token_id = token_id; }) in
                 let operators_with_minted_token_operator = update_operators (update, s.operators) in
                 ([] : operation list),  { s with ledger = ledger_with_minted_token; operators = operators_with_minted_token_operator; market = { s.market with lands=lands_with_new_land; landIds=lands_ids_with_new_id; owners=new_owners; } }
         else

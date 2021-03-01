@@ -1,9 +1,10 @@
-import { LandMap } from "app/App.components/LandMap/LandMap.view";
+import { AllLandMap } from "app/App.components/AllLandsMap/AllLandMap.view";
 import * as React from "react";
-
+import { useState } from "react";
+import { useAlert } from 'react-alert'
 import { Token } from "./Map.controller";
 // prettier-ignore
-import { MapLandBottom, MapLandDescription, MapLandFirstRow, MapLandLocation, MapLandName, MapLandOnSale, MapLandSecondRow, MapLandStyled, MapLandThirdRow, MapStyled } from "./Map.style";
+import { MapLandBottom, MapLandSecondRow ,MapLandCoordinateInput, MapLandDescriptionInput, MapLandFirstRow, MapLandLocation, MapLandNameInput, MapLandStyled, MapStyled } from "./Map.style";
 
 type MapViewProps = {
   existingTokens: Token[];
@@ -12,24 +13,27 @@ type MapViewProps = {
 export const MapView = ({ existingTokens }: MapViewProps) => {
   return (
     <MapStyled>
-      {existingTokens.map((existingToken) => (
-        <MapLand
-          key={existingToken.id}
-          token={existingToken}
-        />
-      ))}
+      <MapLand existingTokens={existingTokens} />
     </MapStyled>
   );
 };
 
-const MapLand = ({
-  token,
-}: {
-  token: Token;
-}) => {
+const MapLand = ({ existingTokens }: MapViewProps) => {
+  const [xCoordinate, setXCoordinate] = useState<number>(0);
+  const [yCoordinate, setYCoordinate] = useState<number>(0);
+  const [selectedToken, setSelectedToken] = useState<Token> (existingTokens[0])
+  const alert = useAlert()
+  
   return (
-    <MapLandStyled key={token.id}>
-      <LandMap x={token.position.x} y={token.position.y} />
+    <MapLandStyled>
+      <AllLandMap
+        x={xCoordinate}
+        y={yCoordinate}
+        existingTokens={existingTokens}
+        setSelectedTokenCallback={setSelectedToken}
+        setXCoordinatesCallback={setXCoordinate}
+        setYCoordinatesCallback={setYCoordinate}
+      />
 
       <MapLandBottom>
         <MapLandFirstRow>
@@ -37,24 +41,45 @@ const MapLand = ({
             <svg>
               <use xlinkHref="/icons/sprites.svg#location" />
             </svg>
-            <div>{`${token.position.x}, ${token.position.y}`}</div>
+            <MapLandCoordinateInput
+              value={xCoordinate}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  if (e.target.value) {
+                    setXCoordinate(parseInt(e.target.value));
+                  } else {
+                    setXCoordinate(0);
+                  }
+                }
+              }}
+              placeholder="x"
+            ></MapLandCoordinateInput>
+            <MapLandCoordinateInput
+              value={yCoordinate}
+              onChange={(e) => {
+                if (!isNaN(Number(e.target.value))) {
+                  if (e.target.value) {
+                    setYCoordinate(parseInt(e.target.value));
+                  } else {
+                    setYCoordinate(0);
+                  }
+                }
+              }}
+              placeholder="y"
+            ></MapLandCoordinateInput>
           </MapLandLocation>
-          <MapLandOnSale isOnSale={token.onSale}>
-            {token.onSale ? `On sale for ${token.price / 1000000 } ꜩ` : "Not on sale"}
-          </MapLandOnSale>
         </MapLandFirstRow>
-
         <MapLandSecondRow>
-          <MapLandName>
-            {token.name}
-          </MapLandName>
-
+        {selectedToken === undefined ? "This land does not exist" : selectedToken.owner}
         </MapLandSecondRow>
-        <MapLandThirdRow>
-        <MapLandDescription>
-          {token.description}
-          </MapLandDescription>
-        </MapLandThirdRow>
+        <MapLandNameInput
+          value={selectedToken === undefined ? "" : selectedToken.name}
+          placeholder="Name"
+        />
+        <MapLandDescriptionInput
+          value={selectedToken === undefined ? "" : selectedToken.description }
+          placeholder="Description"
+        />
       </MapLandBottom>
     </MapLandStyled>
   );

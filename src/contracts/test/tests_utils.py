@@ -39,19 +39,13 @@ def get_storage(self, lands=None, admin=administrator, height=10, width=10,
                        "owners": owners},
             "ledger": ledger,
             "operators": operators,
-            "metadata": {"token_defs": [{"from_": 1, "to_": 100}],
-                         "last_used_id": 1,
-                         "metadata": {(1, 100): {"token_id": 1,
-                                                 "symbol": "TLD",
-                                                 "name": "TezosLand",
-                                                 "decimals": 0,
-                                                 "extras": {}
-                                                 }
-                                      }}
+            "metadata": {},
+            "token_metadata": {}
             }
 
 
-def get_test_storage(self, check_consistency_ledger=None, check_consistency_owners=None, check_consistency_result=False):
+def get_test_storage(self, check_consistency_ledger=None, check_consistency_owners=None,
+                     check_consistency_result=False):
     if check_consistency_owners is None:
         check_consistency_owners = {}
     if check_consistency_ledger is None:

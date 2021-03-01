@@ -23,10 +23,11 @@ class TestChangeLandName(TestCase):
                     "description": "",
                     "position": [0, 0],
                     "isOwned": True,
+                    "owner": alice,
                     "onSale": False,
                     "price": 200,
                     "id": land_token_id}
-            lands = {land_token_id : land}
+            lands = {land_token_id: land}
             storage = self.get_storage(lands=lands,
                                        ledger={land_token_id: owner})
 
@@ -74,10 +75,11 @@ class TestChangeLandName(TestCase):
                 "description": description,
                 "position": position,
                 "isOwned": isOwned,
+                "owner": alice,
                 "onSale": onSale,
                 "price": price,
                 "id": land_token_id}
-        lands = {land_token_id : land}
+        lands = {land_token_id: land}
         storage = self.get_storage(lands=lands,
                                    ledger={land_token_id: owner})
 
@@ -96,7 +98,6 @@ class TestChangeLandName(TestCase):
         self.assertEqual(modified_land["onSale"], onSale)
         self.assertEqual(modified_land["price"], price)
         self.assertEqual(modified_land["id"], land_token_id)
-
 
 
 if __name__ == '__main__':

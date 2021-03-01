@@ -7,6 +7,7 @@ type LandMapProps = {
   x: number;
   y: number;
   isAdmin?: boolean;
+  existingTokenIds: Array<number>;
   setXCoordinatesCallback?: (coordinate: number) => void;
   setYCoordinatesCallback?: (coordinate: number) => void;
 };
@@ -15,6 +16,7 @@ export const LandMap = ({
   x,
   y,
   isAdmin,
+  existingTokenIds,
   setXCoordinatesCallback,
   setYCoordinatesCallback,
 }: LandMapProps) => (
@@ -25,6 +27,7 @@ export const LandMap = ({
           <LandMapTile
             selected={x === ix && y === iy}
             isAdmin={!!isAdmin}
+            exists={existingTokenIds.includes(10 * iy + ix + 1)}
             key={`${iy}-${ix}`}
             onClick={() => {
               if (setXCoordinatesCallback && setYCoordinatesCallback) {

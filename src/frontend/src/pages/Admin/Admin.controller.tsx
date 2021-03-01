@@ -11,19 +11,26 @@ export type Coordinates = {
   x: number;
   y: number;
 };
+type AdminProp = {
+  setMintTransactionPendingCallback: (b: boolean) => void;
+  mintTransactionPending: boolean;
 
-export const Admin = () => {
+};
+export const Admin = ({setMintTransactionPendingCallback, mintTransactionPending}: AdminProp) => {
   const wallet = useWallet();
   const ready = useReady();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const [contract, setContract] = useState(undefined);
   const [adminAdress, setAdminAdress] = useState(undefined);
+  const [existingTokenIds, setExistingTokenIds] = useState<Array<number>>([]);
 
   const loadStorage = React.useCallback(async () => {
     if (contract) {
       const storage = await (contract as any).storage();
+      setExistingTokenIds(storage["market"].landIds.map( (landIdAsObject: { c: any[]; }) => landIdAsObject.c[0]));
       setAdminAdress(storage.market.admin);
+
     }
   }, [contract]);
 
@@ -83,6 +90,9 @@ export const Admin = () => {
                 <AdminView
                   mintCallBack={mint}
                   connectedUser={(accountPkh as unknown) as string}
+                  existingTokenIds={existingTokenIds}
+                  setMintTransactionPendingCallback={setMintTransactionPendingCallback}
+                  mintTransactionPending={mintTransactionPending}
                 />
               ) : (
                 <Message>You are not the admin of this smart contract</Message>

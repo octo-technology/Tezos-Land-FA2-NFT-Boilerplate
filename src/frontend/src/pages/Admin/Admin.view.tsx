@@ -6,7 +6,7 @@ import { useAlert } from 'react-alert'
 // prettier-ignore
 import { AdminLandBottom, AdminLandButton, AdminLandCoordinateInput, AdminLandDescriptionInput, AdminLandFirstRow, AdminLandLocation, AdminLandNameInput, AdminLandStyled, AdminStyled } from "./Admin.style";
 
-type MintPorps = {
+type MintProps = {
   owner: string;
   landType: string;
   xCoordinates: number;
@@ -16,31 +16,36 @@ type MintPorps = {
 };
 
 type AdminViewProps = {
-  mintCallBack: (mintProps: MintPorps) => Promise<any>;
+  mintCallBack: (mintProps: MintProps) => Promise<any>;
+  setMintTransactionPendingCallback: (b: boolean) => void;
   connectedUser: string;
+  mintTransactionPending: boolean;
+  existingTokenIds: Array<number>;
 };
 
-export const AdminView = ({ mintCallBack, connectedUser }: AdminViewProps) => {
+export const AdminView = ({ mintCallBack, connectedUser, existingTokenIds, setMintTransactionPendingCallback, mintTransactionPending }: AdminViewProps) => {
   return (
     <AdminStyled>
-      <AdminLand mintCallBack={mintCallBack} connectedUser={connectedUser} />
+      <AdminLand mintCallBack={mintCallBack} connectedUser={connectedUser} existingTokenIds={existingTokenIds} mintTransactionPending={mintTransactionPending} setMintTransactionPendingCallback={setMintTransactionPendingCallback} />
     </AdminStyled>
   );
 };
 
-const AdminLand = ({ mintCallBack, connectedUser }: AdminViewProps) => {
+const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTransactionPendingCallback, mintTransactionPending }: AdminViewProps) => {
   const [landName, setName] = useState<string>("");
   const [landDescription, setDescription] = useState<string>("");
   const [xCoordinate, setXCoordinate] = useState<number>(0);
   const [yCoordinate, setYCoordinate] = useState<number>(0);
+  // const [mintTransactionPending, setMintTransactionPending] = useState<boolean>(false);
   const alert = useAlert()
-  
+
   return (
     <AdminLandStyled>
       <LandMap
         x={xCoordinate}
         y={yCoordinate}
         isAdmin={true}
+        existingTokenIds={existingTokenIds}
         setXCoordinatesCallback={setXCoordinate}
         setYCoordinatesCallback={setYCoordinate}
       />
@@ -90,18 +95,31 @@ const AdminLand = ({ mintCallBack, connectedUser }: AdminViewProps) => {
           placeholder="Description"
         />
         <AdminLandButton
-          onClick={() =>
-            mintCallBack({
-              owner: connectedUser,
-              landType: "land",
-              xCoordinates: xCoordinate,
-              yCoordinates: yCoordinate,
-              landName: landName,
-              description: landDescription,
-            }).catch((e: any) => {
-              alert.show(e.message)
-              console.error(e.message)
-            })
+          onClick={() => {
+            if (mintTransactionPending) {
+              alert.info("Cannot mint a new land while the previous one is not minted...")
+            } else
+              mintCallBack({
+                owner: connectedUser,
+                landType: "land",
+                xCoordinates: xCoordinate,
+                yCoordinates: yCoordinate,
+                landName: landName,
+                description: landDescription,
+              }).then(e => {
+                setMintTransactionPendingCallback(true)
+                alert.info("Minting a new land...")
+                e.confirmation().then((e: any) => {
+                  alert.success("New land minted")
+                  setMintTransactionPendingCallback(false)
+                  return e
+                })
+                return e
+              }).catch((e: any) => {
+                alert.show(e.message)
+                console.error(e.message)
+              })
+          }
           }
         >
           Mint a land

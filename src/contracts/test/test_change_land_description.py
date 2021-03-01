@@ -23,15 +23,17 @@ class TestChangeLandDescription(TestCase):
                     "description": "old description",
                     "position": [0, 0],
                     "isOwned": True,
+                    "owner": alice,
                     "onSale": False,
                     "price": 200,
                     "id": land_token_id}
-            lands = {land_token_id : land}
+            lands = {land_token_id: land}
             storage = self.get_storage(lands=lands,
                                        ledger={land_token_id: owner})
 
             # WHEN
-            self.nftContract.changeLandDescription({"token_id": land_token_id, "new_land_description": "new description"}).result(
+            self.nftContract.changeLandDescription(
+                {"token_id": land_token_id, "new_land_description": "new description"}).result(
                 storage=storage,
                 source=bob
             )
@@ -50,7 +52,8 @@ class TestChangeLandDescription(TestCase):
                                        ledger={land_token_id: owner})
 
             # WHEN
-            self.nftContract.changeLandDescription({"token_id": land_token_id, "new_land_description": "new description"}).result(
+            self.nftContract.changeLandDescription(
+                {"token_id": land_token_id, "new_land_description": "new description"}).result(
                 storage=storage,
                 source=owner
             )
@@ -74,15 +77,17 @@ class TestChangeLandDescription(TestCase):
                 "description": previous_description,
                 "position": position,
                 "isOwned": isOwned,
+                "owner": alice,
                 "onSale": onSale,
                 "price": price,
                 "id": land_token_id}
-        lands = {land_token_id : land}
+        lands = {land_token_id: land}
         storage = self.get_storage(lands=lands,
                                    ledger={land_token_id: owner})
 
         # WHEN
-        result = self.nftContract.changeLandDescription({"token_id": land_token_id, "new_land_description": new_description}).result(
+        result = self.nftContract.changeLandDescription(
+            {"token_id": land_token_id, "new_land_description": new_description}).result(
             storage=storage,
             source=owner
         )

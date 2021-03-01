@@ -2,7 +2,6 @@
 #define FA2_TLD_DEF_TOKEN
 
 #include "land_definition.mligo"
-#include "token_definition.mligo"
 #include "marketplace_definition.mligo"
 #include "../tzip-12/lib/fa2_operator_lib.mligo"
 
@@ -16,20 +15,14 @@ type marketplace_storage = {
   owners: owners;
 }
 
-
-type token_storage = {
-  token_defs : token_def set;
-  last_used_id : token_id;
-  metadata : nft_meta;
-}
-
 type ledger = (token_id, address) big_map
 
 type nft_token_storage = {
   ledger : ledger;
   operators : operator_storage;
-  metadata : token_storage;
+  metadata: contract_metadata;
   market : marketplace_storage;
+  token_metadata: token_metadata_storage;
 }
 
 #endif
