@@ -68,21 +68,20 @@ export const Buy = ({ setTransactionPendingCallback, transactionPending }: BuyPr
       const tokensOnSaleList = await Promise.all(
         tokenOnSaleIds.map(async (tokenId) => {
           const tokenRaw = await storage.market.lands.get(tokenId.toString());
-          const tokenOwner = await storage.ledger.get(tokenId.toString());
           const token: TokenOnSale = {
             name: tokenRaw.name,
             description: tokenRaw.description,
             position: {
-              x: tokenRaw.position[5].c[0],
-              y: tokenRaw.position[6].c[0],
+              x: tokenRaw.position[6].c[0],
+              y: tokenRaw.position[7].c[0],
             },
             landType: LandType.District, // TO FIX
             isOwned: tokenRaw.isOwned,
+            owner: tokenRaw.owner,
             onSale: tokenRaw.onSale,
             price: tokenRaw.price.c[0],
             id: tokenRaw.id.c[0],
-            owner: tokenOwner,
-            tokenOwnedByUser: accountPkh === tokenOwner,
+            tokenOwnedByUser: accountPkh === tokenRaw.owner,
           };
           return token;
         })
@@ -91,7 +90,7 @@ export const Buy = ({ setTransactionPendingCallback, transactionPending }: BuyPr
       setLoading(false);
     }
   }, [contract, accountPkh]);
-  
+
   useEffect(() => {
     loadStorage();
   }, [loadStorage]);

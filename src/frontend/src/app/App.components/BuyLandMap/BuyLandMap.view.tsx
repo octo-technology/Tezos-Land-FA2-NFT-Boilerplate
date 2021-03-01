@@ -40,9 +40,6 @@ export const BuyLandMap = ({
                 } else {
                   setSelectedTokenCallback(undefined)
                 }
-               console.log(landsOnSale)
-               console.log(tokenIdFromCoordinates)
-               console.log(selectedLand)
               }
             }}
           />

@@ -25,6 +25,7 @@ export type Token = {
   description?: string;
   position: Coordinates;
   isOwned: boolean;
+  owner: string;
   onSale: boolean;
   price: number;
   id: number;
@@ -74,10 +75,11 @@ export const Sell = ({ transactionPending, setTransactionPendingCallback }: Sell
                 name: tokenRaw.name,
                 description: tokenRaw.description,
                 position: {
-                  x: tokenRaw.position[5].c[0],
-                  y: tokenRaw.position[6].c[0],
+                  x: tokenRaw.position[6].c[0],
+                  y: tokenRaw.position[7].c[0],
                 },
                 isOwned: tokenRaw.isOwned,
+                owner: tokenRaw.owner,
                 onSale: tokenRaw.onSale,
                 price: tokenRaw.price, // TO FIX
                 id: tokenRaw.id.c[0],

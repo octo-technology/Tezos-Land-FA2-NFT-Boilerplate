@@ -61,17 +61,16 @@ export const Map = () => {
 
           const tokens = await Promise.all(tokenIds.map(async (tokenId) => {
             const tokenRaw = await storage.market.lands.get(tokenId.toString());
-            const tokenOwner = await storage.ledger.get(tokenId.toString());
             const token: Token = {
               name: tokenRaw.name,
               description: tokenRaw.description,
               position: {
-                x: tokenRaw.position[5].c[0],
-                y: tokenRaw.position[6].c[0]
+                x: tokenRaw.position[6].c[0],
+                y: tokenRaw.position[7].c[0]
               },
               landType: LandType.District,
               isOwned: tokenRaw.isOwned,
-              owner: tokenOwner,
+              owner: tokenRaw.owner,
               onSale: tokenRaw.onSale,
               price: tokenRaw.price,
               id: tokenRaw.id.c[0],

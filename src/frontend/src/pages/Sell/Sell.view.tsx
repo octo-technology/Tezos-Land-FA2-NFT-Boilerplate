@@ -42,16 +42,11 @@ const SellLand = ({ sellTokenCallback,
   myTokens }: SellViewProps) => {
   const [landPrice, setPrice] = useState<string>("");
   const [selectedToken, setSelectedToken] = useState<Token>(myTokens[0])
-
   var x = myTokens.length > 0 ? myTokens[0].position.x : 0
   var y = myTokens.length > 0 ? myTokens[0].position.y : 0
   const [xCoordinate, setXCoordinate] = useState<number>(x);
   const [yCoordinate, setYCoordinate] = useState<number>(y);
   const alert = useAlert()
-  console.log("****")
-  console.log(selectedToken)
-  console.log(myTokens)
-  console.log(myTokens.includes(selectedToken))
 
   return (
     <SellLandStyled>

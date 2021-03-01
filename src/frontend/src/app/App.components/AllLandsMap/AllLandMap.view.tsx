@@ -39,9 +39,6 @@ export const AllLandMap = ({
                 } else {
                   setSelectedTokenCallback(undefined)
                 }
-                console.log(selectedLand)
-                console.log(existingTokens)
-                console.log(existingTokens.filter( token => token.position.x == ix && token.position.y == iy))
               }
             }}
           />

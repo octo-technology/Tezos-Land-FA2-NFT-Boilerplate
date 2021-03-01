@@ -33,8 +33,6 @@ export const LandMap = ({
               if (setXCoordinatesCallback && setYCoordinatesCallback) {
                 setXCoordinatesCallback(ix);
                 setYCoordinatesCallback(iy);
-                console.log(existingTokenIds)
-                console.log(10 * iy + ix + 1)
               }
             }}
           />
