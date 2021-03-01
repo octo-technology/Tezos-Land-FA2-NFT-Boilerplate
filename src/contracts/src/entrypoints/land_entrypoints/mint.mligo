@@ -21,7 +21,7 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
         let ledger_with_minted_token = Big_map.add token_id p.owner s.ledger in
         let ledger_and_owners_are_consistent : bool = check_ownership_is_consistent_in_ledger_and_owners (({owner=p.owner; token_id=token_id} : ownership), ledger_with_minted_token, new_owners) in
         if ledger_and_owners_are_consistent then
-            let new_land = ({ name=p.name; description=p.description; position=p.coordinates; isOwned=true; price=(None:price option); onSale=false; id=token_id }:land) in
+            let new_land = ({ name=p.name; description=p.description; position=p.coordinates; isOwned=true; owner=p.owner; price=(None:price option); onSale=false; id=token_id }:land) in
             let lands_with_new_land = Big_map.add token_id new_land s.market.lands in
             let lands_ids_with_new_id = Set.add token_id s.market.landIds in
             match mint_param.operator with

@@ -34,25 +34,19 @@ class landContractTest(TestCase):
     def test_add_operator(self):
         result = self.nftContract.update_operators([{"add_operator": {"owner": alice, "operator": bob, "token_id": 1}}]
                                                    ).result(
-            storage={"market": {
-                                "lands": {},
-                                "landIds": [],
-                                "owners": {},
-                                "admin": "tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z",
-                                "height": 10, "width": 10,
-                                "sales":[]},
-                     "ledger": {1: alice},
-                     "operators": {},
-                     "metadata": {"token_defs": [{"from_": 1, "to_": 100}],
-                                  "last_used_id": 1,
-                                  "metadata": {(1, 100): {"token_id": 1,
-                                                          "symbol": "TLD",
-                                                          "name": "TezosLand",
-                                                          "decimals": 0,
-                                                          "extras": {}
-                                                          }
-                                               }}
-                     },
+            storage={
+                "market": {
+                    "lands": {},
+                    "landIds": [],
+                    "owners": {},
+                    "admin": "tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z",
+                    "height": 10, "width": 10,
+                    "sales": []},
+                "ledger": {1: alice},
+                "operators": {},
+                "metadata": {},
+                "token_metadata": {}
+            },
             source=alice
         )
         self.assertEqual(1, len(result.big_map_diff['operators'].keys()))
@@ -61,25 +55,19 @@ class landContractTest(TestCase):
     def test_add_operator_2(self):
         result = self.nftContract.update_operators([{"add_operator": {"owner": alice, "operator": bob, "token_id": 2}}]
                                                    ).result(
-            storage={"market": {
-                                "lands": {},
-                                "landIds": [],
-                                "owners": {},
-                                "admin": "tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z",
-                                "height": 10, "width": 10,
-                                "sales": []},
-                     "ledger": {1: alice},
-                     "operators": {(alice, bob, 1): None},
-                     "metadata": {"token_defs": [{"from_": 1, "to_": 100}],
-                                  "last_used_id": 1,
-                                  "metadata": {(1, 100): {"token_id": 1,
-                                                          "symbol": "TLD",
-                                                          "name": "TezosLand",
-                                                          "decimals": 0,
-                                                          "extras": {}
-                                                          }
-                                               }}
-                     },
+            storage={
+                "market": {
+                    "lands": {},
+                    "landIds": [],
+                    "owners": {},
+                    "admin": "tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z",
+                    "height": 10, "width": 10,
+                    "sales": []},
+                "ledger": {1: alice},
+                "operators": {(alice, bob, 1): None},
+                "metadata": {},
+                "token_metadata": {}
+            },
             source=alice
         )
         self.assertEqual(2, len(result.big_map_diff['operators'].keys()))
@@ -90,25 +78,19 @@ class landContractTest(TestCase):
         with self.assertRaises(MichelsonRuntimeError):
             self.nftContract.update_operators(
                 [{"add_operator": {"owner": alice, "operator": bob, "token_id": 1}}]).result(
-                storage={"market": {
-                                    "lands": {},
-                                    "landIds": [],
-                                    "owners": {},
-                                    "admin": "tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z",
-                                    "height": 10, "width": 10,
-                                    "sales": []},
-                         "ledger": {1: alice},
-                         "operators": {},
-                         "metadata": {"token_defs": [{"from_": 1, "to_": 100}],
-                                      "last_used_id": 1,
-                                      "metadata": {(1, 100): {"token_id": 1,
-                                                              "symbol": "TLD",
-                                                              "name": "TezosLand",
-                                                              "decimals": 0,
-                                                              "extras": {}
-                                                              }
-                                                   }}
-                         },
+                storage={
+                    "market": {
+                        "lands": {},
+                        "landIds": [],
+                        "owners": {},
+                        "admin": "tz1ibMpWS6n6MJn73nQHtK5f4ogyYC1z9T9z",
+                        "height": 10, "width": 10,
+                        "sales": []},
+                    "ledger": {1: alice},
+                    "operators": {},
+                    "metadata": {},
+                    "token_metadata": {}
+                },
                 source=bob
             )
     # why does it fail ?
@@ -189,6 +171,7 @@ class landContractTest(TestCase):
     #             },
     #             source = bob
     #         )
+
 
 if __name__ == '__main__':
     main()

@@ -1,7 +1,3 @@
-(**
-Implementation of the FA2 interface for the TLD contract supporting multiple
-types of NFTs. Each NFT type is represented by the range of token IDs - `token_def`.
- *)
 #if !FA2_TLD_TOKEN
 #define FA2_TLD_TOKEN
 
@@ -15,10 +11,10 @@ types of NFTs. Each NFT type is represented by the range of token IDs - `token_d
 
 type nft_entry_points =
     | Fa2 of fa2_entry_points
-    // | Metadata of fa2_token_metadata
     | Mint of mint_param
     | ChangeLandName of change_land_name_param
     | ChangeLandDescription of change_land_description_param
+    | UpdateMetadata of string
     | SellLand of sell_param
     | BuyLand of buy_param
     | WithdrawFromSale of withdraw_param
@@ -37,6 +33,7 @@ let main (param, storage : nft_entry_points * nft_token_storage)
     | Mint p -> mint(p,storage)
     | ChangeLandName p -> change_land_name(p, storage)
     | ChangeLandDescription p -> changeLandDescription(p, storage)
+    | UpdateMetadata p -> updateMetadata(p, storage)
     | SellLand p -> sell(p, storage)
     | BuyLand p -> buy(p, storage)
     | WithdrawFromSale p -> withdraw_from_sale(p, storage)

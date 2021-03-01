@@ -16,19 +16,11 @@ type marketplace_storage = {
   owners: owners;
 }
 
-
-type token_storage = {
-  token_defs : token_def set;
-  last_used_id : token_id;
-  metadata : nft_meta;
-}
-
 type ledger = (token_id, address) big_map
 
 type nft_token_storage = {
   ledger : ledger;
   operators : operator_storage;
-  // metadata_legacy : token_storage;
   metadata: contract_metadata;
   market : marketplace_storage;
   token_metadata: token_metadata_storage;

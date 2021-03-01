@@ -27,6 +27,7 @@ class TestSellLand(TestCase):
                 "description": description,
                 "position": position,
                 "isOwned": isOwned,
+                'owner': alice,
                 "onSale": onSale,
                 "price": None,
                 "id": token_id_sold_by_alice}
@@ -94,6 +95,7 @@ class TestSellLand(TestCase):
                     "description": description,
                     "position": position,
                     "isOwned": isOwned,
+                    'owner': alice,
                     "onSale": onSale,
                     "price": None,
                     "id": token_id_sold_by_alice}
@@ -128,6 +130,7 @@ class TestSellLand(TestCase):
                     "description": description,
                     "position": position,
                     "isOwned": isOwned,
+                    'owner': alice,
                     "onSale": onSale,
                     "price": None,
                     "id": token_id_sold_by_alice}

@@ -8,6 +8,7 @@ type land = {
     description: description;
     position: coordinates;
     isOwned: bool;
+    owner: address;
     onSale: bool;
     price: price option;
     id: nat

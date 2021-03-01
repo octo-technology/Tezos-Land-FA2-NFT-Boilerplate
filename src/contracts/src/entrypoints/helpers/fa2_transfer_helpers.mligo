@@ -11,22 +11,22 @@ permissions or constraints are violated.
 @param txs transfers to be applied to the ledger
 @param owner_validator function that validates of the tokens from the particular owner can be transferred.
  *)
-let transfer (txs, owner_validator, ops_storage, ledger, owners, emitter
-          : (transfer list) * operator_validator * operator_storage * ledger * owners * address option) : ledger * owners =
-  let make_transfer = (fun (l, tx : (ledger * owners) * transfer) ->
+let transfer (txs, owner_validator, ops_storage, ledger, owners, lands, emitter
+          : (transfer list) * operator_validator * operator_storage * ledger * owners * lands * address option) : ledger * owners * lands=
+  let make_transfer = (fun (l, tx : (ledger * owners * lands) * transfer) ->
     List.fold
-      (fun (ll, dst : (ledger * owners) * transfer_destination) ->
+      (fun (ll, dst : (ledger * owners * lands) * transfer_destination) ->
         if dst.amount = 0n
         then ll
         else if dst.amount <> 1n
-        then (failwith fa2_insufficient_balance : (ledger * owners))
+        then (failwith fa2_insufficient_balance : (ledger * owners * lands))
         else
           let owner = Big_map.find_opt dst.token_id ll.0 in
           match owner with
-          | None -> (failwith fa2_token_undefined : (ledger * owners))
+          | None -> (failwith fa2_token_undefined : (ledger * owners * lands))
           | Some o ->
             if o <> tx.from_
-            then (failwith fa2_insufficient_balance : (ledger * owners))
+            then (failwith fa2_insufficient_balance : (ledger * owners * lands))
             else
             let emmitter : address = match emitter with
             | Some e -> e
@@ -35,9 +35,10 @@ let transfer (txs, owner_validator, ops_storage, ledger, owners, emitter
             let u = owner_validator (o, emmitter, dst.token_id, ops_storage) in
             let ledger_with_transferred_token: ledger = Big_map.update dst.token_id (Some dst.to_) ll.0 in
             let new_owners: owners = transfer_token_in_owners (dst.token_id, o, dst.to_, ll.1) in
-            (ledger_with_transferred_token, new_owners)
+            let new_lands = set_new_land_owner(dst.token_id, dst.to_, ll.2) in
+            (ledger_with_transferred_token, new_owners, new_lands)
       ) tx.txs l
   )
   in
-  let ledger_and_owner = (ledger, owners) in
-  List.fold make_transfer txs ledger_and_owner
+  let ledger_owner_and_lands = (ledger, owners, lands) in
+  List.fold make_transfer txs ledger_owner_and_lands

@@ -1,7 +1,3 @@
-(**
-Implementation of the FA2 interface for the TLD contract supporting multiple
-types of NFTs. Each NFT type is represented by the range of token IDs - `token_def`.
- *)
 #if !FA2_TLD_TOKEN
 #define FA2_TLD_TOKEN
 
