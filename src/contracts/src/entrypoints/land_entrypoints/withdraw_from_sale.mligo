@@ -1,7 +1,8 @@
 type withdraw_param = sale
 
 (**
-Withdraw the land on sale from the "on_sale" list and removes this contract as an operator for this tokenœ
+Withdraw the land on sale from the "on_sale" list and removes this contract as an operator for this token
+A check is carried out: the land must be on sale. Only the owner of the token can cancel the sale
 @return storage with modified operators and on_sale lists
 *)
 let withdraw_from_sale (withdraw_param, storage : withdraw_param * nft_token_storage) : (operation  list) * nft_token_storage =

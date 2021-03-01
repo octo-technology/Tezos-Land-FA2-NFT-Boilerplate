@@ -6,7 +6,9 @@ type mint_param = {
     operator: address option;
 }
 (**
-Create a land, and a token (they both have the same id), associate token to given owner, (and possibly setup an operator for this newly minted token)
+Create a land, and a token (they both have the same id), associate token to given owner, (and possibly setup an operator for this newly minted token).
+Several checks are carried out: the token must be within the market range (width and height) and must be a new token (and not an already existing token).
+Only the administrator, defined in the storage (market/admin), can execute this entrypoint 
 @return storage with new token, and operators
 *)
 let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list) * nft_token_storage =

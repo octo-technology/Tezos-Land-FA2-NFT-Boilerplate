@@ -1,6 +1,8 @@
 type sell_param = sale
 (**
 Put the land on sale in the "on_sale" list and add this contract as an operator for this token
+Several checks are carried out: the token must exist and must not be on sale.
+Only the owner of the token can put it on sale
 @return storage with modified operators and on_sale lists
 *)
 let sell (sell_params, storage : sell_param * nft_token_storage) : (operation  list) * nft_token_storage =

@@ -12,8 +12,6 @@
 type nft_entry_points =
     | Fa2 of fa2_entry_points
     | Mint of mint_param
-    | ChangeLandName of change_land_name_param
-    | ChangeLandDescription of change_land_description_param
     | UpdateMetadata of string
     | SellLand of sell_param
     | BuyLand of buy_param
@@ -31,8 +29,6 @@ let main (param, storage : nft_entry_points * nft_token_storage)
     match param with
     | Fa2 fa2 -> fa2_main (fa2, storage)
     | Mint p -> mint(p,storage)
-    | ChangeLandName p -> change_land_name(p, storage)
-    | ChangeLandDescription p -> changeLandDescription(p, storage)
     | UpdateMetadata p -> updateMetadata(p, storage)
     | SellLand p -> sell(p, storage)
     | BuyLand p -> buy(p, storage)

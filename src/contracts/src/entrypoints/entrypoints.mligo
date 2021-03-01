@@ -9,8 +9,6 @@
 #include "land_entrypoints/sell.mligo"
 #include "land_entrypoints/withdraw_from_sale.mligo"
 #include "land_entrypoints/mint.mligo"
-#include "land_entrypoints/change_land_description.mligo"
-#include "land_entrypoints/change_land_name.mligo"
 #include "FA2_entrypoints/balance.mligo"
 #include "FA2_entrypoints/transfer.mligo"
 #include "FA2_entrypoints/update_operators.mligo"

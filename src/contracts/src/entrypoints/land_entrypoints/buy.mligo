@@ -1,7 +1,8 @@
 type buy_param = sale
 
 (**
-Buy a land from the on_sale list, and transfer it to the buyer
+Buy a land from the on_sale list, and transfer it to the buyer.
+Several checks are carried out: the land must be on sale, owned by someone and must exist. The amount sent must match the land price
 @return storage with modified operators and on_sale lists
 *)
 let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  list) * nft_token_storage =
