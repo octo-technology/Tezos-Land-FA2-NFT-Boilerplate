@@ -29,7 +29,7 @@ const empty_ledger = new MichelsonMap()
 const empty_operators = new MichelsonMap()
 
 // Set TZIP-16 contract metadata, with a JSON Blob
-metadata.set("", web3.utils.asciiToHex("https://ipfs.io/ipfs/QmaqGDgx4nVYPHnNHTPYD3Uz3KrXx1JBamr4qkC6j5K6vd").slice(2));
+metadata.set("", web3.utils.asciiToHex("https://tezosland.io/metadata/contract_metadata.json").slice(2));
 
 // Set TZIP-16 token metadata with a JSON Blob
 // token_info.set(
