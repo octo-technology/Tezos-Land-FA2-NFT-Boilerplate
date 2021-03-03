@@ -34,9 +34,14 @@ export type Token = {
 type SellProp = {
   setTransactionPendingCallback: (b: boolean) => void;
   transactionPending: boolean;
+  setSelectedTokenCallback: (token: any) => void;
+  selectedToken: any;
 };
 
-export const Sell = ({ transactionPending, setTransactionPendingCallback }: SellProp) => {
+export const Sell = ({
+  transactionPending,
+  setTransactionPendingCallback,
+  setSelectedTokenCallback, selectedToken }: SellProp) => {
   const wallet = useWallet();
   const ready = useReady();
   const tezos = useTezos();
@@ -45,6 +50,7 @@ export const Sell = ({ transactionPending, setTransactionPendingCallback }: Sell
   const [myTokens, setMyTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const alert = useAlert()
+
 
   useEffect(() => {
     (async () => {
@@ -88,6 +94,7 @@ export const Sell = ({ transactionPending, setTransactionPendingCallback }: Sell
             })
           );
           setMyTokens(myTokens);
+          setSelectedTokenCallback(!!selectedToken ? selectedToken : myTokens[0])
           setLoading(false);
         }
       } catch (e) {
@@ -95,12 +102,12 @@ export const Sell = ({ transactionPending, setTransactionPendingCallback }: Sell
         setLoading(false);
       }
     }
-  }, [alert, contract, accountPkh]);
+  }, [alert, contract, accountPkh, transactionPending]);
 
   useEffect(() => {
     loadStorage();
-  }, [loadStorage]);
-  
+  }, [loadStorage, transactionPending, alert]);
+
   useOnBlock(tezos, loadStorage)
 
   type SellToken = { token_id: number; price: number };
@@ -133,6 +140,8 @@ export const Sell = ({ transactionPending, setTransactionPendingCallback }: Sell
                   myTokens={myTokens}
                   transactionPending={transactionPending}
                   setTransactionPendingCallback={setTransactionPendingCallback}
+                  setSelectedTokenCallback={setSelectedTokenCallback}
+                  selectedToken={selectedToken}
                 />
               ) : (
                   <div>
