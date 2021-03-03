@@ -97,7 +97,7 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
         <AdminLandButton
           onClick={() => {
             if (mintTransactionPending) {
-              alert.info("Cannot mint a new land while the previous one is not minted...")
+              alert.info("Cannot mint a new land while the previous one is not minted...", {timeout: 10000})
             } else
               mintCallBack({
                 owner: connectedUser,
@@ -110,8 +110,11 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
                 setMintTransactionPendingCallback(true)
                 alert.info("Minting a new land...")
                 e.confirmation().then((e: any) => {
-                  alert.success("New land minted")
-                  setMintTransactionPendingCallback(false)
+                  alert.success("New land minted", {
+                    onOpen: () => {
+                      setMintTransactionPendingCallback(false)
+                    }
+                  })
                   return e
                 })
                 return e

@@ -14,28 +14,43 @@ type BuyProps = {
 type BuyViewProps = {
   buyTokenCallback: (sellProps: BuyProps) => Promise<any>;
   setTransactionPendingCallback: (b: boolean) => void;
+  setSelectedTokenCallback: (p : any) => void;
+  selectedToken: any;
   transactionPending: boolean;
   tokensOnSale: TokenOnSale[];
   connectedUser: string;
 };
 
-export const BuyView = ({ buyTokenCallback: buyTokenCallback, tokensOnSale, connectedUser, setTransactionPendingCallback, transactionPending }: BuyViewProps) => {
+export const BuyView = ({ buyTokenCallback: buyTokenCallback, tokensOnSale, connectedUser, setTransactionPendingCallback, transactionPending, selectedToken, setSelectedTokenCallback }: BuyViewProps) => {
   return (
     <BuyStyled>
       <BuyLand buyTokenCallback={buyTokenCallback}
         tokensOnSale={tokensOnSale}
         connectedUser={connectedUser}
         transactionPending={transactionPending}
-        setTransactionPendingCallback={setTransactionPendingCallback} />
+        setTransactionPendingCallback={setTransactionPendingCallback}
+        setSelectedTokenCallback={setSelectedTokenCallback}
+        selectedToken={selectedToken}
+        />
     </BuyStyled>
   );
 };
 
 const BuyLand = ({ buyTokenCallback: buyTokenCallback,
-  tokensOnSale, connectedUser, transactionPending, setTransactionPendingCallback }: BuyViewProps) => {
-  const [xCoordinate, setXCoordinate] = useState<number>(0);
-  const [yCoordinate, setYCoordinate] = useState<number>(0);
-  const [selectedToken, setSelectedToken] = useState<any>(tokensOnSale[0]);
+  tokensOnSale, connectedUser, transactionPending, setTransactionPendingCallback, selectedToken, setSelectedTokenCallback }: BuyViewProps) => {
+  const [xCoordinate, setXCoordinate] = useState<number>(tokensOnSale[0].position.x);
+  const [yCoordinate, setYCoordinate] = useState<number>(tokensOnSale[0].position.y);
+  React.useEffect(() => {
+    if (!!selectedToken){
+        var selectedTokenOwned = tokensOnSale.filter(token => token.id === yCoordinate * 10 + xCoordinate + 1)
+        if (selectedTokenOwned.length > 0){
+          setSelectedTokenCallback(selectedTokenOwned[0])
+        } else {
+          setSelectedTokenCallback(undefined)
+        }
+    }
+
+  }, [selectedToken, tokensOnSale])
   const alert = useAlert()
 
   return (
@@ -46,7 +61,7 @@ const BuyLand = ({ buyTokenCallback: buyTokenCallback,
         landsOnSale={tokensOnSale}
         setXCoordinatesCallback={setXCoordinate}
         setYCoordinatesCallback={setYCoordinate}
-        setSelectedTokenCallback={setSelectedToken}
+        setSelectedTokenCallback={setSelectedTokenCallback}
       />
 
       <BuyLandBottom>
@@ -108,8 +123,13 @@ const BuyLand = ({ buyTokenCallback: buyTokenCallback,
                       alert.info("Buying land ...")
                       setTransactionPendingCallback(true)
                       e.confirmation().then((e: any) => {
-                        alert.success("Land bought")
-                        setTransactionPendingCallback(false)
+                        alert.success("Land bought", {
+                          onOpen: () => {
+                            setSelectedTokenCallback({ ...selectedToken, onSale: false });
+                            setTransactionPendingCallback(false)
+                          }
+                        })
+
                         return e
                       })
                       return e

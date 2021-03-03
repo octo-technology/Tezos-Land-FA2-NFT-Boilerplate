@@ -33,9 +33,9 @@ export const SellLandMap = ({
                 var tokenIdFromCoordinates = 10 * iy + ix + 1;
                 setXCoordinatesCallback(ix);
                 setYCoordinatesCallback(iy);
-                var selectedLand = landsOwned.find(land => land.id == tokenIdFromCoordinates)
-                if (!!selectedLand) {
-                  setSelectedTokenCallback(selectedLand)
+                var selectedLandFromCoordinates = landsOwned.find(land => land.id == tokenIdFromCoordinates)
+                if (!!selectedLandFromCoordinates) {
+                  setSelectedTokenCallback({...selectedLandFromCoordinates})
                 } else {
                   setSelectedTokenCallback(undefined)
                 }

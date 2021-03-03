@@ -45,6 +45,7 @@ export const Buy = ({ setTransactionPendingCallback, transactionPending }: BuyPr
   const accountPkh = useAccountPkh();
   const [contract, setContract] = useState(undefined);
   const [tokensOnSale, setTokensOnSale] = useState<TokenOnSale[]>([]);
+  const [selectedToken, setSelectedToken] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -87,13 +88,14 @@ export const Buy = ({ setTransactionPendingCallback, transactionPending }: BuyPr
         })
       );
       setTokensOnSale(tokensOnSaleList);
+      setSelectedToken(tokensOnSaleList[0]);
       setLoading(false);
     }
-  }, [contract, accountPkh]);
+  }, [contract, accountPkh, transactionPending]);
 
   useEffect(() => {
     loadStorage();
-  }, [loadStorage]);
+  }, [loadStorage, transactionPending]);
 
   useOnBlock(tezos, loadStorage)
 
@@ -120,6 +122,8 @@ export const Buy = ({ setTransactionPendingCallback, transactionPending }: BuyPr
                   connectedUser={(accountPkh as unknown) as string}
                   transactionPending={transactionPending}
                   setTransactionPendingCallback={setTransactionPendingCallback}
+                  selectedToken={selectedToken}
+                  setSelectedTokenCallback={setSelectedToken}
                 />
               ) : (
                   <div>

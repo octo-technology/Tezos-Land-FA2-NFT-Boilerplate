@@ -23,6 +23,7 @@ const options = {
 
 export const App = () => {
   const [transactionPending, setTransactionPending] = useState<boolean>(false);
+  const [selectedToken, setSelectedToken] = useState<any>(undefined);
   return (
     <Router>
       <Provider template={AlertTemplate} {...options}>
@@ -42,7 +43,10 @@ export const App = () => {
                   <Buy transactionPending={transactionPending} setTransactionPendingCallback={setTransactionPending} />
                 </Route>
                 <Route exact path="/sell">
-                  <Sell transactionPending={transactionPending} setTransactionPendingCallback={setTransactionPending} />
+                  <Sell transactionPending={transactionPending}
+                        setTransactionPendingCallback={setTransactionPending} 
+                        setSelectedTokenCallback={setSelectedToken}
+                        selectedToken={selectedToken}/>
                 </Route>
                 <Route exact path="/map">
                   <Map />
