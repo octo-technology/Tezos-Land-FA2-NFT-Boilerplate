@@ -28,6 +28,12 @@ export const SellLandSecondRow = styled.div`
   margin-top: 10px;
 `;
 
+export const SellLandThirdRow = styled.div`
+  position: relative;
+  margin-top: 8px;
+  width: 500px;
+`;
+
 export const SellLandLocation = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr 2fr;
@@ -46,6 +52,46 @@ export const SellLandLocation = styled.div`
     margin-top: 6px;
   }
 `;
+
+export const SellLandId = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 1px;
+  height: 25px;
+  width: 80px;
+  line-height: 25px;
+  border-radius: 5px;
+  background-color: #4c5170;
+  margin-top: 10px;
+
+  > svg {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 3px;
+    margin-top: 2px;
+  }
+`;
+
+export const SellLandOwner = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 1px;
+  height: 25px;
+  width: 300px;
+  line-height: 25px;
+  border-radius: 5px;
+  background-color: #4c5170;
+  margin-top: 10px;
+  > svg {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 3px;
+    margin-top: 2px;
+  }
+`;
+
 
 export const SellLandCoordinateInput = styled.input`
   height: 25px;
@@ -74,6 +120,22 @@ export const SellLandPriceInput = styled.input`
   border-radius: 5px;
   font-size: 11px;
 
+  ::placeholder {
+    color: "#727272";
+    font-size: 11px;
+  }
+`;
+
+export const CancelLandInput = styled.input`
+  height: 30px;
+  width: 100%;
+  margin-top: 5px;
+  background-color: #202337;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 5px;
+  font-size: 11px;
+  pointer-events: none;
   ::placeholder {
     color: "#727272";
     font-size: 11px;

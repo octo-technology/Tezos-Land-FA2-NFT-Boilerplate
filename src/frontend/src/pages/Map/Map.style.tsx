@@ -27,6 +27,12 @@ export const MapLandSecondRow = styled.div`
   width: 500px;
 `;
 
+export const MapLandThirdRow = styled.div`
+  position: relative;
+  margin-top: 8px;
+  width: 500px;
+`;
+
 export const MapLandLocation = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr 2fr;
@@ -45,6 +51,47 @@ export const MapLandLocation = styled.div`
     margin-top: 6px;
   }
 `;
+
+export const MapLandId = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 1px;
+  height: 25px;
+  width: 80px;
+  line-height: 25px;
+  border-radius: 5px;
+  background-color: #4c5170;
+  margin-top: 10px;
+
+  > svg {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 3px;
+    margin-top: 2px;
+  }
+`;
+
+export const MapLandOwner = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 1px;
+  height: 25px;
+  width: 320px;
+  line-height: 25px;
+  border-radius: 5px;
+  background-color: #4c5170;
+  margin-top: 10px;
+  padding-right: 2px;
+  > svg {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 3px;
+    margin-top: 2px;
+  }
+`;
+
 
 export const MapLandCoordinateInput = styled.input`
   height: 25px;
@@ -72,7 +119,7 @@ export const MapLandNameInput = styled.input`
   border: 0;
   border-radius: 5px;
   font-size: 11px;
-
+  pointer-events: none;
   ::placeholder {
     color: "#727272";
     font-size: 11px;
@@ -89,7 +136,7 @@ export const MapLandDescriptionInput = styled.input`
   border-radius: 5px;
   font-size: 11px;
   text-align: left top;
-
+  pointer-events: none;
   ::placeholder {
     color: "#727272";
     font-size: 11px;

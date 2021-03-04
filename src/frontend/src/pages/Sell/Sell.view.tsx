@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAlert } from 'react-alert'
 import { Token } from "./Sell.controller";
 // prettier-ignore
-import { SellLandBottom, SellLandSecondRow, CancelSaleButton, SellLandButton, SellLandCoordinateInput, SellLandFirstRow, SellLandLocation, SellLandPriceInput, SellLandStyled, SellStyled } from "./Sell.style";
+import { SellLandBottom, SellLandSecondRow, SellLandId, SellLandOwner, CancelLandInput, CancelSaleButton, SellLandButton, SellLandCoordinateInput, SellLandFirstRow, SellLandLocation, SellLandPriceInput, SellLandStyled, SellStyled, SellLandThirdRow } from "./Sell.style";
 
 type SellPorps = {
   token_id: number;
@@ -107,11 +107,19 @@ const SellLand = ({ sellTokenCallback,
             ></SellLandCoordinateInput>
           </SellLandLocation>
         </SellLandFirstRow>
+        <SellLandThirdRow>
+          <SellLandId>
+          <svg>
+              <use xlinkHref="/icons/sprites.svg#location" />
+            </svg>
+            <div>{`${xCoordinate + 1 + 10 * yCoordinate}`}</div>
+          </SellLandId>
+        </SellLandThirdRow>
 
         <SellLandSecondRow>
           {myTokens.filter(token => !!selectedToken ? token.id === selectedToken.id : false).length === 0 ? (<> You don't own this land </>) :
             (<> {selectedToken.onSale ? (
-              <><SellLandPriceInput
+              <><CancelLandInput
                 value={selectedToken.price / 1000000 + " ꜩ"}
                 placeholder="Price (ꜩ)"
               />

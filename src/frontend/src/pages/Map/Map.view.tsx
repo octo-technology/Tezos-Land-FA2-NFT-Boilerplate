@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAlert } from 'react-alert'
 import { Token } from "./Map.controller";
 // prettier-ignore
-import { MapLandBottom, MapLandSecondRow ,MapLandCoordinateInput, MapLandDescriptionInput, MapLandFirstRow, MapLandLocation, MapLandNameInput, MapLandStyled, MapStyled } from "./Map.style";
+import { MapLandBottom, MapLandSecondRow , MapLandThirdRow, MapLandOwner, MapLandId, MapLandCoordinateInput, MapLandDescriptionInput, MapLandFirstRow, MapLandLocation, MapLandNameInput, MapLandStyled, MapStyled } from "./Map.style";
 
 type MapViewProps = {
   existingTokens: Token[];
@@ -69,8 +69,26 @@ const MapLand = ({ existingTokens }: MapViewProps) => {
             ></MapLandCoordinateInput>
           </MapLandLocation>
         </MapLandFirstRow>
+        <MapLandThirdRow>
+        <MapLandId>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#location" />
+            </svg>
+            <div>{`${xCoordinate + 1 + 10 * yCoordinate}`}</div>
+        </MapLandId>
+        </MapLandThirdRow>
+      
         <MapLandSecondRow>
-        {selectedToken === undefined ? "This land does not exist" : selectedToken.owner}
+        {selectedToken === undefined ? (<>This land does not exist </>) : (<> 
+        <MapLandOwner>
+        <svg>
+              <use xlinkHref="/icons/sprites.svg#location" />
+            </svg>
+            <div>{`${selectedToken.owner}`}</div>
+        </MapLandOwner>
+        
+        </>)
+          }
         </MapLandSecondRow>
         <MapLandNameInput
           value={selectedToken === undefined ? "" : selectedToken.name}

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAlert } from 'react-alert'
 import { TokenOnSale } from "./Buy.controller";
 // prettier-ignore
-import { BuyLandBottom, BuyOwnerDiv, BuyLandSecondRow, BuyLandThirdRow, BuyLandButton, BuyLandCoordinateInput, BuyLandFirstRow, BuyLandLocation, BuyLandPriceInput, BuyLandStyled as BuyLandStyled, BuyStyled as BuyStyled } from "./Buy.style";
+import { BuyLandBottom, BuyOwnerDiv, BuyLandSecondRow, BuyLandThirdRow, BuyLandButton, BuyLandCoordinateInput, BuyLandFirstRow, BuyLandLocation, BuyLandPriceInput, BuyLandStyled as BuyLandStyled, BuyStyled as BuyStyled, BuyLandOwner, BuyLandFourthRow, BuyLandId } from "./Buy.style";
 
 type BuyProps = {
   token_id: number;
@@ -98,9 +98,25 @@ const BuyLand = ({ buyTokenCallback: buyTokenCallback,
             ></BuyLandCoordinateInput>
           </BuyLandLocation>
         </BuyLandFirstRow>
+        <BuyLandFourthRow>
+            <BuyLandId>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#location" />
+            </svg>
+            <div>{`${xCoordinate + 1 + 10 * yCoordinate}`}</div>
+            </BuyLandId>
+        </BuyLandFourthRow>
         <BuyLandSecondRow>
           <BuyOwnerDiv>
-            {selectedToken == undefined ? "" : selectedToken.owner}
+            {selectedToken == undefined ? "" :  (<> 
+        <BuyLandOwner>
+        <svg>
+              <use xlinkHref="/icons/sprites.svg#location" />
+            </svg>
+            <div>{`${selectedToken.owner}`}</div>
+        </BuyLandOwner>
+        
+        </>)}
           </BuyOwnerDiv>
         </BuyLandSecondRow>
         <BuyLandThirdRow>

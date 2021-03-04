@@ -36,7 +36,6 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
   const [landDescription, setDescription] = useState<string>("");
   const [xCoordinate, setXCoordinate] = useState<number>(0);
   const [yCoordinate, setYCoordinate] = useState<number>(0);
-  // const [mintTransactionPending, setMintTransactionPending] = useState<boolean>(false);
   const alert = useAlert()
 
   return (

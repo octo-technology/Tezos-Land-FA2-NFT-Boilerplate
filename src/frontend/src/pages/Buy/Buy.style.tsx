@@ -33,6 +33,12 @@ export const BuyLandThirdRow = styled.div`
   margin-top: 10px;
 `;
 
+export const BuyLandFourthRow = styled.div`
+position: relative;
+margin-top: 8px;
+width: 500px;
+`;
+
 export const BuyLandLocation = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr 2fr;
@@ -86,12 +92,54 @@ export const BuyLandPriceInput = styled.input`
   border: 0;
   border-radius: 5px;
   font-size: 11px;
+  pointer-events: none;
 
   ::placeholder {
     color: "#727272";
     font-size: 11px;
   }
 `;
+
+export const BuyLandId = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 1px;
+  height: 25px;
+  width: 80px;
+  line-height: 25px;
+  border-radius: 5px;
+  background-color: #4c5170;
+  margin-top: 10px;
+
+  > svg {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 3px;
+    margin-top: 2px;
+  }
+`;
+
+export const BuyLandOwner = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 1px;
+  height: 25px;
+  width: 320px;
+  line-height: 25px;
+  border-radius: 5px;
+  background-color: #4c5170;
+  margin-top: 10px;
+  padding-right: 2px;
+  > svg {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 3px;
+    margin-top: 2px;
+  }
+`;
+
 
 export const BuyLandButton = styled.button`
   height: 30px;
