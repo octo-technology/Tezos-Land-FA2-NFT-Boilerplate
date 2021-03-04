@@ -19,7 +19,7 @@ import {
   BuyStyled
 } from "./Buy.style";
 
-import {Button} from "../../app/App.components/Button/Button.controller"
+import {Button} from "../../app/App.components/TinyButton/Button.controller"
 
 
 type BuyProps = {
@@ -105,42 +105,43 @@ const BuyLand = ({
           {tokenOnSale.tokenOwnedByUser ? (
             <div>You are the owner</div>
           ) : (
-              <BuyLandButton
-                onClick={() => {
-                  if (transactionPending) {
-                    alert.info("A transaction is pending. Try again later")
-                    console.info("A transaction is pending. Try again later")
-                  } else {
-                    buyTokenCallback({
-                      token_id: tokenOnSale.id,
-                      price: tokenOnSale.price,
-                    }).then(e => {
-                      alert.info("Buying land ...")
-                      setTransactionPendingCallback(true)
-                      e.confirmation().then((e: any) => {
-                        alert.success("Land bought", {
-                          onOpen: () => {
-                            setTransactionPendingCallback(false)
-                          }
-                        })
+<Button
+          text={"Buy this land"}
+          color={"primary"}
+          onClick={() => {
+            if (transactionPending) {
+              alert.info("A transaction is pending. Try again later")
+              console.info("A transaction is pending. Try again later")
+            } else {
+              buyTokenCallback({
+                token_id: tokenOnSale.id,
+                price: tokenOnSale.price,
+              }).then(e => {
+                alert.info("Buying land ...")
+                setTransactionPendingCallback(true)
+                e.confirmation().then((e: any) => {
+                  alert.success("Land bought", {
+                    onOpen: () => {
+                      setTransactionPendingCallback(false)
+                    }
+                  })
 
-                        return e
-                      })
-                      return e
-                    }).catch((e: any) => {
-                      alert.show(e.message)
-                      console.error(e.message)
-                    })
+                  return e
+                })
+                return e
+              }).catch((e: any) => {
+                alert.show(e.message)
+                console.error(e.message)
+              })
 
-                  }
-                }
+            }
+          }
 
-                }
-              >
-                Buy
-              </BuyLandButton>
+          }
+          loading={transactionPending} />
             )}
         </BuyLandFourthRow>
+        
       </BuyLandBottom>
     </BuyLandStyled>
   );

@@ -8,7 +8,6 @@ import { Token } from "./Sell.controller";
 import {
   CancelSaleButton,
   SellLandBottom,
-  SellLandButton,
   SellLandLocation,
   SellLandOnSale,
   SellLandPriceInput,
@@ -21,6 +20,7 @@ import {
   SellLandId,
   SellLandOwner
 } from "./Sell.style";
+import { Button } from "../../app/App.components/TinyButton/Button.controller"
 
 type SellProps = {
   token_id: number;
@@ -118,37 +118,38 @@ const SellLand = ({
         <SellLandFourthRow>
           {myToken.onSale ? (
             <>
-              <CancelSaleButton
-                onClick={() => {
-                  if (transactionPending) {
-                    alert.info("A transaction is pending. Try again later")
-                    console.info("A transaction is pending. Try again later")
-                  } else {
-                    cancelSaleCallback({
-                      token_id: myToken.id,
-                      price: myToken.price,
-                    }).then(e => {
-                      alert.info("Removing land from sales ...")
-                      setTransactionPendingCallback(true)
-                      e.confirmation().then((e: any) => {
-                        alert.success("Land is not on sale anymore", {
-                          onOpen: () => {
-                            setTransactionPendingCallback(false)
-                          }
+               <Button
+                  text={"Cancel Sale"}
+                  color={"primary"}
+                  width={"210%"}
+                  onClick={() => {
+                    if (transactionPending) {
+                      alert.info("A transaction is pending. Try again later")
+                      console.info("A transaction is pending. Try again later")
+                    } else {
+                      cancelSaleCallback({
+                        token_id: myToken.id,
+                        price: myToken.price,
+                      }).then(e => {
+                        alert.info("Removing land from sales ...")
+                        setTransactionPendingCallback(true)
+                        e.confirmation().then((e: any) => {
+                          alert.success("Land is not on sale anymore", {
+                            onOpen: () => {
+                              setTransactionPendingCallback(false)
+                            }
+                          })
+                          return e
                         })
                         return e
+                      }).catch((e: any) => {
+                        alert.show(e.message)
+                        console.error(e.message)
                       })
-                      return e
-                    }).catch((e: any) => {
-                      alert.show(e.message)
-                      console.error(e.message)
-                    })
+                    }
                   }
-                }
-                }
-              >
-                Cancel sale
-              </CancelSaleButton>
+                  }
+                  loading={transactionPending} />
             </>
           ) : (
               <>
@@ -157,7 +158,9 @@ const SellLand = ({
                   onChange={(e) => setPrice(e.target.value)}
                   placeholder="Enter price"
                 />
-                <SellLandButton
+                <Button
+                  text={"Sell this land"}
+                  color={"primary"}
                   onClick={() => {
                     if (transactionPending) {
                       alert.info("A transaction is pending. Try again later")
@@ -185,9 +188,7 @@ const SellLand = ({
                     }
                   }
                   }
-                >
-                  Sell
-              </SellLandButton>
+                  loading={transactionPending} />
               </>
             )}
         </SellLandFourthRow>

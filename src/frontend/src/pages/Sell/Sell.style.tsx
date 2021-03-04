@@ -123,7 +123,7 @@ export const SellLandOnSale = styled.div<{ isOnSale: boolean }>`
 `;
 
 export const SellLandPriceInput = styled.input`
-  height: 20px;
+  height: 25px;
   width: 100%;
   background-color: #202337;
   box-sizing: border-box;

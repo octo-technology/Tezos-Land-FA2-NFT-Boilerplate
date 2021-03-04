@@ -11,16 +11,16 @@ export const clickWave = keyframes`
   }
 `
 
-export const ButtonStyled = styled.button`
-  height: 36px;
+export const ButtonStyled = styled.button<{ width?: string }>`
+  height: 25px;
   border: none;
   font-family: 'Proxima Nova', Helvetica, Arial, sans-serif;
   font-weight: normal;
-  font-size: 14px;
+  font-size: 11px;
   cursor: pointer;
   border-radius: 6px;
   will-change: box-shadow;
-  width: 100%;
+  width: ${(props) => (props.width ? props.width : "100%")};;
   user-select: none;
 
   &.clicked {
@@ -53,7 +53,7 @@ export const ButtonText = styled.div`
   text-align: center;
   margin: auto;
   display: inline-block;
-  line-height: 36px;
+  line-height: 20px;
 `
 
 export const ButtonIcon = styled.svg`
@@ -89,8 +89,8 @@ const path = keyframes`
 `
 
 export const ButtonLoadingIcon = styled.svg`
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   margin-left: 15px;
   vertical-align: sub;
   stroke: ${textColor};
