@@ -61,10 +61,10 @@ export const MapLandLocation = styled.div`
 
   > svg {
     display: inline-block;
-    width: 24px;
-    height: 24px;
-    margin: 4px;
-    margin-top: 6px;
+    width: 20px;
+    height: 20px;
+    margin: 3px;
+    margin-top: 10px;
     stroke: white;
   }
 `;
