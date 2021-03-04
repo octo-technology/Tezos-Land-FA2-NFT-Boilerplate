@@ -1,11 +1,11 @@
-import { LandMap } from "app/App.components/LandMap/LandMap.view";
+import { LandMap } from "app/App.components/AdminLandMap/AdminLandMap.view";
 import * as React from "react";
 import { useState } from "react";
 import { useAlert } from 'react-alert'
 
 // prettier-ignore
 import { AdminLandBottom, AdminLandButton, AdminLandCoordinateInput, AdminLandDescriptionInput, AdminLandFirstRow, AdminLandLocation, AdminLandNameInput, AdminLandStyled, AdminStyled } from "./Admin.style";
-
+import { Button } from "../../app/App.components/Button/Button.controller"
 type MintProps = {
   owner: string;
   landType: string;
@@ -93,10 +93,13 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description"
         />
-        <AdminLandButton
+        <Button
+          text={"Mint a land"}
+          color={"primary"}
+          icon={"mint"}
           onClick={() => {
             if (mintTransactionPending) {
-              alert.info("Cannot mint a new land while the previous one is not minted...", {timeout: 10000})
+              alert.info("Cannot mint a new land while the previous one is not minted...", { timeout: 10000 })
             } else
               mintCallBack({
                 owner: connectedUser,
@@ -123,9 +126,8 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
               })
           }
           }
-        >
-          Mint a land
-        </AdminLandButton>
+          loading={mintTransactionPending} />
+
       </AdminLandBottom>
     </AdminLandStyled>
   );

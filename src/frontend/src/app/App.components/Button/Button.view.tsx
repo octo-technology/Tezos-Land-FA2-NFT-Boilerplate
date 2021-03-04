@@ -33,7 +33,7 @@ export const ButtonView = ({ text, icon, color, onClick, clickCallback, clicked,
           <>
             Loading
             <ButtonLoadingIcon>
-              <use xlinkHref="/icons/sprites.svg#circle" />
+              <use xlinkHref="/icons/sprites.svg#mint" />
             </ButtonLoadingIcon>
           </>
         ) : (
