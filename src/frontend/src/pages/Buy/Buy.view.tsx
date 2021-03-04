@@ -1,10 +1,26 @@
-import { BuyLandMap } from "app/App.components/BuyLandMap/BuyLandMap.view";
+import { LandMap } from "app/App.components/LandMap/LandMap.view";
 import * as React from "react";
-import { useState } from "react";
 import { useAlert } from 'react-alert'
+
 import { TokenOnSale } from "./Buy.controller";
 // prettier-ignore
-import { BuyLandBottom, BuyOwnerDiv, BuyLandSecondRow, BuyLandThirdRow, BuyLandButton, BuyLandCoordinateInput, BuyLandFirstRow, BuyLandLocation, BuyLandPriceInput, BuyLandStyled as BuyLandStyled, BuyStyled as BuyStyled, BuyLandOwner, BuyLandFourthRow, BuyLandId } from "./Buy.style";
+import {
+  BuyLandBottom,
+  BuyLandButton,
+  BuyLandFirstRow,
+  BuyLandSecondRow,
+  BuyLandThirdRow,
+  BuyLandLocation,
+  BuyLandOwner,
+  BuyLandOnSale,
+  BuyLandFourthRow,
+  BuyLandStyled,
+  BuyLandId,
+  BuyStyled
+} from "./Buy.style";
+
+import {Button} from "../../app/App.components/Button/Button.controller"
+
 
 type BuyProps = {
   token_id: number;
@@ -14,118 +30,81 @@ type BuyProps = {
 type BuyViewProps = {
   buyTokenCallback: (sellProps: BuyProps) => Promise<any>;
   setTransactionPendingCallback: (b: boolean) => void;
-  setSelectedTokenCallback: (p : any) => void;
-  selectedToken: any;
   transactionPending: boolean;
   tokensOnSale: TokenOnSale[];
-  connectedUser: string;
 };
 
-export const BuyView = ({ buyTokenCallback: buyTokenCallback, tokensOnSale, connectedUser, setTransactionPendingCallback, transactionPending, selectedToken, setSelectedTokenCallback }: BuyViewProps) => {
+export const BuyView = ({
+  buyTokenCallback: buyToken,
+  tokensOnSale,
+  transactionPending,
+  setTransactionPendingCallback
+}: BuyViewProps) => {
   return (
     <BuyStyled>
-      <BuyLand buyTokenCallback={buyTokenCallback}
-        tokensOnSale={tokensOnSale}
-        connectedUser={connectedUser}
-        transactionPending={transactionPending}
-        setTransactionPendingCallback={setTransactionPendingCallback}
-        setSelectedTokenCallback={setSelectedTokenCallback}
-        selectedToken={selectedToken}
+      {tokensOnSale.map((myToken) => (
+        <BuyLand
+          key={myToken.id}
+          buyTokenCallback={buyToken}
+          tokenOnSale={myToken}
+          setTransactionPendingCallback={setTransactionPendingCallback}
+          transactionPending={transactionPending}
         />
+      ))}
     </BuyStyled>
   );
 };
 
-const BuyLand = ({ buyTokenCallback: buyTokenCallback,
-  tokensOnSale, connectedUser, transactionPending, setTransactionPendingCallback, selectedToken, setSelectedTokenCallback }: BuyViewProps) => {
-  const [xCoordinate, setXCoordinate] = useState<number>(tokensOnSale[0].position.x);
-  const [yCoordinate, setYCoordinate] = useState<number>(tokensOnSale[0].position.y);
-  React.useEffect(() => {
-    if (!!selectedToken){
-        var selectedTokenOwned = tokensOnSale.filter(token => token.id === yCoordinate * 10 + xCoordinate + 1)
-        if (selectedTokenOwned.length > 0){
-          setSelectedTokenCallback(selectedTokenOwned[0])
-        } else {
-          setSelectedTokenCallback(undefined)
-        }
-    }
-
-  }, [selectedToken, tokensOnSale])
+const BuyLand = ({
+  buyTokenCallback,
+  tokenOnSale,
+  transactionPending,
+  setTransactionPendingCallback
+}: {
+  buyTokenCallback: (buyProps: BuyProps) => Promise<any>;
+  tokenOnSale: TokenOnSale;
+  setTransactionPendingCallback: (b: boolean) => void;
+  transactionPending: boolean;
+}) => {
   const alert = useAlert()
 
   return (
-    <BuyLandStyled>
-      <BuyLandMap
-        x={xCoordinate}
-        y={yCoordinate}
-        landsOnSale={tokensOnSale}
-        setXCoordinatesCallback={setXCoordinate}
-        setYCoordinatesCallback={setYCoordinate}
-        setSelectedTokenCallback={setSelectedTokenCallback}
-      />
+    <BuyLandStyled key={tokenOnSale.id}>
+      <LandMap x={tokenOnSale.position.x} y={tokenOnSale.position.y} />
 
       <BuyLandBottom>
         <BuyLandFirstRow>
           <BuyLandLocation>
             <svg>
-              <use xlinkHref="/icons/sprites.svg#location" />
+              <use xlinkHref="/icons/sprites.svg#location2" />
             </svg>
-            <BuyLandCoordinateInput
-              value={xCoordinate}
-              onChange={(e) => {
-                if (!isNaN(Number(e.target.value))) {
-                  if (e.target.value) {
-                    setXCoordinate(parseInt(e.target.value));
-                  } else {
-                    setXCoordinate(0);
-                  }
-                }
-              }}
-              placeholder="x"
-            ></BuyLandCoordinateInput>
-            <BuyLandCoordinateInput
-              value={yCoordinate}
-              onChange={(e) => {
-                if (!isNaN(Number(e.target.value))) {
-                  if (e.target.value) {
-                    setYCoordinate(parseInt(e.target.value));
-                  } else {
-                    setYCoordinate(0);
-                  }
-                }
-              }}
-              placeholder="y"
-            ></BuyLandCoordinateInput>
+            <div>{`${tokenOnSale.position.x}, ${tokenOnSale.position.y}`}</div>
           </BuyLandLocation>
+          <BuyLandOnSale>
+            On sale for {tokenOnSale.price / 1000000} ꜩ{" "}
+          </BuyLandOnSale>
         </BuyLandFirstRow>
-        <BuyLandFourthRow>
-            <BuyLandId>
-            <svg>
-              <use xlinkHref="/icons/sprites.svg#location" />
-            </svg>
-            <div>{`${xCoordinate + 1 + 10 * yCoordinate}`}</div>
-            </BuyLandId>
-        </BuyLandFourthRow>
         <BuyLandSecondRow>
-          <BuyOwnerDiv>
-            {selectedToken == undefined ? "" :  (<> 
-        <BuyLandOwner>
-        <svg>
-              <use xlinkHref="/icons/sprites.svg#location" />
+          <BuyLandId>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#barcode" />
             </svg>
-            <div>{`${selectedToken.owner}`}</div>
-        </BuyLandOwner>
-        
-        </>)}
-          </BuyOwnerDiv>
+            <div>{tokenOnSale.id}</div>
+          </BuyLandId>
         </BuyLandSecondRow>
         <BuyLandThirdRow>
-          {selectedToken == undefined ? (<>This land is not on sale </>) : (<>{
-            selectedToken.owner == connectedUser ? (<> You are the owner </>) : (<>
-              <BuyLandPriceInput
-                value={selectedToken.price / 1000000 + " ꜩ"}
-                placeholder="Price"
-              />
+          <BuyLandOwner>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#owner" />
+            </svg>
+            <div>{tokenOnSale.owner}</div>
+          </BuyLandOwner>
+        </BuyLandThirdRow>
+
+        <BuyLandFourthRow>
+          {tokenOnSale.tokenOwnedByUser ? (
+            <div>You are the owner</div>
+          ) : (
               <BuyLandButton
                 onClick={() => {
                   if (transactionPending) {
@@ -133,15 +112,14 @@ const BuyLand = ({ buyTokenCallback: buyTokenCallback,
                     console.info("A transaction is pending. Try again later")
                   } else {
                     buyTokenCallback({
-                      token_id: selectedToken.id,
-                      price: parseFloat(String(selectedToken.price)),
+                      token_id: tokenOnSale.id,
+                      price: tokenOnSale.price,
                     }).then(e => {
                       alert.info("Buying land ...")
                       setTransactionPendingCallback(true)
                       e.confirmation().then((e: any) => {
                         alert.success("Land bought", {
                           onOpen: () => {
-                            setSelectedTokenCallback({ ...selectedToken, onSale: false });
                             setTransactionPendingCallback(false)
                           }
                         })
@@ -153,23 +131,17 @@ const BuyLand = ({ buyTokenCallback: buyTokenCallback,
                       alert.show(e.message)
                       console.error(e.message)
                     })
-                  }
 
+                  }
                 }
 
                 }
               >
-                Buy this land
-          </BuyLandButton> </>)
-          }  </>)}
-
-
-
-        </BuyLandThirdRow>
-
+                Buy
+              </BuyLandButton>
+            )}
+        </BuyLandFourthRow>
       </BuyLandBottom>
     </BuyLandStyled>
   );
 };
-
-
