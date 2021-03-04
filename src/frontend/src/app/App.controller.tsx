@@ -5,6 +5,7 @@ import { Buy } from "pages/Buy/Buy.controller";
 import { Home } from "pages/Home/Home.controller";
 import { Map } from "pages/Map/Map.controller";
 import { Sell } from "pages/Sell/Sell.controller";
+import { Help } from "pages/Help/Help.controller";
 import React from "react";
 import { useState } from "react";
 import { positions, Provider, types } from "react-alert";
@@ -44,12 +45,13 @@ export const App = () => {
                 </Route>
                 <Route exact path="/sell">
                   <Sell transactionPending={transactionPending}
-                        setTransactionPendingCallback={setTransactionPending} 
-                        setSelectedTokenCallback={setSelectedToken}
-                        selectedToken={selectedToken}/>
+                        setTransactionPendingCallback={setTransactionPending} />
                 </Route>
                 <Route exact path="/map">
                   <Map />
+                </Route>
+                <Route exact path="/help">
+                  <Help />
                 </Route>
               </Switch>
             </AppContainer>
