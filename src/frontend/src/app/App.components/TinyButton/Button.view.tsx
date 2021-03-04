@@ -13,9 +13,10 @@ type ButtonViewProps = {
   clicked: boolean
   type?: ButtonTypes
   loading: boolean
+  width?: string
 }
 
-export const ButtonView = ({ text, icon, color, onClick, clickCallback, clicked, type, loading }: ButtonViewProps) => {
+export const ButtonView = ({ text, icon, color, onClick, clickCallback, clicked, type, loading, width }: ButtonViewProps) => {
   let buttonClasses = color
   if (clicked) buttonClasses += ' clicked'
   if (loading) buttonClasses += ' loading'
@@ -27,11 +28,12 @@ export const ButtonView = ({ text, icon, color, onClick, clickCallback, clicked,
         onClick && onClick()
       }}
       type={type}
+      width={width}
     >
       <ButtonText>
         {loading ? (
           <>
-            Waiting for confirmation
+            Please wait
             <ButtonLoadingIcon>
               <use xlinkHref="/icons/sprites.svg#loading" />
             </ButtonLoadingIcon>

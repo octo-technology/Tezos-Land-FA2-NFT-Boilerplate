@@ -42,6 +42,12 @@ export const HeaderView = ({
           </svg>
           <div>MAP</div>
         </Link>
+        <Link to="/help">
+          <svg>
+            <use xlinkHref="/icons/sprites.svg#help" />
+          </svg>
+          <div>HELP</div>
+        </Link>
       </HeaderLeft>
 
       <Link to="/">

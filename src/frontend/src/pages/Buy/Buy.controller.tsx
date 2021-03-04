@@ -119,11 +119,8 @@ export const Buy = ({ setTransactionPendingCallback, transactionPending }: BuyPr
                 <BuyView
                   buyTokenCallback={buyToken}
                   tokensOnSale={tokensOnSale}
-                  connectedUser={(accountPkh as unknown) as string}
                   transactionPending={transactionPending}
                   setTransactionPendingCallback={setTransactionPendingCallback}
-                  selectedToken={selectedToken}
-                  setSelectedTokenCallback={setSelectedToken}
                 />
               ) : (
                   <div>
