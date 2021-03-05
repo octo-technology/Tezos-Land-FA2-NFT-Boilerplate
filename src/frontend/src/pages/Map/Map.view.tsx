@@ -55,7 +55,7 @@ const MapLand = ({ existingTokens }: MapViewProps) => {
         <MapLandFirstRow>
           <MapLandLocation>
             <svg>
-              <use xlinkHref="/icons/sprites.svg#location2" />
+              <use xlinkHref="/icons/sprites.svg#location" />
             </svg>
             <MapLandCoordinateInput
               value={xCoordinate}

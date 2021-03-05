@@ -122,6 +122,7 @@ export const MapLandOwner = styled.div`
     display: inline-block;
     font-size: 14px;
     vertical-align: super;
+    font-family:"Proxima Nova";
     text-align: left;
     padding-right: 5px;
     line-height: 25px;
@@ -151,10 +152,11 @@ export const NameTextArea = styled.textarea`
   margin-top:20px;
   padding-left: 5px;
   padding-top: 2px;
-  font-size: 13px;
+  font-size: 15px;
   height: 20px;
   width: 100%;
   cursor: default;
+  font-family:"Proxima Nova";
   background-color: #141b43;
   border-radius: 5px;
   border: none;
@@ -168,10 +170,11 @@ export const NameTextArea = styled.textarea`
 
 export const DescriptionTextArea = styled.textarea`
   margin-top: 2px;
-  font-size: 11px;
+  font-size: 12px;
   padding: 5px;
   height: 60px;
   width: 100%;
+  font-family:"Proxima Nova";
   cursor: default;
   background-color: #141b43;
   border-radius: 5px;

@@ -89,7 +89,7 @@ const SellLand = ({
         <SellLandFirstRow>
           <SellLandLocation>
             <svg>
-              <use xlinkHref="/icons/sprites.svg#location2" />
+              <use xlinkHref="/icons/sprites.svg#location" />
             </svg>
             <div>{`${myToken.position.x}, ${myToken.position.y}`}</div>
           </SellLandLocation>

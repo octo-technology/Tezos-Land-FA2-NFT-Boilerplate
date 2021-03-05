@@ -4,7 +4,16 @@ import { useState } from "react";
 import { useAlert } from 'react-alert'
 
 // prettier-ignore
-import { AdminLandBottom, AdminLandButton, AdminLandCoordinateInput, AdminLandDescriptionInput, AdminLandFirstRow, AdminLandLocation, AdminLandNameInput, AdminLandStyled, AdminStyled } from "./Admin.style";
+import {
+  AdminLandBottom,
+  AdminLandCoordinateInput,
+  AdminLandFirstRow,
+  AdminLandLocation,
+  AdminLandNameInput,
+  AdminLandStyled,
+  AdminStyled,
+  DescriptionTextArea
+} from "./Admin.style";
 import { Button } from "../../app/App.components/Button/Button.controller"
 type MintProps = {
   owner: string;
@@ -53,7 +62,7 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
         <AdminLandFirstRow>
           <AdminLandLocation>
             <svg>
-              <use xlinkHref="/icons/sprites.svg#location" />
+              <use xlinkHref="/icons/sprites.svg#location"/>
             </svg>
             <AdminLandCoordinateInput
               value={xCoordinate}
@@ -86,17 +95,16 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
         <AdminLandNameInput
           value={landName}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Name"
+          placeholder="Enter land name"
         />
-        <AdminLandDescriptionInput
+        <DescriptionTextArea
           value={landDescription}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Description"
+          placeholder="Enter land description"
         />
         <Button
           text={"Mint a land"}
           color={"primary"}
-          icon={"mint"}
           onClick={() => {
             if (mintTransactionPending) {
               alert.info("Cannot mint a new land while the previous one is not minted...", { timeout: 10000 })

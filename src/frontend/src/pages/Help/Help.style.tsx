@@ -10,8 +10,10 @@ export const HelpTempleTextArea = styled.textarea`
   padding: 5px;
   font-size: 14px;
   width: 100%;
-  height:150px;
-  cursor: default;
+  font-family:"Proxima Nova";
+  font-size: 15px;
+  height:160px;
+  cursor: hidden;
   background-color: #4c5170;
   border-radius: 5px;
   border: none;
@@ -25,9 +27,11 @@ export const HelpTutorialTextArea = styled.textarea`
   font-size: 14px;
   width: 100%;
   height:50px;
+  font-family:"Proxima Nova";
   cursor: default;
   background-color: #4c5170;
   border-radius: 5px;
+  font-size: 15px;
   border: none;
   resize: none;
   color: white;
@@ -56,10 +60,11 @@ export const HelpQuestionDiv = styled.div`
 
 export const HelpAnswerDiv = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 30fr;
   grid-gap: 1px;
+  font-size: 15px;
   height: 25px;
-  width: 312px;
+  width: 100%;
   line-height: 25px;
   border-radius: 5px;
   background-color: #4c5170;
