@@ -19,19 +19,10 @@ export const MapLandBottom = styled.div`
 
 export const MapLandFirstRow = styled.div`
   position: relative;
-  width: 500px;
-`;
-
-export const MapLandSecondRow = styled.div`
-  position: relative;
-  margin-top: 8px;
-  width: 500px;
-`;
-
-export const MapLandThirdRow = styled.div`
-  position: relative;
-  margin-top: 8px;
-  width: 500px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 100px 60px auto;
+  grid-gap: 10px;
 `;
 
 export const LegendDiv = styled.div`
@@ -41,10 +32,11 @@ export const LegendDiv = styled.div`
   font-size: 14px;
 `;
 
-export const LegenRow = styled.div`
+export const LegendRow = styled.div`
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 8fr;
+  grid-template-columns: 25px auto;
+  grid-gap: 10px;
   margin-top: 8px;
   width: 500px;
 `;
@@ -73,63 +65,60 @@ export const MapLandId = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-gap: 1px;
-  height: 25px;
+  height: 40px;
   width: 60px;
-  line-height: 25px;
+  line-height: 40px;
   border-radius: 5px;
   background-color: #4c5170;
-  margin-top: 10px;
 
   > svg {
     display: inline-block;
     width: 20px;
     height: 20px;
-    margin: 3px;
-    margin-top: 2px;
+    margin: 10px 3px 10px 6px;
     stroke: white;
   }
+
   > div {
     display: inline-block;
     font-size: 14px;
-    vertical-align: super;
-    text-align: right;
+    text-align: center;
     padding-right: 5px;
-    line-height: 25px;
+    line-height: 40px;
     margin-left: 3px;
   }
 `;
 
 export const MapLandOwner = styled.div`
   display: grid;
-  grid-template-columns: 1fr 8fr;
-  grid-gap: 1px;
-  height: 25px;
-  width: 320px;
-  line-height: 25px;
+  grid-template-columns: 25px auto;
+  grid-gap: 10px;
+  height: 40px;
+  line-height: 40px;
   border-radius: 5px;
   background-color: #4c5170;
-  margin-top: 10px;
   padding-right: 2px;
+
   > svg {
     display: inline-block;
     width: 20px;
     height: 20px;
-    margin: 3px;
-    margin-top: 2px;
+    margin: 10px 3px 10px 6px;
     stroke: white;
   }
+
   > div {
     display: inline-block;
     font-size: 14px;
-    vertical-align: super;
-    font-family:"Proxima Nova";
-    text-align: left;
+    text-align: center;
     padding-right: 5px;
-    line-height: 25px;
+    line-height: 40px;
     margin-left: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
-
 
 export const MapLandCoordinateInput = styled.input`
   height: 25px;
@@ -148,46 +137,13 @@ export const MapLandCoordinateInput = styled.input`
   }
 `;
 
-export const NameTextArea = styled.textarea`
-  margin-top:20px;
-  padding-left: 5px;
-  padding-top: 2px;
-  font-size: 15px;
-  height: 20px;
-  width: 100%;
-  cursor: default;
-  font-family:"Proxima Nova";
-  background-color: #141b43;
-  border-radius: 5px;
-  border: none;
-  resize: none;
-  color: white;
-  ::placeholder {
-    color: "#727272";
-    font-size: 11px;
-  }
+export const NameTextArea = styled.div`
+  margin-top: 10px;
 `;
 
-export const DescriptionTextArea = styled.textarea`
-  margin-top: 2px;
-  font-size: 12px;
-  padding: 5px;
-  height: 60px;
-  width: 100%;
-  font-family:"Proxima Nova";
-  cursor: default;
-  background-color: #141b43;
-  border-radius: 5px;
-  border: none;
-  overflow-y: auto;
-  resize: none;
-  color: white;
-  ::placeholder {
-    color: "#727272";
-    font-size: 11px;
-  }
+export const DescriptionTextArea = styled.div`
+  margin-top: 10px;
 `;
-
 
 export const MapLandButton = styled.button`
   height: 40px;

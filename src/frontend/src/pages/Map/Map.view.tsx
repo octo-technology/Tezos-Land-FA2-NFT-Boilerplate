@@ -1,26 +1,10 @@
+import { AllLandMapTile } from "app/App.components/AllLandsMap/AllLandMap.style";
 import { AllLandMap } from "app/App.components/AllLandsMap/AllLandMap.view";
-import { AllLandMapTile } from "app/App.components/AllLandsMap/AllLandMap.style"
-import * as React from "react";
 import { useState } from "react";
-import { useAlert } from 'react-alert'
+
 import { Token } from "./Map.controller";
 // prettier-ignore
-import {
-  MapLandBottom,
-  MapLandSecondRow,
-  MapLandThirdRow,
-  MapLandOwner,
-  MapLandId,
-  MapLandCoordinateInput,
-  NameTextArea,
-  MapLandFirstRow,
-  MapLandLocation,
-  MapLandStyled,
-  MapStyled,
-  LegenRow,
-  LegendDiv,
-  DescriptionTextArea
-} from "./Map.style";
+import { DescriptionTextArea, LegendDiv, LegendRow, MapLandBottom, MapLandCoordinateInput, MapLandFirstRow, MapLandId, MapLandLocation, MapLandOwner, MapLandStyled, MapStyled, NameTextArea } from "./Map.style";
 
 type MapViewProps = {
   existingTokens: Token[];
@@ -37,8 +21,7 @@ export const MapView = ({ existingTokens }: MapViewProps) => {
 const MapLand = ({ existingTokens }: MapViewProps) => {
   const [xCoordinate, setXCoordinate] = useState<number>(0);
   const [yCoordinate, setYCoordinate] = useState<number>(0);
-  const [selectedToken, setSelectedToken] = useState<Token>(existingTokens[0])
-  const alert = useAlert()
+  const [selectedToken, setSelectedToken] = useState<Token>(existingTokens[0]);
 
   return (
     <MapLandStyled>
@@ -69,7 +52,7 @@ const MapLand = ({ existingTokens }: MapViewProps) => {
                 }
               }}
               placeholder="x"
-            ></MapLandCoordinateInput>
+            />
             <MapLandCoordinateInput
               value={yCoordinate}
               onChange={(e) => {
@@ -82,81 +65,64 @@ const MapLand = ({ existingTokens }: MapViewProps) => {
                 }
               }}
               placeholder="y"
-            ></MapLandCoordinateInput>
+            />
           </MapLandLocation>
-        </MapLandFirstRow>
-        <MapLandThirdRow>
+
           <MapLandId>
             <svg>
               <use xlinkHref="/icons/sprites.svg#barcode" />
             </svg>
             <div>{`${xCoordinate + 1 + 10 * yCoordinate}`}</div>
           </MapLandId>
-        </MapLandThirdRow>
 
-        <MapLandSecondRow>
-          {selectedToken === undefined ? (<MapLandOwner>
-            <svg>
-              <use xlinkHref="/icons/sprites.svg#unknownOwner" />
-            </svg>
-            <div>This land does not exist</div>
-          </MapLandOwner>
-          ) : (<>
-            <MapLandOwner>
-              <svg>
-                <use xlinkHref="/icons/sprites.svg#owner" />
-              </svg>
-              <div>{`${selectedToken.owner}`}</div>
-            </MapLandOwner>
-
-          </>)
-          }
-        </MapLandSecondRow>
-        <NameTextArea
-          readOnly
-          value={selectedToken === undefined ? "" : selectedToken.name}
-          placeholder="This land has no name"
-        />
-        <DescriptionTextArea
-          readOnly
-          value={selectedToken === undefined ? "" : selectedToken.description}
-          placeholder="This land has no description"
-        />
-
+          <div>
+            {selectedToken === undefined ? (
+              <MapLandOwner>
+                <svg>
+                  <use xlinkHref="/icons/sprites.svg#unknownOwner" />
+                </svg>
+                <div>This land does not exist</div>
+              </MapLandOwner>
+            ) : (
+              <>
+                <MapLandOwner>
+                  <svg>
+                    <use xlinkHref="/icons/sprites.svg#owner" />
+                  </svg>
+                  <div>{`${selectedToken.owner}`}</div>
+                </MapLandOwner>
+              </>
+            )}
+          </div>
+        </MapLandFirstRow>
+        <NameTextArea>
+          {selectedToken
+            ? selectedToken.name || "This land has no name"
+            : "This land has no name"}
+        </NameTextArea>
+        <DescriptionTextArea>
+          {selectedToken
+            ? selectedToken.description || "This land has no description"
+            : "This land has no description"}
+        </DescriptionTextArea>
       </MapLandBottom>
 
-      <LegenRow>
-        <AllLandMapTile
-          key={"legende"}
-          exists={true}
-          legend={true}
-        /> <LegendDiv>
-          Minted token
-      </LegendDiv>
-      </LegenRow>
-      <LegenRow>
-        <AllLandMapTile
-          key={"legende"}
-          exists={false}
-          legend={true}
-        /> <LegendDiv>
-          Not yet minted token
-    </LegendDiv>
-      </LegenRow>
-      <LegenRow>
-        <AllLandMapTile
-          key={"legende"}
-          exists={true}
-          legend={true}
-        ><svg>
+      <LegendRow>
+        <AllLandMapTile key={"legende"} exists={true} legend={true} />
+        <LegendDiv>Minted token</LegendDiv>
+      </LegendRow>
+      <LegendRow>
+        <AllLandMapTile key={"legende"} exists={false} legend={true} />
+        <LegendDiv>Not yet minted token</LegendDiv>
+      </LegendRow>
+      <LegendRow>
+        <AllLandMapTile key={"legende"} exists={true} legend={true}>
+          <svg>
             <use xlinkHref="/icons/sprites.svg#onSale" />
-          </svg></AllLandMapTile>
-        <LegendDiv>
-          Minted token on sale
-    </LegendDiv>
-      </LegenRow>
-
-
+          </svg>
+        </AllLandMapTile>
+        <LegendDiv>Minted token on sale</LegendDiv>
+      </LegendRow>
     </MapLandStyled>
   );
 };

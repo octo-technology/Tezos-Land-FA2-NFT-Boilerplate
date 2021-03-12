@@ -11,12 +11,16 @@ export type Coordinates = {
   x: number;
   y: number;
 };
+
 type AdminProp = {
   setMintTransactionPendingCallback: (b: boolean) => void;
   mintTransactionPending: boolean;
-
 };
-export const Admin = ({setMintTransactionPendingCallback, mintTransactionPending}: AdminProp) => {
+
+export const Admin = ({
+  setMintTransactionPendingCallback,
+  mintTransactionPending,
+}: AdminProp) => {
   const wallet = useWallet();
   const ready = useReady();
   const tezos = useTezos();
@@ -28,9 +32,12 @@ export const Admin = ({setMintTransactionPendingCallback, mintTransactionPending
   const loadStorage = React.useCallback(async () => {
     if (contract) {
       const storage = await (contract as any).storage();
-      setExistingTokenIds(storage["market"].landIds.map( (landIdAsObject: { c: any[]; }) => landIdAsObject.c[0]));
+      setExistingTokenIds(
+        storage["market"].landIds.map(
+          (landIdAsObject: { c: any[] }) => landIdAsObject.c[0]
+        )
+      );
       setAdminAdress(storage.market.admin);
-
     }
   }, [contract]);
 
@@ -67,14 +74,7 @@ export const Admin = ({setMintTransactionPendingCallback, mintTransactionPending
       owner,
     }: MintToken) => {
       return (contract as any).methods
-        .mint(
-          xCoordinates,
-          yCoordinates,
-          description,
-          landName,
-          owner,
-          owner
-        )
+        .mint(xCoordinates, yCoordinates, description, landName, owner, owner)
         .send();
     },
     [contract]
@@ -91,7 +91,9 @@ export const Admin = ({setMintTransactionPendingCallback, mintTransactionPending
                   mintCallBack={mint}
                   connectedUser={(accountPkh as unknown) as string}
                   existingTokenIds={existingTokenIds}
-                  setMintTransactionPendingCallback={setMintTransactionPendingCallback}
+                  setMintTransactionPendingCallback={
+                    setMintTransactionPendingCallback
+                  }
                   mintTransactionPending={mintTransactionPending}
                 />
               ) : (

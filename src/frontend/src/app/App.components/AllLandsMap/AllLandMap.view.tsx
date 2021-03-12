@@ -1,7 +1,6 @@
 import * as PropTypes from "prop-types";
-import * as React from "react";
 
-import { AllLandMapStyled as AllLandMapStyled, AllLandMapTile as AllLandMapTile } from "./AllLandMap.style";
+import { AllLandMapStyled, AllLandMapTile } from "./AllLandMap.style";
 
 type AllLandMapProps = {
   x: number;
@@ -26,12 +25,12 @@ export const AllLandMap = ({
         return (
           <AllLandMapTile
             selected={x === ix && y === iy}
-            exists={existingTokens.filter(token => token.position.x == ix && token.position.y == iy).length > 0}
+            exists={existingTokens.filter(token => token.position.x === ix && token.position.y === iy).length > 0}
             key={`${iy}-${ix}`}
             onClick={() => {
               if (setXCoordinatesCallback && setYCoordinatesCallback && setSelectedTokenCallback) {
                 var tokenIdFromCoordinates = 10 * iy + ix + 1;
-                var selectedLand = existingTokens.find(land => land.id == tokenIdFromCoordinates)
+                var selectedLand = existingTokens.find(land => land.id === tokenIdFromCoordinates)
                 setXCoordinatesCallback(ix);
                 setYCoordinatesCallback(iy);
                 if (!!selectedLand) {
@@ -42,7 +41,7 @@ export const AllLandMap = ({
               }
             }}
           >
-            { existingTokens.filter(land => land.position.x == ix && land.position.y == iy && land.onSale).length > 0 ? (
+            { existingTokens.filter(land => land.position.x === ix && land.position.y === iy && land.onSale).length > 0 ? (
               <svg>
                 <use xlinkHref="/icons/sprites.svg#onSale" />
               </svg>) :

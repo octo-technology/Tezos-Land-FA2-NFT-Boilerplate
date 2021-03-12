@@ -9,7 +9,6 @@ export const BuyLandStyled = styled.div`
   width: 230px;
 `;
 
-
 export const BuyLandBottom = styled.div`
   background-color: #141b43;
   padding: 10px;
@@ -18,105 +17,52 @@ export const BuyLandBottom = styled.div`
 
 export const BuyLandFirstRow = styled.div`
   display: grid;
-  grid-template-columns: 50px auto;
+  grid-template-columns: 50px 50px auto;
   grid-gap: 10px;
 `;
 
 export const BuyLandSecondRow = styled.div`
   position: relative;
-  margin-top: 8px;
-  width: 500px;
+  margin-top: 10px;
 `;
 
 export const BuyLandThirdRow = styled.div`
   position: relative;
-  margin-top: 8px;
-  width: 500px;
+  margin-top: 10px;
 `;
-
 
 export const BuyLandFourthRow = styled.div`
   margin-top: 10px;
 `;
 
-export const BuyLandLocation = styled.div`
-  height: 20px;
-  width: 50px;
-  line-height: 20px;
+export const BuyLandData = styled.div<{ isOnSale?: boolean }>`
+  height: 25px;
+  line-height: 25px;
   border-radius: 5px;
   background-color: #4c5170;
+  color: ${(props) => (props.isOnSale ? "#E50000" : "#FFF")};
+  display: grid;
+  grid-template-columns: 25px auto;
+
   > svg {
     display: inline-block;
-    width: 12px;
-    height: 12px;
-    margin: 4px;
+    width: 15px;
+    height: 15px;
+    margin: 5px;
     stroke: white;
   }
+
   > div {
+    text-align: center;
     display: inline-block;
     font-size: 11px;
-    vertical-align: super;
-    line-height: 17px;
-    margin-left: 3px;
+    line-height: 25px;
+    vertical-align: top;
+    margin-left: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-`;
-
-export const BuyLandOwner = styled.div`
-display: grid;
-  grid-template-columns: 20px auto;
-  height: 20px;
-  width: 210px;
-  line-height: 20px;
-  border-radius: 5px;
-  background-color: #4c5170;
-  > svg {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    margin: 4px;
-    stroke: white;
-  }
-  > div {
-    display: inline-block;
-    font-size: 9px;
-    vertical-align: super;
-    line-height: 20px;
-    margin-left: 3px;
-  }
-`;
-
-export const BuyLandId = styled.div`
-display: grid;
-  grid-template-columns: 20px auto;
-  height: 20px;
-  width: 40px;
-  line-height: 20px;
-  border-radius: 5px;
-  background-color: #4c5170;
-  > svg {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    margin: 4px;
-    stroke: white;
-  }
-  > div {
-    display: inline-block;
-    font-size: 9px;
-    vertical-align: super;
-    text-align: right;
-    padding-right: 5px;
-    line-height: 20px;
-    margin-left: 3px;
-  }
-`;
-
-
-export const BuyLandOnSale = styled.div`
-  color: #E50000;
-  line-height: 20px;
-  text-align: right;
-  font-size: 11px;
 `;
 
 export const BuyLandButton = styled.button`

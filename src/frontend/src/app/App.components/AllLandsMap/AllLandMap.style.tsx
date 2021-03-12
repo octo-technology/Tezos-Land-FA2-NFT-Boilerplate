@@ -25,7 +25,7 @@ export const AllLandMapTile = styled.div<{ selected?: boolean; exists?: boolean;
     display: inline-block;
     width: ${(props) => (props.legend ? "12px" : "24px")};
     height: ${(props) => (props.legend ? "12px" : "24px")};
-    margin: ${(props) => (props.legend ? "6px" : "13px")};
+    margin: ${(props) => (props.legend ? "6px" : "12px")};
     stroke: white;
   }
 `;

@@ -1,26 +1,10 @@
 import { LandMap } from "app/App.components/LandMap/LandMap.view";
-import * as React from "react";
-import { useAlert } from 'react-alert'
+import { useAlert } from "react-alert";
 
+import { Button } from "../../app/App.components/TinyButton/Button.controller";
 import { TokenOnSale } from "./Buy.controller";
 // prettier-ignore
-import {
-  BuyLandBottom,
-  BuyLandButton,
-  BuyLandFirstRow,
-  BuyLandSecondRow,
-  BuyLandThirdRow,
-  BuyLandLocation,
-  BuyLandOwner,
-  BuyLandOnSale,
-  BuyLandFourthRow,
-  BuyLandStyled,
-  BuyLandId,
-  BuyStyled
-} from "./Buy.style";
-
-import {Button} from "../../app/App.components/TinyButton/Button.controller"
-
+import { BuyLandBottom, BuyLandButton, BuyLandData, BuyLandFirstRow, BuyLandFourthRow, BuyLandSecondRow, BuyLandStyled, BuyLandThirdRow, BuyStyled } from "./Buy.style";
 
 type BuyProps = {
   token_id: number;
@@ -38,7 +22,7 @@ export const BuyView = ({
   buyTokenCallback: buyToken,
   tokensOnSale,
   transactionPending,
-  setTransactionPendingCallback
+  setTransactionPendingCallback,
 }: BuyViewProps) => {
   return (
     <BuyStyled>
@@ -59,14 +43,14 @@ const BuyLand = ({
   buyTokenCallback,
   tokenOnSale,
   transactionPending,
-  setTransactionPendingCallback
+  setTransactionPendingCallback,
 }: {
   buyTokenCallback: (buyProps: BuyProps) => Promise<any>;
   tokenOnSale: TokenOnSale;
   setTransactionPendingCallback: (b: boolean) => void;
   transactionPending: boolean;
 }) => {
-  const alert = useAlert()
+  const alert = useAlert();
 
   return (
     <BuyLandStyled key={tokenOnSale.id}>
@@ -74,74 +58,75 @@ const BuyLand = ({
 
       <BuyLandBottom>
         <BuyLandFirstRow>
-          <BuyLandLocation>
+          <BuyLandData>
             <svg>
               <use xlinkHref="/icons/sprites.svg#location" />
             </svg>
             <div>{`${tokenOnSale.position.x}, ${tokenOnSale.position.y}`}</div>
-          </BuyLandLocation>
-          <BuyLandOnSale>
-            On sale for {tokenOnSale.price / 1000000} ꜩ{" "}
-          </BuyLandOnSale>
-        </BuyLandFirstRow>
-        <BuyLandSecondRow>
-          <BuyLandId>
+          </BuyLandData>
+          <BuyLandData>
             <svg>
               <use xlinkHref="/icons/sprites.svg#barcode" />
             </svg>
             <div>{tokenOnSale.id}</div>
-          </BuyLandId>
-        </BuyLandSecondRow>
+          </BuyLandData>
+          <BuyLandData>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#price" />
+            </svg>
+            <div>{tokenOnSale.price / 1000000} ꜩ</div>
+          </BuyLandData>
+        </BuyLandFirstRow>
+
         <BuyLandThirdRow>
-          <BuyLandOwner>
+          <BuyLandData>
             <svg>
               <use xlinkHref="/icons/sprites.svg#owner" />
             </svg>
             <div>{tokenOnSale.owner}</div>
-          </BuyLandOwner>
+          </BuyLandData>
         </BuyLandThirdRow>
 
         <BuyLandFourthRow>
           {tokenOnSale.tokenOwnedByUser ? (
             <div>You are the owner</div>
           ) : (
-<Button
-          text={"Buy this land"}
-          color={"primary"}
-          onClick={() => {
-            if (transactionPending) {
-              alert.info("A transaction is pending. Try again later")
-              console.info("A transaction is pending. Try again later")
-            } else {
-              buyTokenCallback({
-                token_id: tokenOnSale.id,
-                price: tokenOnSale.price,
-              }).then(e => {
-                alert.info("Buying land ...")
-                setTransactionPendingCallback(true)
-                e.confirmation().then((e: any) => {
-                  alert.success("Land bought", {
-                    onOpen: () => {
-                      setTransactionPendingCallback(false)
-                    }
+            <Button
+              text={"Buy this land"}
+              color={"primary"}
+              onClick={() => {
+                if (transactionPending) {
+                  alert.info("A transaction is pending. Try again later");
+                  console.info("A transaction is pending. Try again later");
+                } else {
+                  buyTokenCallback({
+                    token_id: tokenOnSale.id,
+                    price: tokenOnSale.price,
                   })
+                    .then((e) => {
+                      alert.info("Buying land ...");
+                      setTransactionPendingCallback(true);
+                      e.confirmation().then((e: any) => {
+                        alert.success("Land bought", {
+                          onOpen: () => {
+                            setTransactionPendingCallback(false);
+                          },
+                        });
 
-                  return e
-                })
-                return e
-              }).catch((e: any) => {
-                alert.show(e.message)
-                console.error(e.message)
-              })
-
-            }
-          }
-
-          }
-          loading={transactionPending} />
-            )}
+                        return e;
+                      });
+                      return e;
+                    })
+                    .catch((e: any) => {
+                      alert.show(e.message);
+                      console.error(e.message);
+                    });
+                }
+              }}
+              loading={transactionPending}
+            />
+          )}
         </BuyLandFourthRow>
-        
       </BuyLandBottom>
     </BuyLandStyled>
   );
