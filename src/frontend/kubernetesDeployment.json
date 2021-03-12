@@ -12,7 +12,7 @@
         "containers": [
           {
             "name": "tezosland-frontend",
-            "image": "registry.digitalocean.com/neutrino/tezosland-frontend",
+            "image": "registry.digitalocean.com/rtx/tezosland-frontend",
             "imagePullPolicy": "Always"
           }
         ]

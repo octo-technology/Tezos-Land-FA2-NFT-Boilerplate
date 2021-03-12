@@ -26,11 +26,11 @@
             <polygon fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="    20.512,22.5 3.512,22.5 1.512,11.5 22.512,11.5   "></polygon>
             <rect x="0.512" y="9.5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" width="23" height="2"></rect>
             <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="3.512" y1="7.5" x2="9.512" y2="1.5"></line>
-            <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="20.512" y1="7.5" x2="14.512" y2="1.5"></line>
-            <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="13.512" y1="13.5" x2="13.512" y2="19.5"></line>
-            <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="17.512" y1="13.5" x2="17.512" y2="19.5"></line>
-            <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="10.512" y1="13.5" x2="10.512" y2="19.5"></line>
-            <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="6.512" y1="13.5" x2="6.512" y2="19.5"></line>
+        <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="20.512" y1="7.5" x2="14.512" y2="1.5"></line>
+        <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="13.512" y1="13.5" x2="13.512" y2="19.5"></line>
+        <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="17.512" y1="13.5" x2="17.512" y2="19.5"></line>
+        <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="10.512" y1="13.5" x2="10.512" y2="19.5"></line>
+        <line fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="6.512" y1="13.5" x2="6.512" y2="19.5"></line>
         </g>
         <g id="Invisible_Shape">
             <rect fill="none" stroke="none" width="24" height="24"></rect>
