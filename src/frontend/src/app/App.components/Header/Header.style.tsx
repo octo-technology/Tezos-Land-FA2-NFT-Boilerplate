@@ -28,7 +28,7 @@ export const HeaderLeft = styled.div`
   left: 30px;
   line-height: 50px;
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto auto auto;
   grid-gap: 40px;
   font-weight: bold;
 

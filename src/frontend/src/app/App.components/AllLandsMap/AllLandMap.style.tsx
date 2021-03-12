@@ -15,16 +15,17 @@ export const AllLandMapStyled = styled.div`
   }
 `;
 
-export const AllLandMapTile = styled.div<{ selected: boolean; exists: boolean }>`
-  height: 50px;
-  width: 50px;
+export const AllLandMapTile = styled.div<{ selected?: boolean; exists?: boolean; legend?: boolean }>`
+  height: ${(props) => (props.legend ? "25px" : "50px")};
+  width: ${(props) => (props.legend ? "25px" : "50px")};
   border: ${(props) => (props.selected ? "1px solid #FFFFFF" : "1px solid #141b43 ")};
   background-color: ${(props) => (props.exists ? "#E50000" : "#202337")};
 
-  > img {
+  > svg {
     display: inline-block;
-    width: 24px;
-    height: 24px;
-    margin: 13px;
+    width: ${(props) => (props.legend ? "12px" : "24px")};
+    height: ${(props) => (props.legend ? "12px" : "24px")};
+    margin: ${(props) => (props.legend ? "6px" : "13px")};
+    stroke: white;
   }
 `;

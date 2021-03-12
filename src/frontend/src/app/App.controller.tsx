@@ -5,6 +5,7 @@ import { Buy } from "pages/Buy/Buy.controller";
 import { Home } from "pages/Home/Home.controller";
 import { Map } from "pages/Map/Map.controller";
 import { Sell } from "pages/Sell/Sell.controller";
+import { Help } from "pages/Help/Help.controller";
 import React from "react";
 import { useState } from "react";
 import { positions, Provider, types } from "react-alert";
@@ -23,6 +24,7 @@ const options = {
 
 export const App = () => {
   const [transactionPending, setTransactionPending] = useState<boolean>(false);
+  const [selectedToken, setSelectedToken] = useState<any>(undefined);
   return (
     <Router>
       <Provider template={AlertTemplate} {...options}>
@@ -42,10 +44,14 @@ export const App = () => {
                   <Buy transactionPending={transactionPending} setTransactionPendingCallback={setTransactionPending} />
                 </Route>
                 <Route exact path="/sell">
-                  <Sell transactionPending={transactionPending} setTransactionPendingCallback={setTransactionPending} />
+                  <Sell transactionPending={transactionPending}
+                        setTransactionPendingCallback={setTransactionPending} />
                 </Route>
                 <Route exact path="/map">
                   <Map />
+                </Route>
+                <Route exact path="/help">
+                  <Help />
                 </Route>
               </Switch>
             </AppContainer>

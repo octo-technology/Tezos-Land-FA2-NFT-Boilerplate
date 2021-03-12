@@ -1,12 +1,28 @@
-import { SellLandMap } from "app/App.components/SellLandMap/SellLandMap.view";
+import { LandMap } from "app/App.components/LandMap/LandMap.view";
 import * as React from "react";
 import { useState } from "react";
 import { useAlert } from 'react-alert'
+
 import { Token } from "./Sell.controller";
 // prettier-ignore
-import { SellLandBottom, SellLandSecondRow, CancelSaleButton, SellLandButton, SellLandCoordinateInput, SellLandFirstRow, SellLandLocation, SellLandPriceInput, SellLandStyled, SellStyled } from "./Sell.style";
+import {
+  CancelSaleButton,
+  SellLandBottom,
+  SellLandLocation,
+  SellLandOnSale,
+  SellLandPriceInput,
+  SellLandFirstRow,
+  SellLandSecondRow,
+  SellLandThirdRow,
+  SellLandFourthRow,
+  SellLandStyled,
+  SellStyled,
+  SellLandId,
+  SellLandOwner
+} from "./Sell.style";
+import { Button } from "../../app/App.components/TinyButton/Button.controller"
 
-type SellPorps = {
+type SellProps = {
   token_id: number;
   price: number;
 };
@@ -17,47 +33,57 @@ type CancelPorps = {
 };
 
 type SellViewProps = {
-  sellTokenCallback: (sellProps: SellPorps) => Promise<any>;
+  sellTokenCallback: (sellProps: SellProps) => Promise<any>;
   cancelSaleCallback: (cancelProps: CancelPorps) => Promise<any>;
-  setTransactionPendingCallback: (b: boolean) => void;
+  setTransactionPendingCallback: (transactionPending: boolean) => void;
   transactionPending: boolean;
   myTokens: Token[];
 };
 
-export const SellView = ({ sellTokenCallback, cancelSaleCallback, setTransactionPendingCallback, transactionPending, myTokens }: SellViewProps) => {
+export const SellView = ({
+  sellTokenCallback,
+  cancelSaleCallback,
+  transactionPending,
+  setTransactionPendingCallback,
+  myTokens,
+}: SellViewProps) => {
   return (
     <SellStyled>
-      <SellLand sellTokenCallback={sellTokenCallback}
-        cancelSaleCallback={cancelSaleCallback}
-        myTokens={myTokens}
-        setTransactionPendingCallback={setTransactionPendingCallback}
-        transactionPending={transactionPending} />
+      {myTokens.map((myToken) => (
+        <SellLand
+          key={myToken.id}
+          sellTokenCallback={sellTokenCallback}
+          cancelSaleCallback={cancelSaleCallback}
+          transactionPending={transactionPending}
+          setTransactionPendingCallback={setTransactionPendingCallback}
+          myToken={myToken}
+        />
+      ))}
     </SellStyled>
   );
 };
 
-const SellLand = ({ sellTokenCallback,
+const SellLand = ({
+  sellTokenCallback,
   cancelSaleCallback,
-  setTransactionPendingCallback, transactionPending,
-  myTokens }: SellViewProps) => {
-  const [landPrice, setPrice] = useState<string>("");
-  const [selectedToken, setSelectedToken] = useState<Token>(myTokens[0])
-  var x = myTokens.length > 0 ? myTokens[0].position.x : 0
-  var y = myTokens.length > 0 ? myTokens[0].position.y : 0
-  const [xCoordinate, setXCoordinate] = useState<number>(x);
-  const [yCoordinate, setYCoordinate] = useState<number>(y);
+  setTransactionPendingCallback,
+  transactionPending,
+  myToken
+}:
+  {
+    sellTokenCallback: (sellProps: SellProps) => Promise<any>;
+    cancelSaleCallback: (cancelProps: CancelPorps) => Promise<any>;
+    setTransactionPendingCallback: (transactionPending: boolean) => void;
+    transactionPending: boolean;
+    myToken: Token;
+  }
+) => {
+  const [price, setPrice] = useState<string>("");
   const alert = useAlert()
 
   return (
-    <SellLandStyled>
-      <SellLandMap
-        x={xCoordinate}
-        y={yCoordinate}
-        landsOwned={myTokens}
-        setSelectedTokenCallback={setSelectedToken}
-        setXCoordinatesCallback={setXCoordinate}
-        setYCoordinatesCallback={setYCoordinate}
-      />
+    <SellLandStyled key={myToken.id}>
+      <LandMap x={myToken.position.x} y={myToken.position.y} />
 
       <SellLandBottom>
         <SellLandFirstRow>
@@ -65,93 +91,54 @@ const SellLand = ({ sellTokenCallback,
             <svg>
               <use xlinkHref="/icons/sprites.svg#location" />
             </svg>
-            <SellLandCoordinateInput
-              value={xCoordinate}
-              onChange={(e) => {
-                if (!isNaN(Number(e.target.value))) {
-                  if (e.target.value) {
-                    setXCoordinate(parseInt(e.target.value));
-                  } else {
-                    setXCoordinate(0);
-                  }
-                }
-              }}
-              placeholder="x"
-            ></SellLandCoordinateInput>
-            <SellLandCoordinateInput
-              value={yCoordinate}
-              onChange={(e) => {
-                if (!isNaN(Number(e.target.value))) {
-                  if (e.target.value) {
-                    setYCoordinate(parseInt(e.target.value));
-                  } else {
-                    setYCoordinate(0);
-                  }
-                }
-              }}
-              placeholder="y"
-            ></SellLandCoordinateInput>
+            <div>{`${myToken.position.x}, ${myToken.position.y}`}</div>
           </SellLandLocation>
+          <SellLandOnSale isOnSale={myToken.onSale}>
+            {myToken.onSale
+              ? `On sale for ${myToken.price / 1000000} ꜩ`
+              : "Not on sale"}
+          </SellLandOnSale>
         </SellLandFirstRow>
-
         <SellLandSecondRow>
-          {myTokens.filter(token => !!selectedToken ? token.id === selectedToken.id : false).length === 0 ? (<> You don't own this land </>) : 
-          (<> {selectedToken.onSale ? (
-            <><SellLandPriceInput
-              value={selectedToken.price / 1000000 + " ꜩ"}
-              placeholder="Price (ꜩ)"
-            />
-              <CancelSaleButton
-                onClick={() => {
-                  if (transactionPending) {
-                    alert.info("A transaction is pending. Try again later")
-                    console.info("A transaction is pending. Try again later")
-                  } else {
-                    cancelSaleCallback({
-                      token_id: selectedToken.id,
-                      price: selectedToken.price,
-                    }).then(e => {
-                      alert.info("Removing land from sales ...")
-                      setTransactionPendingCallback(true)
-                      e.confirmation().then((e: any) => {
-                        alert.success("Land is not on sale anymore")
-                        setTransactionPendingCallback(false)
-                        return e
-                      })
-                      return e
-                    }).catch((e: any) => {
-                      alert.show(e.message)
-                      console.error(e.message)
-                    })
-                  }
-                }
-                }
-              >
-                Cancel sale
-              </CancelSaleButton>
-            </>
-          ) : (
-              <>
-                <SellLandPriceInput
-                  value={landPrice}
-                  onChange={(e) => setPrice(e.target.value)}
-                  placeholder="Price (ꜩ)"
-                />
-                <SellLandButton
+          <SellLandId>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#barcode" />
+            </svg>
+            <div>{myToken.id}</div>
+          </SellLandId>
+        </SellLandSecondRow>
+        <SellLandThirdRow>
+          <SellLandOwner>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#owner" />
+            </svg>
+            <div>{myToken.owner}</div>
+          </SellLandOwner>
+        </SellLandThirdRow>
+        <SellLandFourthRow>
+          {myToken.onSale ? (
+            <>
+               <Button
+                  text={"Cancel Sale"}
+                  color={"primary"}
+                  width={"210%"}
                   onClick={() => {
                     if (transactionPending) {
                       alert.info("A transaction is pending. Try again later")
                       console.info("A transaction is pending. Try again later")
                     } else {
-                      sellTokenCallback({
-                        token_id: selectedToken.id,
-                        price: parseFloat(landPrice),
+                      cancelSaleCallback({
+                        token_id: myToken.id,
+                        price: myToken.price,
                       }).then(e => {
-                        alert.info("Putting land on sale ...")
+                        alert.info("Removing land from sales ...")
                         setTransactionPendingCallback(true)
                         e.confirmation().then((e: any) => {
-                          alert.success("Land is on sale")
-                          setTransactionPendingCallback(false)
+                          alert.success("Land is not on sale anymore", {
+                            onOpen: () => {
+                              setTransactionPendingCallback(false)
+                            }
+                          })
                           return e
                         })
                         return e
@@ -159,22 +146,52 @@ const SellLand = ({ sellTokenCallback,
                         alert.show(e.message)
                         console.error(e.message)
                       })
-
-
                     }
                   }
-
-
-
                   }
-                >
-                  Sell this land
-        </SellLandButton>
+                  loading={transactionPending} />
+            </>
+          ) : (
+              <>
+                <SellLandPriceInput
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="Enter price"
+                />
+                <Button
+                  text={"Sell this land"}
+                  color={"primary"}
+                  onClick={() => {
+                    if (transactionPending) {
+                      alert.info("A transaction is pending. Try again later")
+                      console.info("A transaction is pending. Try again later")
+                    } else {
+                      sellTokenCallback({
+                        token_id: myToken.id,
+                        price: parseFloat(price),
+                      }).then(e => {
+                        alert.info("Putting land on sale ...")
+                        setTransactionPendingCallback(true)
+                        e.confirmation().then((e: any) => {
+                          alert.success("Land is on sale", {
+                            onOpen: () => {
+                              setTransactionPendingCallback(false)
+                            }
+                          })
+                          return e
+                        })
+                        return e
+                      }).catch((e: any) => {
+                        alert.show(e.message)
+                        console.error(e.message)
+                      })
+                    }
+                  }
+                  }
+                  loading={transactionPending} />
               </>
-            )} </>)}
-
-        </SellLandSecondRow>
-
+            )}
+        </SellLandFourthRow>
       </SellLandBottom>
     </SellLandStyled>
   );

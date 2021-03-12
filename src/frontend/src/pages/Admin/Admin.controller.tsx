@@ -45,7 +45,7 @@ export const Admin = ({setMintTransactionPendingCallback, mintTransactionPending
         setContract(ctr);
       }
     })();
-  }, [tezos]);
+  }, [tezos, mintTransactionPending]);
 
   useOnBlock(tezos, loadStorage);
 

@@ -49,7 +49,7 @@
             <rect fill="none" stroke="none" width="24" height="24"></rect>
         </g>
     </symbol>
-    <symbol id="location" viewBox="0 0 12 12">
+    <symbol id="oldLocation" viewBox="0 0 12 12">
         <g id="Outline_Icons">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M6 11.2222C6 11.2222 10 8.33333 10 5.22222C10 2.89067 8.33156 1 6 1C3.668 1 2 2.89067 2 5.22222C2 8.33333 6 11.2222 6 11.2222ZM8.22228 5.00005C8.22228 6.22735 7.22735 7.22228 6.00005 7.22228C4.77275 7.22228 3.77783 6.22735 3.77783 5.00005C3.77783 3.77275 4.77275 2.77783 6.00005 2.77783C7.22735 2.77783 8.22228 3.77275 8.22228 5.00005Z" fill="white"/>
         </g>
@@ -62,17 +62,120 @@
             <rect fill="none" stroke="none" width="24" height="24"></rect>
         </g>
     </symbol>
-    <symbol id="XXXX" viewBox="0 0 24 24">
+    <symbol id="owner" viewBox="0 0 24 24">
         <g id="Outline_Icons">
-
+            <path fill="none" stroke-linejoin="round" stroke-miterlimit="10" d="M10,15c0,0-1.5-0.5-1.5-3 c-0.826,0-0.826-2,0-2c0-0.335-1.5-4,1-3.5c0.5-2,6-2,6.5,0c0.347,1.388-0.5,3.254-0.5,3.5c0.826,0,0.826,2,0,2 c0,2.5-1.5,3-1.5,3v2.5c2.477,0.929,4.93,1.697,6.186,2.575C22.234,17.999,23.5,15.147,23.5,12c0-6.352-5.148-11.5-11.5-11.5 S0.5,5.648,0.5,12c0,3.153,1.27,6.009,3.325,8.087c1.33-0.92,3.952-1.746,6.175-2.587V15z"/>
+            <path fill="none" stroke-linejoin="round" stroke-miterlimit="10" d="M3.825,20.087 C5.91,22.194,8.802,23.5,12,23.5c3.203,0,6.1-1.311,8.186-3.425"/>
         </g>
         <g id="Invisible_Shape">
             <rect fill="none" stroke="none" width="24" height="24"></rect>
         </g>
     </symbol>
-    <symbol id="XXXX" viewBox="0 0 24 24">
+    <symbol id="barcode" viewBox="0 0 24 24">
         <g id="Outline_Icons">
-
+            <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="0.502,18.531 0.502,21.5 3.471,21.5" />
+            <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="3.471,2.5 0.502,2.5 0.502,5.469" />
+            <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="23.502,5.469 23.502,2.5 20.533,2.5" />
+            <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="20.533,21.5 23.502,21.5 23.502,18.531" />
+            <line x1="3.502" x2="3.502" y1="7" y2="17" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <line x1="5.502" x2="5.502" y1="7" y2="14" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <line x1="7.502" x2="7.502" y1="7" y2="14" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <line x1="10.502" x2="10.502" y1="7" y2="14" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <line x1="12.502" x2="12.502" y1="7" y2="14" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <line x1="14.502" x2="14.502" y1="7" y2="14" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <line x1="16.502" x2="16.502" y1="7" y2="14" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <line x1="18.502" x2="18.502" y1="7" y2="14" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <line x1="20.502" x2="20.502" y1="7" y2="17" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <polygon points="6,15 5.002,15 5.002,16 6,16 6,15"/>
+            <polygon points="8,15 7.002,15 7.002,16 8,16 8,15"/>
+            <polygon points="11,15 10.002,15 10.002,16 11,16 11,15"/>
+            <polygon points="13,15 12.002,15 12.002,16 13,16 13,15"/>
+            <polygon points="15,15 14.002,15 14.002,16 15,16 15,15"/>
+            <polygon points="17,15 16.002,15 16.002,16 17,16 17,15"/>
+            <polygon points="19,15 18.002,15 18.002,16 19,16 19,15"/>
+        </g>
+        <g id="Invisible_Shape">
+            <rect fill="none" stroke="none" width="24" height="24"></rect>
+        </g>
+    </symbol>
+    <symbol id="location" viewBox="0 0 24 24">
+        <g id="Outline_Icons">
+            <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M19.5,8 c0,4.144-7.5,15.5-7.5,15.5S4.5,12.144,4.5,8c0-4.142,3.357-7.5,7.5-7.5C16.142,0.5,19.5,3.858,19.5,8z"/>
+            <circle cx="12" cy="8" r="3" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+        </g>
+        <g id="Invisible_Shape">
+            <rect fill="none" stroke="none" width="24" height="24"></rect>
+        </g>
+    </symbol>
+    <symbol id="help" viewBox="0 0 24 24">
+        <g id="Outline_Icons">
+            <circle cx="11.5" cy="12.5" r="11" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+            <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M8.5,10 c0-1.656,1.343-3,3-3c1.656,0,3,1.344,3,3c0,1.658-1.344,3-3,3v3"/>
+            <path fill="none" stroke-linejoin="round" stroke-miterlimit="10" d="M12,18.5c0,0.276-0.224,0.5-0.5,0.5l0,0 c-0.276,0-0.5-0.224-0.5-0.5l0,0c0-0.276,0.224-0.5,0.5-0.5l0,0C11.776,18,12,18.224,12,18.5L12,18.5z"/>
+        </g>
+        <g id="Invisible_Shape">
+            <rect fill="none" stroke="none" width="24" height="24"></rect>
+        </g>
+    </symbol>
+    <symbol id="mint" viewBox="0 0 24 24">
+        <g id="Outline_Icons">
+            <path fill="none" stroke-linejoin="round" stroke-miterlimit="10" d="M16.5,1c-1.369,1.367-3.635,1.367-5,0 l-1,1l9.5,9.5L23.5,8L16.5,1z"/>
+            <rect width="3.536" height="20.153" x="7.107" y="4.549" fill="none" stroke-linejoin="round" stroke-miterlimit="10" transform="rotate(45.001 8.875 14.625)"/>
+        </g>
+        <g id="Invisible_Shape">
+            <rect fill="none" stroke="none" width="24" height="24"></rect>
+        </g>
+    </symbol>
+    <symbol id="time" viewBox="0 0 24 24">
+        <g id="Outline_Icons">
+            <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="13.5,7 13.5,12.5 18.5,12.5"/>
+            <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="1,8.994 4,13.494 7.5,9.494"/>
+            <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M13.5,21.5 c5.247,0,9.5-4.252,9.5-9.5c0-5.246-4.253-9.5-9.5-9.5S4,6.754,4,12v1.494"/>
+        </g>
+        <g id="Invisible_Shape">
+            <rect fill="none" stroke="none" width="24" height="24"></rect>
+        </g>
+    </symbol>
+    <symbol id="loading" viewBox="0 0 24 24">
+        <g id="Outline_Icons">
+            <g transform="matrix(-.97624 0 0 1 24.96 0)">
+                <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="1.5,8.994 4.5,13.494 8,9.494"/>
+                <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M 4.531,13.432 C 3.78,7.217 8.406,2.694 13.649,2.5 c 5.243,-0.191 9.65,3.902 9.844,9.145 0.192,5.244 -3.901,9.65 -9.145,9.844 -3.942,0.145 -7.41,-2.133 -8.973,-5.502"/>
+            </g>
+        </g>
+        <g id="Invisible_Shape">
+            <rect fill="none" stroke="none" width="24" height="24"></rect>
+        </g>
+    </symbol>
+    <symbol id="onSale" viewBox="0 0 24 24">
+        <g id="Outline_Icons">
+            <rect width="21" height="19" x="1.5" y=".5" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <rect width="3" height="4" x="3.5" y="19.5" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <rect width="3" height="4" x="17.5" y="19.5" fill="none" stroke-linejoin="round" stroke-miterlimit="10" />
+            <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="19,15.5 17.5,15.5 17.5,11.5 19,11.5" />
+            <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="7.5,7.5 7.5,3.5 9,3.5" />
+            <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="11.5,15.5 10.25,11.586 9,15.5" />
+            <polyline fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="15.5,15.5 13.5,15.5 13.5,11.5" />
+            <line x1="17.5" x2="18.5" y1="13.5" y2="13.5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" />
+            <line x1="7.5" x2="9" y1="5.5" y2="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" />
+            <line x1="9.319" x2="11.18" y1="14.5" y2="14.5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" />
+            <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M13.5,5.5 c0,1.104-0.309,2-1.25,2c-0.942,0-1.25-0.896-1.25-2s0.308-2,1.25-2C13.191,3.5,13.5,4.396,13.5,5.5z" />
+            <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M5.062,14.562 C5.093,15.087,5.5,15.5,5.999,15.5c0.518,0,0.937-0.448,0.937-1c0-0.816-0.771-0.953-0.936-1c-0.163-0.049-0.938-0.186-0.938-1 c0-0.553,0.421-1,0.938-1c0.498,0,0.904,0.412,0.936,0.936" />
+            <g>
+                <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M15.5,7.5v-4h1 c0.797,0,1,0.46,1,1c0,0.542-0.703,1-1.5,1h-0.5" />
+                <line x1="16.5" x2="17.5" y1="5.5" y2="7.5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" />
+            </g>
+        </g>
+        <g id="Invisible_Shape">
+            <rect fill="none" stroke="none" width="24" height="24"></rect>
+        </g>
+    </symbol>
+    <symbol id="unknownOwner" viewBox="0 0 24 24">
+        <g id="Outline_Icons">
+            <circle cx="18.5" cy="18.5" r="5" fill="none" stroke-linejoin="round" stroke-miterlimit="10"/>
+            <path d="M18.5,21c-0.273,0-0.494,0.222-0.494,0.494c0,0.273,0.221,0.494,0.494,0.494c0.272,0,0.494-0.22,0.494-0.494 C18.994,21.222,18.772,21,18.5,21L18.5,21z"/>
+            <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M17,17 c0-0.828,0.672-1.5,1.5-1.5S20,16.172,20,17s-0.672,1.5-1.5,1.5V20"/>
+            <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M13.982,13.354 c-0.777-0.258-1.615-0.533-2.466-0.854V10c0,0,1.5-0.619,1.5-3c0.782,0,0.782-2.072,0-2.072c0-0.233,0.828-1.606,0.5-2.928 c-0.474-1.904-6.026-1.904-6.5,0c-2.369-0.477-1,2.681-1,3c-0.783,0-0.783,2,0,2c0,2.381,1.5,3,1.5,3v2.5 c-2.778,1.055-6.088,1.756-6.5,3c-0.474,1.428-0.5,4-0.5,4h10.5"/>
         </g>
         <g id="Invisible_Shape">
             <rect fill="none" stroke="none" width="24" height="24"></rect>

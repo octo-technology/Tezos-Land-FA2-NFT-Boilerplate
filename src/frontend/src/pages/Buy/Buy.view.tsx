@@ -1,10 +1,26 @@
-import { BuyLandMap } from "app/App.components/BuyLandMap/BuyLandMap.view";
+import { LandMap } from "app/App.components/LandMap/LandMap.view";
 import * as React from "react";
-import { useState } from "react";
 import { useAlert } from 'react-alert'
+
 import { TokenOnSale } from "./Buy.controller";
 // prettier-ignore
-import { BuyLandBottom, BuyOwnerDiv, BuyLandSecondRow, BuyLandThirdRow, BuyLandButton, BuyLandCoordinateInput, BuyLandFirstRow, BuyLandLocation, BuyLandPriceInput, BuyLandStyled as BuyLandStyled, BuyStyled as BuyStyled } from "./Buy.style";
+import {
+  BuyLandBottom,
+  BuyLandButton,
+  BuyLandFirstRow,
+  BuyLandSecondRow,
+  BuyLandThirdRow,
+  BuyLandLocation,
+  BuyLandOwner,
+  BuyLandOnSale,
+  BuyLandFourthRow,
+  BuyLandStyled,
+  BuyLandId,
+  BuyStyled
+} from "./Buy.style";
+
+import {Button} from "../../app/App.components/TinyButton/Button.controller"
+
 
 type BuyProps = {
   token_id: number;
@@ -16,38 +32,45 @@ type BuyViewProps = {
   setTransactionPendingCallback: (b: boolean) => void;
   transactionPending: boolean;
   tokensOnSale: TokenOnSale[];
-  connectedUser: string;
 };
 
-export const BuyView = ({ buyTokenCallback: buyTokenCallback, tokensOnSale, connectedUser, setTransactionPendingCallback, transactionPending }: BuyViewProps) => {
+export const BuyView = ({
+  buyTokenCallback: buyToken,
+  tokensOnSale,
+  transactionPending,
+  setTransactionPendingCallback
+}: BuyViewProps) => {
   return (
     <BuyStyled>
-      <BuyLand buyTokenCallback={buyTokenCallback}
-        tokensOnSale={tokensOnSale}
-        connectedUser={connectedUser}
-        transactionPending={transactionPending}
-        setTransactionPendingCallback={setTransactionPendingCallback} />
+      {tokensOnSale.map((myToken) => (
+        <BuyLand
+          key={myToken.id}
+          buyTokenCallback={buyToken}
+          tokenOnSale={myToken}
+          setTransactionPendingCallback={setTransactionPendingCallback}
+          transactionPending={transactionPending}
+        />
+      ))}
     </BuyStyled>
   );
 };
 
-const BuyLand = ({ buyTokenCallback: buyTokenCallback,
-  tokensOnSale, connectedUser, transactionPending, setTransactionPendingCallback }: BuyViewProps) => {
-  const [xCoordinate, setXCoordinate] = useState<number>(0);
-  const [yCoordinate, setYCoordinate] = useState<number>(0);
-  const [selectedToken, setSelectedToken] = useState<any>(tokensOnSale[0]);
+const BuyLand = ({
+  buyTokenCallback,
+  tokenOnSale,
+  transactionPending,
+  setTransactionPendingCallback
+}: {
+  buyTokenCallback: (buyProps: BuyProps) => Promise<any>;
+  tokenOnSale: TokenOnSale;
+  setTransactionPendingCallback: (b: boolean) => void;
+  transactionPending: boolean;
+}) => {
   const alert = useAlert()
 
   return (
-    <BuyLandStyled>
-      <BuyLandMap
-        x={xCoordinate}
-        y={yCoordinate}
-        landsOnSale={tokensOnSale}
-        setXCoordinatesCallback={setXCoordinate}
-        setYCoordinatesCallback={setYCoordinate}
-        setSelectedTokenCallback={setSelectedToken}
-      />
+    <BuyLandStyled key={tokenOnSale.id}>
+      <LandMap x={tokenOnSale.position.x} y={tokenOnSale.position.y} />
 
       <BuyLandBottom>
         <BuyLandFirstRow>
@@ -55,85 +78,71 @@ const BuyLand = ({ buyTokenCallback: buyTokenCallback,
             <svg>
               <use xlinkHref="/icons/sprites.svg#location" />
             </svg>
-            <BuyLandCoordinateInput
-              value={xCoordinate}
-              onChange={(e) => {
-                if (!isNaN(Number(e.target.value))) {
-                  if (e.target.value) {
-                    setXCoordinate(parseInt(e.target.value));
-                  } else {
-                    setXCoordinate(0);
-                  }
-                }
-              }}
-              placeholder="x"
-            ></BuyLandCoordinateInput>
-            <BuyLandCoordinateInput
-              value={yCoordinate}
-              onChange={(e) => {
-                if (!isNaN(Number(e.target.value))) {
-                  if (e.target.value) {
-                    setYCoordinate(parseInt(e.target.value));
-                  } else {
-                    setYCoordinate(0);
-                  }
-                }
-              }}
-              placeholder="y"
-            ></BuyLandCoordinateInput>
+            <div>{`${tokenOnSale.position.x}, ${tokenOnSale.position.y}`}</div>
           </BuyLandLocation>
+          <BuyLandOnSale>
+            On sale for {tokenOnSale.price / 1000000} ꜩ{" "}
+          </BuyLandOnSale>
         </BuyLandFirstRow>
         <BuyLandSecondRow>
-          <BuyOwnerDiv>
-            {selectedToken == undefined ? "" : selectedToken.owner}
-          </BuyOwnerDiv>
+          <BuyLandId>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#barcode" />
+            </svg>
+            <div>{tokenOnSale.id}</div>
+          </BuyLandId>
         </BuyLandSecondRow>
         <BuyLandThirdRow>
-          {selectedToken == undefined ? (<>This land is not on sale </>) : (<>{
-            selectedToken.owner == connectedUser ? (<> You are the owner </>) : (<>
-              <BuyLandPriceInput
-                value={selectedToken.price / 1000000 + " ꜩ"}
-                placeholder="Price"
-              />
-              <BuyLandButton
-                onClick={() => {
-                  if (transactionPending) {
-                    alert.info("A transaction is pending. Try again later")
-                    console.info("A transaction is pending. Try again later")
-                  } else {
-                    buyTokenCallback({
-                      token_id: selectedToken.id,
-                      price: parseFloat(String(selectedToken.price)),
-                    }).then(e => {
-                      alert.info("Buying land ...")
-                      setTransactionPendingCallback(true)
-                      e.confirmation().then((e: any) => {
-                        alert.success("Land bought")
-                        setTransactionPendingCallback(false)
-                        return e
-                      })
-                      return e
-                    }).catch((e: any) => {
-                      alert.show(e.message)
-                      console.error(e.message)
-                    })
-                  }
-
-                }
-
-                }
-              >
-                Buy this land
-          </BuyLandButton> </>)
-          }  </>)}
-
-
-
+          <BuyLandOwner>
+            <svg>
+              <use xlinkHref="/icons/sprites.svg#owner" />
+            </svg>
+            <div>{tokenOnSale.owner}</div>
+          </BuyLandOwner>
         </BuyLandThirdRow>
 
+        <BuyLandFourthRow>
+          {tokenOnSale.tokenOwnedByUser ? (
+            <div>You are the owner</div>
+          ) : (
+<Button
+          text={"Buy this land"}
+          color={"primary"}
+          onClick={() => {
+            if (transactionPending) {
+              alert.info("A transaction is pending. Try again later")
+              console.info("A transaction is pending. Try again later")
+            } else {
+              buyTokenCallback({
+                token_id: tokenOnSale.id,
+                price: tokenOnSale.price,
+              }).then(e => {
+                alert.info("Buying land ...")
+                setTransactionPendingCallback(true)
+                e.confirmation().then((e: any) => {
+                  alert.success("Land bought", {
+                    onOpen: () => {
+                      setTransactionPendingCallback(false)
+                    }
+                  })
+
+                  return e
+                })
+                return e
+              }).catch((e: any) => {
+                alert.show(e.message)
+                console.error(e.message)
+              })
+
+            }
+          }
+
+          }
+          loading={transactionPending} />
+            )}
+        </BuyLandFourthRow>
+        
       </BuyLandBottom>
     </BuyLandStyled>
   );
 };
-
-

@@ -36,7 +36,10 @@ type SellProp = {
   transactionPending: boolean;
 };
 
-export const Sell = ({ transactionPending, setTransactionPendingCallback }: SellProp) => {
+export const Sell = ({
+  transactionPending,
+  setTransactionPendingCallback,
+}: SellProp) => {
   const wallet = useWallet();
   const ready = useReady();
   const tezos = useTezos();
@@ -45,6 +48,7 @@ export const Sell = ({ transactionPending, setTransactionPendingCallback }: Sell
   const [myTokens, setMyTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const alert = useAlert()
+
 
   useEffect(() => {
     (async () => {
@@ -95,12 +99,12 @@ export const Sell = ({ transactionPending, setTransactionPendingCallback }: Sell
         setLoading(false);
       }
     }
-  }, [alert, contract, accountPkh]);
+  }, [alert, contract, accountPkh, transactionPending]);
 
   useEffect(() => {
     loadStorage();
-  }, [loadStorage]);
-  
+  }, [loadStorage, transactionPending, alert]);
+
   useOnBlock(tezos, loadStorage)
 
   type SellToken = { token_id: number; price: number };

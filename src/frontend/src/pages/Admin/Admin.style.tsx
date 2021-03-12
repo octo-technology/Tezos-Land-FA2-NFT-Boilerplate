@@ -33,10 +33,11 @@ export const AdminLandLocation = styled.div`
 
   > svg {
     display: inline-block;
-    width: 24px;
-    height: 24px;
-    margin: 4px;
-    margin-top: 6px;
+    width: 20px;
+    height: 20px;
+    margin: 3px;
+    margin-top: 10px;
+    stroke: white;
   }
 `;
 
@@ -57,16 +58,37 @@ export const AdminLandCoordinateInput = styled.input`
   }
 `;
 
+export const DescriptionTextArea = styled.textarea`
+  margin-top: 2px;
+  font-size: 11px;
+  padding: 5px;
+  height: 60px;
+  width: 100%;
+  font-family:"Proxima Nova";
+  background-color: #202337;
+  border-radius: 5px;
+  border: none;
+  overflow-y: auto;
+  resize: none;
+  color: white;
+  ::placeholder {
+    color: "#727272";
+    font-size: 11px;
+  }
+`;
+
+
 export const AdminLandNameInput = styled.input`
   height: 30px;
   width: 100%;
   margin-top: 5px;
+  padding-left: 5px;
   background-color: #202337;
   box-sizing: border-box;
   border: 0;
   border-radius: 5px;
   font-size: 11px;
-
+  font-family:"Proxima Nova"; 
   ::placeholder {
     color: "#727272";
     font-size: 11px;

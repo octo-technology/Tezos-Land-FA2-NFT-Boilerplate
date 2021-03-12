@@ -1,11 +1,20 @@
-import { LandMap } from "app/App.components/LandMap/LandMap.view";
+import { LandMap } from "app/App.components/AdminLandMap/AdminLandMap.view";
 import * as React from "react";
 import { useState } from "react";
 import { useAlert } from 'react-alert'
 
 // prettier-ignore
-import { AdminLandBottom, AdminLandButton, AdminLandCoordinateInput, AdminLandDescriptionInput, AdminLandFirstRow, AdminLandLocation, AdminLandNameInput, AdminLandStyled, AdminStyled } from "./Admin.style";
-
+import {
+  AdminLandBottom,
+  AdminLandCoordinateInput,
+  AdminLandFirstRow,
+  AdminLandLocation,
+  AdminLandNameInput,
+  AdminLandStyled,
+  AdminStyled,
+  DescriptionTextArea
+} from "./Admin.style";
+import { Button } from "../../app/App.components/Button/Button.controller"
 type MintProps = {
   owner: string;
   landType: string;
@@ -36,7 +45,6 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
   const [landDescription, setDescription] = useState<string>("");
   const [xCoordinate, setXCoordinate] = useState<number>(0);
   const [yCoordinate, setYCoordinate] = useState<number>(0);
-  // const [mintTransactionPending, setMintTransactionPending] = useState<boolean>(false);
   const alert = useAlert()
 
   return (
@@ -54,7 +62,7 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
         <AdminLandFirstRow>
           <AdminLandLocation>
             <svg>
-              <use xlinkHref="/icons/sprites.svg#location" />
+              <use xlinkHref="/icons/sprites.svg#location"/>
             </svg>
             <AdminLandCoordinateInput
               value={xCoordinate}
@@ -87,17 +95,19 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
         <AdminLandNameInput
           value={landName}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Name"
+          placeholder="Enter land name"
         />
-        <AdminLandDescriptionInput
+        <DescriptionTextArea
           value={landDescription}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Description"
+          placeholder="Enter land description"
         />
-        <AdminLandButton
+        <Button
+          text={"Mint a land"}
+          color={"primary"}
           onClick={() => {
             if (mintTransactionPending) {
-              alert.info("Cannot mint a new land while the previous one is not minted...")
+              alert.info("Cannot mint a new land while the previous one is not minted...", { timeout: 10000 })
             } else
               mintCallBack({
                 owner: connectedUser,
@@ -110,8 +120,11 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
                 setMintTransactionPendingCallback(true)
                 alert.info("Minting a new land...")
                 e.confirmation().then((e: any) => {
-                  alert.success("New land minted")
-                  setMintTransactionPendingCallback(false)
+                  alert.success("New land minted", {
+                    onOpen: () => {
+                      setMintTransactionPendingCallback(false)
+                    }
+                  })
                   return e
                 })
                 return e
@@ -121,9 +134,8 @@ const AdminLand = ({ mintCallBack, connectedUser, existingTokenIds, setMintTrans
               })
           }
           }
-        >
-          Mint a land
-        </AdminLandButton>
+          loading={mintTransactionPending} />
+
       </AdminLandBottom>
     </AdminLandStyled>
   );
