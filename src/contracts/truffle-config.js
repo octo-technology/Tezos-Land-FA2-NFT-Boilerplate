@@ -23,7 +23,7 @@ module.exports = {
       type: "tezos"
     },
     delphinet: {
-      host: "https://delphinet-tezos.giganode.io",
+      host:"https://delphinet.smartpy.io",
       port: 443,
       network_id: "*",
       secret,
@@ -33,7 +33,7 @@ module.exports = {
       type: "tezos"
     },
     edonet: {
-      host: "https://edonet-tezos.giganode.io/",
+      host: "https://edonet-tezos.giganode.io",
       port: 443,
       network_id: "*",
       secret,
