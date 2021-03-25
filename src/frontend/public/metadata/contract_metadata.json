@@ -1,448 +1,444 @@
 {
-    "name": "TezosLand",
-    "description": "NFT marketplace",
-    "version": "0.1.0",
-    "license": {
-      "name": "MIT",
-      "details": "The MIT License"
-    },
-    "homepage": "https://tezosland.io/",
-    "interfaces": [
-      "TZIP-012",
-      "TZIP-016"
-    ],
-    "source-repository": "https://github.com/octo-technology/Tezos-Land-FA2-NFT-Boilerplate",
-    "commit": "8d3077fb78ff157b36a72f15ff2d17df7c4763f7",
-    "views": [
-      {
-        "name": "token_metadata",
-        "implementations": [
-          {
-            "michelsonStorageView": {
-              "parameter": {
-                "prim": "nat"
-              },
-              "returnType": {
-                "prim": "pair",
-                "args": [
-                  {
-                    "prim": "nat"
-                  },
-                  {
-                    "prim": "map",
-                    "args": [
-                      {
-                        "prim": "string"
-                      },
-                      {
-                        "prim": "bytes"
-                      }
-                    ]
-                  }
-                ]
-              },
-              "code": [
+  "name": "TezosLand",
+  "description": "NFT marketplace",
+  "version": "0.1.0",
+  "license": {
+    "name": "MIT",
+    "details": "The MIT License"
+  },
+  "homepage": "https://tezosland.io/",
+  "interfaces": [
+    "TZIP-012",
+    "TZIP-016"
+  ],
+  "source-repository": "https://github.com/octo-technology/Tezos-Land-FA2-NFT-Boilerplate",
+  "commit": "8d3077fb78ff157b36a72f15ff2d17df7c4763f7",
+  "views": [
+    {
+      "name": "token_metadata",
+      "implementations": [
+        {
+          "michelsonStorageView": {
+            "parameter": {
+              "prim": "nat"
+            },
+            "returnType": {
+              "prim": "pair",
+              "args": [
                 {
-                  "prim": "CAR"
+                  "prim": "nat"
                 },
                 {
-                  "prim": "PUSH",
+                  "prim": "map",
                   "args": [
                     {
-                      "prim": "nat"
+                      "prim": "string"
                     },
                     {
-                      "int": "100"
+                      "prim": "bytes"
                     }
-                  ]
-                },
-                {
-                  "prim": "SWAP"
-                },
-                {
-                  "prim": "DUP"
-                },
-                {
-                  "prim": "DUG",
-                  "args": [
-                    {
-                      "int": "2"
-                    }
-                  ]
-                },
-                {
-                  "prim": "COMPARE"
-                },
-                {
-                  "prim": "LT"
-                },
-                {
-                  "prim": "IF",
-                  "args": [
-                    [
-                      {
-                        "prim": "EMPTY_MAP",
-                        "args": [
-                          {
-                            "prim": "string"
-                          },
-                          {
-                            "prim": "bytes"
-                          }
-                        ]
-                      },
-                      {
-                        "prim": "PUSH",
-                        "args": [
-                          {
-                            "prim": "bytes"
-                          },
-                          {
-                            "bytes": "68747470733a2f2f74657a6f736c616e642e696f2f6c6f676f3531322e706e67"
-                          }
-                        ]
-                      },
-                      {
-                        "prim": "SOME"
-                      },
-                      {
-                        "prim": "PUSH",
-                        "args": [
-                          {
-                            "prim": "string"
-                          },
-                          {
-                            "string": "thumbnailUri"
-                          }
-                        ]
-                      },
-                      {
-                        "prim": "UPDATE"
-                      },
-                      {
-                        "prim": "PUSH",
-                        "args": [
-                          {
-                            "prim": "bytes"
-                          },
-                          {
-                            "bytes": "544c44"
-                          }
-                        ]
-                      },
-                      {
-                        "prim": "SOME"
-                      },
-                      {
-                        "prim": "PUSH",
-                        "args": [
-                          {
-                            "prim": "string"
-                          },
-                          {
-                            "string": "symbol"
-                          }
-                        ]
-                      },
-                      {
-                        "prim": "UPDATE"
-                      },
-                      {
-                        "prim": "PUSH",
-                        "args": [
-                          {
-                            "prim": "bytes"
-                          },
-                          {
-                            "bytes": "54657a6f734c616e64"
-                          }
-                        ]
-                      },
-                      {
-                        "prim": "SOME"
-                      },
-                      {
-                        "prim": "PUSH",
-                        "args": [
-                          {
-                            "prim": "string"
-                          },
-                          {
-                            "string": "name"
-                          }
-                        ]
-                      },
-                      {
-                        "prim": "UPDATE"
-                      },
-                      {
-                        "prim": "PUSH",
-                        "args": [
-                          {
-                            "prim": "bytes"
-                          },
-                          {
-                            "bytes": "30"
-                          }
-                        ]
-                      },
-                      {
-                        "prim": "SOME"
-                      },
-                      {
-                        "prim": "PUSH",
-                        "args": [
-                          {
-                            "prim": "string"
-                          },
-                          {
-                            "string": "decimals"
-                          }
-                        ]
-                      },
-                      {
-                        "prim": "UPDATE"
-                      },
-                      {
-                        "prim": "SWAP"
-                      },
-                      {
-                        "prim": "PAIR"
-                      }
-                    ],
-                    [
-                      {
-                        "prim": "DROP"
-                      },
-                      {
-                        "prim": "PUSH",
-                        "args": [
-                          {
-                            "prim": "string"
-                          },
-                          {
-                            "string": "Error: cannot mint this token"
-                          }
-                        ]
-                      },
-                      {
-                        "prim": "FAILWITH"
-                      }
-                    ]
                   ]
                 }
               ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "get_balance",
-        "description": "This is the `get_balance` view required by TZIP-012.",
-        "implementations": [
-          {
-            "michelsonStorageView": {
-              "parameter": {
-                "prim": "pair",
+            },
+            "code": [
+              {
+                "prim": "CAR"
+              },
+              {
+                "prim": "PUSH",
                 "args": [
                   {
-                    "prim": "address",
-                    "annots": [
-                      "%owner"
-                    ]
+                    "prim": "nat"
                   },
                   {
-                    "prim": "nat",
-                    "annots": [
-                      "%token_id"
-                    ]
+                    "int": "100"
                   }
                 ]
               },
-              "returnType": {
-                "prim": "nat"
+              {
+                "prim": "SWAP"
               },
-              "code": [
+              {
+                "prim": "DUP"
+              },
+              {
+                "prim": "DUG",
+                "args": [
+                  {
+                    "int": "2"
+                  }
+                ]
+              },
+              {
+                "prim": "COMPARE"
+              },
+              {
+                "prim": "LT"
+              },
+              {
+                "prim": "IF",
+                "args": [
+                  [
+                    {
+                      "prim": "EMPTY_MAP",
+                      "args": [
+                        {
+                          "prim": "string"
+                        },
+                        {
+                          "prim": "bytes"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "PUSH",
+                      "args": [
+                        {
+                          "prim": "bytes"
+                        },
+                        {
+                          "bytes": "68747470733a2f2f74657a6f736c616e642e696f2f6c6f676f3531322e706e67"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "SOME"
+                    },
+                    {
+                      "prim": "PUSH",
+                      "args": [
+                        {
+                          "prim": "string"
+                        },
+                        {
+                          "string": "thumbnailUri"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "UPDATE"
+                    },
+                    {
+                      "prim": "PUSH",
+                      "args": [
+                        {
+                          "prim": "bytes"
+                        },
+                        {
+                          "bytes": "544c44"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "SOME"
+                    },
+                    {
+                      "prim": "PUSH",
+                      "args": [
+                        {
+                          "prim": "string"
+                        },
+                        {
+                          "string": "symbol"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "UPDATE"
+                    },
+                    {
+                      "prim": "PUSH",
+                      "args": [
+                        {
+                          "prim": "bytes"
+                        },
+                        {
+                          "bytes": "54657a6f734c616e64"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "SOME"
+                    },
+                    {
+                      "prim": "PUSH",
+                      "args": [
+                        {
+                          "prim": "string"
+                        },
+                        {
+                          "string": "name"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "UPDATE"
+                    },
+                    {
+                      "prim": "PUSH",
+                      "args": [
+                        {
+                          "prim": "bytes"
+                        },
+                        {
+                          "bytes": "30"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "SOME"
+                    },
+                    {
+                      "prim": "PUSH",
+                      "args": [
+                        {
+                          "prim": "string"
+                        },
+                        {
+                          "string": "decimals"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "UPDATE"
+                    },
+                    {
+                      "prim": "SWAP"
+                    },
+                    {
+                      "prim": "PAIR"
+                    }
+                  ],
+                  [
+                    {
+                      "prim": "DROP"
+                    },
+                    {
+                      "prim": "PUSH",
+                      "args": [
+                        {
+                          "prim": "string"
+                        },
+                        {
+                          "string": "Error: cannot mint this token"
+                        }
+                      ]
+                    },
+                    {
+                      "prim": "FAILWITH"
+                    }
+                  ]
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "get_balance",
+      "description": "This is the `get_balance` view required by TZIP-012.",
+      "implementations": [
+        {
+          "michelsonStorageView": {
+            "parameter": {
+              "prim": "pair",
+              "args": [
                 {
-                  "prim": "DUP"
-                },
-                {
-                  "prim": "CAR"
-                },
-                {
-                  "prim": "DIP",
-                  "args": [
-                    [
-                      {
-                        "prim": "CDR"
-                      },
-                      {
-                        "prim": "CAR"
-                      },
-                      {
-                        "prim": "CAR"
-                      },
-                      {
-                        "prim": "CAR"
-                      }
-                    ]
+                  "prim": "address",
+                  "annots": [
+                    "%owner"
                   ]
                 },
                 {
-                  "prim": "DUP"
-                },
-                {
-                  "prim": "CDR"
-                },
-                {
-                  "prim": "SWAP"
-                },
-                {
-                  "prim": "DIP",
-                  "args": [
-                    [
-                      {
-                        "prim": "GET"
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "prim": "SWAP"
-                },
-                {
-                  "prim": "IF_NONE",
-                  "args": [
-                    [
-                      {
-                        "prim": "DROP"
-                      },
-                      {
-                        "prim": "PUSH",
-                        "args": [
-                          {
-                            "prim": "nat"
-                          },
-                          {
-                            "int": "0"
-                          }
-                        ]
-                      }
-                    ],
-                    [
-                      {
-                        "prim": "SWAP"
-                      },
-                      {
-                        "prim": "CAR"
-                      },
-                      {
-                        "prim": "COMPARE"
-                      },
-                      {
-                        "prim": "EQ"
-                      },
-                      {
-                        "prim": "IF",
-                        "args": [
-                          [
-                            {
-                              "prim": "PUSH",
-                              "args": [
-                                {
-                                  "prim": "nat"
-                                },
-                                {
-                                  "int": "1"
-                                }
-                              ]
-                            }
-                          ],
-                          [
-                            {
-                              "prim": "PUSH",
-                              "args": [
-                                {
-                                  "prim": "nat"
-                                },
-                                {
-                                  "int": "0"
-                                }
-                              ]
-                            }
-                          ]
-                        ]
-                      }
-                    ]
+                  "prim": "nat",
+                  "annots": [
+                    "%token_id"
                   ]
                 }
               ]
-            }
-          }
-        ]
-      },
-      {
-        "name": "all_tokens",
-        "description": "This is the `all_tokens` view required by TZIP-012.",
-        "implementations": [
-          {
-            "michelsonStorageView": {
-              "parameter": {
-                "prim": "unit"
+            },
+            "returnType": {
+              "prim": "nat"
+            },
+            "code": [
+              {
+                "prim": "DUP"
               },
-              "returnType": {
-                "prim": "list",
+              {
+                "prim": "CAR"
+              },
+              {
+                "prim": "DIP",
+                "args": [
+                  [
+                    {
+                      "prim": "CDR"
+                    },
+                    {
+                      "prim": "CAR"
+                    },
+                    {
+                      "prim": "CAR"
+                    },
+                    {
+                      "prim": "CAR"
+                    }
+                  ]
+                ]
+              },
+              {
+                "prim": "DUP"
+              },
+              {
+                "prim": "CDR"
+              },
+              {
+                "prim": "SWAP"
+              },
+              {
+                "prim": "DIP",
+                "args": [
+                  [
+                    {
+                      "prim": "GET"
+                    }
+                  ]
+                ]
+              },
+              {
+                "prim": "SWAP"
+              },
+              {
+                "prim": "IF_NONE",
+                "args": [
+                  [
+                    {
+                      "prim": "DROP"
+                    },
+                    {
+                      "prim": "PUSH",
+                      "args": [
+                        {
+                          "prim": "nat"
+                        },
+                        {
+                          "int": "0"
+                        }
+                      ]
+                    }
+                  ],
+                  [
+                    {
+                      "prim": "SWAP"
+                    },
+                    {
+                      "prim": "CAR"
+                    },
+                    {
+                      "prim": "COMPARE"
+                    },
+                    {
+                      "prim": "EQ"
+                    },
+                    {
+                      "prim": "IF",
+                      "args": [
+                        [
+                          {
+                            "prim": "PUSH",
+                            "args": [
+                              {
+                                "prim": "nat"
+                              },
+                              {
+                                "int": "1"
+                              }
+                            ]
+                          }
+                        ],
+                        [
+                          {
+                            "prim": "PUSH",
+                            "args": [
+                              {
+                                "prim": "nat"
+                              },
+                              {
+                                "int": "0"
+                              }
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "all_tokens",
+      "description": "This is the `all_tokens` view required by TZIP-012.",
+      "implementations": [
+        {
+          "michelsonStorageView": {
+            "returnType": {
+              "prim": "list",
+              "args": [
+                {
+                  "prim": "nat"
+                }
+              ]
+            },
+            "code": [
+              {
+                "prim": "CDR"
+              },
+              {
+                "prim": "CAR"
+              },
+              {
+                "prim": "CAR"
+              },
+              {
+                "prim": "CDR"
+              },
+              {
+                "prim": "CAR"
+              },
+              {
+                "prim": "CDR"
+              },
+              {
+                "prim": "CAR"
+              },
+              {
+                "prim": "NIL",
                 "args": [
                   {
                     "prim": "nat"
                   }
                 ]
               },
-              "code": [
-                {
-                  "prim": "CDR"
-                },
-                {
-                  "prim": "CAR"
-                },
-                {
-                  "prim": "CAR"
-                },
-                {
-                  "prim": "CDR"
-                },
-                {
-                  "prim": "CAR"
-                },
-                {
-                  "prim": "CDR"
-                },
-                {
-                  "prim": "CAR"
-                },
-                {
-                  "prim": "NIL",
-                  "args": [
+              {
+                "prim": "ITER",
+                "args": [
+                  [
                     {
-                      "prim": "nat"
+                      "prim": "CONS"
                     }
                   ]
-                },
-                {
-                  "prim": "ITER",
-                  "args": [
-                    [
-                      {
-                        "prim": "CONS"
-                      }
-                    ]
-                  ]
-                }
-              ]
-            }
+                ]
+              }
+            ]
           }
-        ]
-      }
-    ]
-  }
-  
+        }
+      ]
+    }
+  ]
+}

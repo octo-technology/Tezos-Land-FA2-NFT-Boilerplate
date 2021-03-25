@@ -25,11 +25,11 @@ const market = {
 const metadata = new MichelsonMap();
 const token_info = new MichelsonMap();
 const token_metadata = new MichelsonMap();
-const empty_ledger = new MichelsonMap()
-const empty_operators = new MichelsonMap()
+const empty_ledger = new MichelsonMap();
+const empty_operators = new MichelsonMap();
 
 // Set TZIP-16 contract metadata, with a JSON Blob
-metadata.set("", web3.utils.asciiToHex("https://tezosland.io/metadata/contract_metadata.json").slice(2));
+metadata.set("", web3.utils.asciiToHex("sha256://0xb2f041e72a4015d173fe7de9621c472aae8de47d46391d3e8fce9006ba692398/https:%2F%2Ftezosland.io%2Fmetadata%2Fcontract_metadata.json").slice(2));
 
 // Set TZIP-16 token metadata with a JSON Blob
 // token_info.set(
