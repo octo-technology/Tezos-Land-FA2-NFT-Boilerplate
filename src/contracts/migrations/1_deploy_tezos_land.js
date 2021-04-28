@@ -29,7 +29,8 @@ const empty_ledger = new MichelsonMap();
 const empty_operators = new MichelsonMap();
 
 // Set TZIP-16 contract metadata, with a JSON Blob
-metadata.set("", web3.utils.asciiToHex("sha256://0xb2f041e72a4015d173fe7de9621c472aae8de47d46391d3e8fce9006ba692398/https:%2F%2Ftezosland.io%2Fmetadata%2Fcontract_metadata.json").slice(2));
+metadata.set("", web3.utils.asciiToHex("sha256://0x19faf07472cc91927ff455a82c0d51a682164b3b18125e6a5b1763a14f09a60c/https:%2F%2Ftezosland.io%2Fmetadata%2Fcontract_metadata.json").slice(2));
+
 
 // Set TZIP-16 token metadata with a JSON Blob
 // token_info.set(
@@ -51,12 +52,12 @@ metadata.set("", web3.utils.asciiToHex("sha256://0xb2f041e72a4015d173fe7de9621c4
 // );
 
 
-token_metadata.set(
-    1, {
-    token_info: token_info,
-    token_id: 1
-}
-);
+// token_metadata.set(
+//     1, {
+//     token_info: token_info,
+//     token_id: 1
+// }
+// );
 
 const initial_storage = {
     "market": market,

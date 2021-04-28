@@ -380,65 +380,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "all_tokens",
-      "description": "This is the `all_tokens` view required by TZIP-012.",
-      "implementations": [
-        {
-          "michelsonStorageView": {
-            "returnType": {
-              "prim": "list",
-              "args": [
-                {
-                  "prim": "nat"
-                }
-              ]
-            },
-            "code": [
-              {
-                "prim": "CDR"
-              },
-              {
-                "prim": "CAR"
-              },
-              {
-                "prim": "CAR"
-              },
-              {
-                "prim": "CDR"
-              },
-              {
-                "prim": "CAR"
-              },
-              {
-                "prim": "CDR"
-              },
-              {
-                "prim": "CAR"
-              },
-              {
-                "prim": "NIL",
-                "args": [
-                  {
-                    "prim": "nat"
-                  }
-                ]
-              },
-              {
-                "prim": "ITER",
-                "args": [
-                  [
-                    {
-                      "prim": "CONS"
-                    }
-                  ]
-                ]
-              }
-            ]
-          }
-        }
-      ]
     }
   ]
 }

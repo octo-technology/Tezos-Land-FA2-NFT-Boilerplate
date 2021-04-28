@@ -1,9 +1,7 @@
-import { useAccountPkh, useReady, useTezos, useWallet } from "dapp/dapp";
 import { TEZOSLAND_ADDRESS } from "dapp/defaults";
-import * as React from "react";
 import { useEffect, useState } from "react";
 import { Message, Page } from "styles";
-import { compose, TezosToolkit } from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 import { MapView } from "./Map.view";
 
 export type Coordinates = {
@@ -46,7 +44,7 @@ export const Map = ({
 
   useEffect(() => {
     (async () => {
-      const contract2: any = await tk.contract.at("KT1GuwfE5nrLzKizwnqbP5or2jKqPAGC8EfJ");
+      const contract2: any = await tk.contract.at(TEZOSLAND_ADDRESS);
       setContractTaquito(contract2)
     })();
   }, [transactionPending]);
